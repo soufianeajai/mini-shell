@@ -25,6 +25,7 @@ typedef struct s_token
 	int index;
 	int type;
 	char *str;
+	struct s_token *prev;
 	struct s_token *next;
 } t_token;
 

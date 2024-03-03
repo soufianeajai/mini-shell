@@ -35,4 +35,5 @@ void tokenisation(t_token **tokens, char *input)
         tmp->str = mystrdup(tmp, input);
         tmp = tmp->next;
     }
+    tmp = NULL;
 }

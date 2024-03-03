@@ -3,17 +3,20 @@ void	ft_lstadd_back(t_token **lst, int len , int type , int index)
 {
     t_token	*new;
     t_token	*p;
+    t_token	*prev;
 
     new = malloc(sizeof(t_token));
-    if (new != NULL)
+    prev = malloc(sizeof(t_token));
+    if (new != NULL && prev != NULL)
     {
         new->len = len;
         new->type = type;
         new->index = index;
         new->next = NULL;
+        new->prev = NULL;
     }
     p = *lst;
-    if (new != NULL)
+    if (new && prev)
     {
         if (*lst == NULL)
             *lst = new;
@@ -21,6 +24,7 @@ void	ft_lstadd_back(t_token **lst, int len , int type , int index)
         {
             while (p->next)
                 p = p->next;
+            new->prev = p;
             p->next = new;
         }
     }
@@ -128,6 +132,8 @@ void print_tokens(t_token *tokens)
 {
     while (tokens)
     {
+        if (tokens->prev != NULL)
+            printf("\n------>%s",tokens->prev->str);
         printf("\n len = %d index = %d__type = %d token = %s", 
                 tokens->len, tokens->index, tokens->type, tokens->str);
         tokens = tokens->next;
