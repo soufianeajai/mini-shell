@@ -142,18 +142,20 @@ int main(int ac, char **av, char **env)
 {
     char* input;
     t_token *tokens;
-
+    t_env *env_list;
+    env_copy(&env_list, env);
     while(1)
     {
         input = readline(YELLOW"\n➜ sh-mini ✗ "NC);
 
         if (!input)
             break;
+        print_env(env_list, input);
         add_history(input);
         //clear_history();
         SplitTokens(input, &tokens);
         tokenisation(&tokens,input);
-        print_tokens(tokens);
+        //print_tokens(tokens);
         //ft_clear(input);
         //ft_exit(input);
         free(input);

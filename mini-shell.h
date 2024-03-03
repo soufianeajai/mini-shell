@@ -48,6 +48,14 @@ typedef struct s_cmd
 	char **args;
 }			t_cmd;
 
+
+typedef struct s_env
+{
+	char *key;
+	char *value;
+	struct s_env *next;
+} t_env;
+
 // typedef struct s_command
 // {
 // 	t_cmd *cmd;               // The command to execute
@@ -89,3 +97,13 @@ void		ft_clear(char *input);
 //tokenisation
 void tokenisation(t_token **tokens, char *input);
 void print_tokens(t_token *tokens);
+char *mystrdup(t_token *tokens, char *input);
+void ft_strlcpy(char *dst, const char *src, size_t dstsize);
+
+
+
+
+
+//env
+void env_copy(t_env **env, char **environ);
+void print_env(t_env *tmp, char *input);

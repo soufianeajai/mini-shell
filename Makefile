@@ -1,5 +1,5 @@
 NAME = minishell
-SRCS = libft/utils1.c libft/utils2.c libft/ft_split.c tokenisation/SplitToken.c tokenisation/tokenisation.c
+SRCS = libft/utils1.c libft/utils2.c libft/ft_split.c tokenisation/SplitToken.c tokenisation/tokenisation.c environnement/env.c
 OBJS = $(SRCS:.c=.o)
 
 all : $(NAME)
