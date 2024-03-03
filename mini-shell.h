@@ -12,6 +12,7 @@
 
 extern void	rl_replace_line(const char *, int);
 
+
 #define WORD 0
 #define PIPE 1
 #define I_RED 2

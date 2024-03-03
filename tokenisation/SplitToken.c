@@ -134,8 +134,7 @@ void print_tokens(t_token *tokens)
     {
         if (tokens->prev != NULL)
             printf("\n------>%s",tokens->prev->str);
-        printf("\n len = %d index = %d__type = %d token = %s", 
-                tokens->len, tokens->index, tokens->type, tokens->str);
+        printf("\n%s", tokens->str);
         tokens = tokens->next;
     }
 }
@@ -151,7 +150,7 @@ int main(int ac, char **av, char **env)
         if (!input)
             break;
         add_history(input);
-
+        //clear_history();
         SplitTokens(input, &tokens);
         tokenisation(&tokens,input);
         print_tokens(tokens);
