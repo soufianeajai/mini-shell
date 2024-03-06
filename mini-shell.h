@@ -31,14 +31,6 @@ typedef struct s_token
 } t_token;
 
 
-typedef struct s_tree
-{
-    char *value; 
-    struct s_tree *left;
-    struct s_tree *right;
-	int type;
-
-} t_tree;
 
 // check first herdoc  '<<' !!
 typedef struct s_cmd 
@@ -106,4 +98,4 @@ void ft_strlcpy(char *dst, const char *src, size_t dstsize);
 
 //env
 void env_copy(t_env **env, char **environ);
-void print_env(t_env *tmp, char *input);
+void print_env(t_env *tmp, char *input); 

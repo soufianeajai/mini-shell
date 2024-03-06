@@ -37,3 +37,14 @@ void tokenisation(t_token **tokens, char *input)
     }
     tmp = NULL;
 }
+
+void print_tokens(t_token *tokens)
+{
+    while (tokens)
+    {
+        //if (tokens->prev != NULL)
+            //printf("\n prev : %s",tokens->prev->str);
+        printf("\n%s", tokens->str);
+        tokens = tokens->next;
+    }
+}

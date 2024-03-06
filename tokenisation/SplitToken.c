@@ -89,11 +89,13 @@ int is_word(t_token **tokens, char *input, int *i)
             (*i)++;
         else 
             break;
+        if(input[*i] && ft_isspace(input[*i]))
+            break;
     }
     if (j == *i)
         return (0);
-    (*i)--;
-    ft_lstadd_back(tokens, *i - j + 1, WORD, j);
+    //(*i)--;ft_lstadd_back(tokens, *i - j + 1, WORD, j);
+    ft_lstadd_back(tokens, *i - j, WORD, j);
     return (1);
 }
 
@@ -109,14 +111,12 @@ void SplitTokens(char *input, t_token **tokens)
             i++;
         if (is_word(tokens, input, &i))
         {
-
             // for example : echo "hello world" > file.txt ,
             // we need to split this funcion 
             //to 2 function first for just word without "" or ''
             // , second for quotes
             //printf("ok is word : \n");
-            
-            i++;
+            //i++;
             continue;
         }
         if (input[i] == '<' || input[i] == '>' || input[i] == '|')
@@ -128,16 +128,6 @@ void SplitTokens(char *input, t_token **tokens)
     }
 }
 
-void print_tokens(t_token *tokens)
-{
-    while (tokens)
-    {
-        if (tokens->prev != NULL)
-            printf("\n------>%s",tokens->prev->str);
-        printf("\n%s", tokens->str);
-        tokens = tokens->next;
-    }
-}
 int main(int ac, char **av, char **env)
 {
     char* input;
@@ -155,7 +145,7 @@ int main(int ac, char **av, char **env)
         //clear_history();
         SplitTokens(input, &tokens);
         tokenisation(&tokens,input);
-        //print_tokens(tokens);
+        print_tokens(tokens);
         //ft_clear(input);
         //ft_exit(input);
         free(input);
