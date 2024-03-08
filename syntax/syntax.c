@@ -26,17 +26,22 @@ int check_syntax(t_token *tok)
     while (tok)
     {
         // first case if same special token 
-        if (tok->prev && is_operator(tok->type) && is_operator(tok->prev->type) == is_operator(tok->type))
+        if (tok->prev && is_operator(tok->type) && is_operator(tok->prev->type))
         {
-            printf_error_syntax(tok->str);
-            return (1);
-        }
-        if (tok->prev && is_operator(tok->prev->type) == 3 && is_operator(tok->type))
-        {
-            printf_error_syntax(tok->str);
-            return (1);
+            if (is_operator(tok->prev->type) == is_operator(tok->type))
+            {
+                printf_error_syntax(tok->str);
+                return (1);
+            }
+            else if (is_operator(tok->prev->type) != 1)
+            {
+                printf_error_syntax(tok->str);
+                return (1);
+            }
         }
         tok = tok->next;
     }
+
+    // 
     return (0);
 }

@@ -82,7 +82,7 @@ void ft_exit(char *input,t_token *tokens);
 
 
 //tokenisation
-void free_tokens(t_token *tokens);
+void free_tokens(t_token **tokens);
 void tokenisation(t_token **tokens, char *input);
 void SplitTokens(char *input, t_token **tokens);
 void print_tokens(t_token *tokens);

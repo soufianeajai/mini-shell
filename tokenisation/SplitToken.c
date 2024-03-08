@@ -103,10 +103,6 @@ void SplitTokens(char *input, t_token **tokens)
     int i;
 
     i = 0;
-    free_tokens(*tokens);
-    *tokens = NULL;
-
-    printf("\n-->(%p)\n",(*tokens));
     while (input[i])
     {
         while (input[i] && ft_isspace(input[i]))

@@ -4,7 +4,6 @@ int main(int ac, char **av, char **env)
 {
     char* input;
     t_token *tokens;
-    int i = 1;
     
     tokens = NULL;
     while(1)
@@ -16,23 +15,20 @@ int main(int ac, char **av, char **env)
         if (ft_strlen(input) > 0)
             add_history(input);
         //clear_history();
+
         SplitTokens(input, &tokens);
         tokenisation(&tokens,input);
-        //print_tokens(tokens);
-        // if (check_syntax(tokens))
-        //     continue;
         
-        
-        if (i == 2)
+
+        if (check_syntax(tokens))
         {
-            free_tokens(tokens);
-            tokens = NULL;  
+            free_tokens(&tokens);
             free(input);
-            system("leaks minishell");
-            exit(0);
+            continue;
         }
-        i++;
-        //ft_exit(input, tokens);
+        free_tokens(&tokens);
+        free(input);
+        ft_exit(input, tokens);
     }
 }
 
