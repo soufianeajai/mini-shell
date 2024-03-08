@@ -11,7 +11,7 @@
 #define GREEN "\e[32m"
 
 extern void	rl_replace_line(const char *, int);
-
+//extern int	g_signal;
 
 #define WORD 0
 #define PIPE 1
@@ -58,6 +58,12 @@ typedef struct s_env
 // 	struct s_command *next;   // The next command in the list
 // }			t_command;
 
+
+//syntax error : 
+int check_syntax(t_token *tok);
+void printf_error_syntax(char *str);
+int    is_operator(int type);
+
 // libft
 char		**ft_split(char const *s, char c);
 size_t		ft_strlen(const char *s);
@@ -69,25 +75,16 @@ void		ft_putstr_fd(char *s, int fd);
 size_t		count_strings(char **strings);
 int			ft_isspace(char c);
 
-// error
-int 		syntax_token(char *input);
-int			is_token(char c, char next, int *flag, char *token);
-void		error(void);
-void		error_fd(int fd, char *file, int free_allocation);
-void		error_cmd(char *cmd);
-void		ft_free(char **tab); 
 
 // parsing
-char		**split_commands(char *input);
-
-void		ft_exit(char *input);
-void		ft_pwd(char *input);
-void		ft_clear(char *input);
+void ft_exit(char *input,t_token *tokens);
 
 
 
 //tokenisation
+void free_tokens(t_token **tokens);
 void tokenisation(t_token **tokens, char *input);
+void SplitTokens(char *input, t_token **tokens);
 void print_tokens(t_token *tokens);
 char *mystrdup(t_token *tokens, char *input);
 void ft_strlcpy(char *dst, const char *src, size_t dstsize);

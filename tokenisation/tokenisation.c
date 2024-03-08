@@ -38,13 +38,26 @@ void tokenisation(t_token **tokens, char *input)
     tmp = NULL;
 }
 
+void free_tokens(t_token **tokens)
+{
+    t_token *tmp;
+    
+    while (*tokens)
+    {
+        tmp = *tokens;
+        *tokens = (*tokens)->next;
+        free(tmp->str);
+        free(tmp);
+    }
+}
 void print_tokens(t_token *tokens)
 {
     while (tokens)
     {
         //if (tokens->prev != NULL)
             //printf("\n prev : %s",tokens->prev->str);
-        printf("\n%s", tokens->str);
+        printf("\n------->%s\n", tokens->str);
         tokens = tokens->next;
     }
 }
+

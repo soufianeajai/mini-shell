@@ -1,4 +1,5 @@
 #include "../mini-shell.h"
+
 void	ft_lstadd_back(t_token **lst, int len , int type , int index)
 {
     t_token	*new;
@@ -6,8 +7,7 @@ void	ft_lstadd_back(t_token **lst, int len , int type , int index)
     t_token	*prev;
 
     new = malloc(sizeof(t_token));
-    prev = malloc(sizeof(t_token));
-    if (new != NULL && prev != NULL)
+    if (new != NULL)
     {
         new->len = len;
         new->type = type;
@@ -16,7 +16,7 @@ void	ft_lstadd_back(t_token **lst, int len , int type , int index)
         new->prev = NULL;
     }
     p = *lst;
-    if (new && prev)
+    if (new)
     {
         if (*lst == NULL)
             *lst = new;
@@ -94,7 +94,6 @@ int is_word(t_token **tokens, char *input, int *i)
     }
     if (j == *i)
         return (0);
-    //(*i)--;ft_lstadd_back(tokens, *i - j + 1, WORD, j);
     ft_lstadd_back(tokens, *i - j, WORD, j);
     return (1);
 }
@@ -110,15 +109,7 @@ void SplitTokens(char *input, t_token **tokens)
         while (input[i] && ft_isspace(input[i]))
             i++;
         if (is_word(tokens, input, &i))
-        {
-            // for example : echo "hello world" > file.txt ,
-            // we need to split this funcion 
-            //to 2 function first for just word without "" or ''
-            // , second for quotes
-            //printf("ok is word : \n");
-            //i++;
             continue;
-        }
         if (input[i] == '<' || input[i] == '>' || input[i] == '|')
         {
             i += redirection_detect(input, tokens, i);
@@ -128,26 +119,7 @@ void SplitTokens(char *input, t_token **tokens)
     }
 }
 
-int main(int ac, char **av, char **env)
-{
-    char* input;
-    t_token *tokens;
-    t_env *env_list;
-    env_copy(&env_list, env);
-    while(1)
-    {
-        input = readline(YELLOW"\n➜ sh-mini ✗ "NC);
 
-        if (!input)
-            break;
-        print_env(env_list, input);
-        add_history(input);
-        //clear_history();
-        SplitTokens(input, &tokens);
-        tokenisation(&tokens,input);
-        print_tokens(tokens);
-        //ft_clear(input);
-        //ft_exit(input);
-        free(input);
-    }
-}
+
+
+
