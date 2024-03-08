@@ -6,6 +6,7 @@ int main(int ac, char **av, char **env)
     t_token *tokens;
     int i = 1;
     
+    tokens = NULL;
     while(1)
     {
         input = readline(YELLOW"\n➜ sh-mini ✗ "NC);
@@ -17,15 +18,13 @@ int main(int ac, char **av, char **env)
         //clear_history();
         SplitTokens(input, &tokens);
         tokenisation(&tokens,input);
-        print_tokens(tokens);
+        //print_tokens(tokens);
         // if (check_syntax(tokens))
         //     continue;
         
-
+        
         if (i == 2)
         {
-            free_tokens(&tokens);
-            free(tokens);
             free(input);
             system("leaks minishell");
             exit(0);

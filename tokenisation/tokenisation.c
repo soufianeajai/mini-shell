@@ -29,6 +29,7 @@ char *mystrdup(t_token *tokens, char *input)
 void tokenisation(t_token **tokens, char *input)
 {
     t_token *tmp;
+
     tmp = *tokens;
     while (tmp)
     {
@@ -38,18 +39,22 @@ void tokenisation(t_token **tokens, char *input)
     tmp = NULL;
 }
 
-void free_tokens(t_token **tokens)
+void free_tokens(t_token *tokens)
 {
+    if (tokens == NULL)
+        return;
     t_token *tmp;
-    
-    while (*tokens)
+
+    while (tokens)
     {
-        tmp = *tokens;
-        *tokens = (*tokens)->next;
+        tmp = tokens;
+        tokens = tokens->next;
         free(tmp->str);
         free(tmp);
-    }
+    }  
+    
 }
+
 void print_tokens(t_token *tokens)
 {
     while (tokens)
