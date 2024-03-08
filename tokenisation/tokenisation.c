@@ -41,18 +41,15 @@ void tokenisation(t_token **tokens, char *input)
 
 void free_tokens(t_token *tokens)
 {
-    if (tokens == NULL)
-        return;
     t_token *tmp;
-
+    
     while (tokens)
     {
         tmp = tokens;
         tokens = tokens->next;
-        free(tmp->str);
+        free(tmp->str); 
         free(tmp);
-    }  
-    
+    }
 }
 
 void print_tokens(t_token *tokens)

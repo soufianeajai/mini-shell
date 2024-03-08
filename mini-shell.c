@@ -25,6 +25,8 @@ int main(int ac, char **av, char **env)
         
         if (i == 2)
         {
+            free_tokens(tokens);
+            tokens = NULL;  
             free(input);
             system("leaks minishell");
             exit(0);
