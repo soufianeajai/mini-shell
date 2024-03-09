@@ -90,8 +90,6 @@ t_tree_node	*parse_pipeline(t_token **tokens)
 	tree_node = 0;
 	left = parse_simple_command(tokens);
 	
-	printf("%p\n",left);
-	//printf("\n+++%s\n",((t_cmd_node *)left->node)->executable);
 	if (!left)
 		return (0);
 	if (*tokens && (*tokens)->type == PIPE)
@@ -140,7 +138,7 @@ t_tree_node	*parse_simple_command(t_token **tokens)
 	executable = 0;
 	arguments = 0;
 	redir_node = 0;
-	*head_redir = 0;
+	head_redir = 0;
 	while ((*tokens) && (*tokens)->type != PIPE)
 	{
 		if ((*tokens)->type == CMD)
@@ -159,8 +157,7 @@ t_tree_node	*parse_simple_command(t_token **tokens)
 		}
 	}
 	cmd_node = create_cmd_node(executable, arguments);
-	printf("\n+++%s\n",cmd_node->executable);
-	if (*head_redir)
+	if (head_redir)
 	{
 		// redir_node = *head_redir;
 		// while ((*head_redir)->next)

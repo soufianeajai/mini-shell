@@ -27,8 +27,8 @@ if (check_syntax(tokens))
             continue;
         }
         printf("\n\n\n");
-        parse_command(&tokens);
-    //    print_tree(parse_command(&tokens));
+      //  parse_command(&tokens);
+        print_tree(parse_command(&tokens));
         
         //ft_exit(input,&tokens);
         free_tokens(&tokens);
