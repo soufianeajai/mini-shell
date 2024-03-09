@@ -1,4 +1,4 @@
-#include "../mini-shell.h"
+#include "../minishell.h"
 
 void ft_strlcpy(char *dst, const char *src, size_t dstsize)
 {
@@ -48,8 +48,11 @@ void free_tokens(t_token **tokens)
         tmp = *tokens;
         *tokens = (*tokens)->next;
         free(tmp->str); 
+        tmp->str = 0;
         free(tmp);
-    }  
+        tmp = 0;
+    }
+    tokens = 0;
 }
 
 void print_tokens(t_token *tokens)
@@ -58,7 +61,7 @@ void print_tokens(t_token *tokens)
     {
         //if (tokens->prev != NULL)
             //printf("\n prev : %s",tokens->prev->str);
-        printf("\n----waa--->%s\n", tokens->str);
+        printf("\n--->%s\n", tokens->str);
         tokens = tokens->next;
     }
 }

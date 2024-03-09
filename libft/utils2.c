@@ -1,4 +1,4 @@
-#include "../mini-shell.h"
+#include "../minishell.h"
 
 int ft_strchr(const char *s, int c)
 {

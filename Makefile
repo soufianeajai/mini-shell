@@ -1,5 +1,5 @@
 NAME = minishell
-SRCS = libft/utils1.c libft/utils2.c libft/ft_split.c tokenisation/SplitToken.c syntax/syntax.c tokenisation/tokenisation.c environnement/env.c parsing/utils.c mini-shell.c 
+SRCS = libft/utils1.c libft/utils2.c libft/ft_split.c tokenisation/SplitToken.c syntax/syntax.c tokenisation/tokenisation.c environnement/env.c builtins/builtins_functions.c mini-shell.c parsing/parsing.c
 OBJS = $(SRCS:.c=.o)
 
 all : $(NAME)
@@ -8,7 +8,7 @@ all : $(NAME)
 #    cc $(CFLAGS) -c $< -o $@ 
 
 $(NAME) : $(OBJS)
-	cc  $(CFLAGS) -o $@ $^ -lreadline
+	cc  -g3 $(CFLAGS)  -fsanitize=address -o $@ $^ -lreadline
 
 clean :
 	$(RM) $(OBJS) $(OBJSB)

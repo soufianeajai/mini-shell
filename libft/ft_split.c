@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../mini-shell.h"
+#include "../minishell.h"
 
 static int	ft_len(char const *s, char c)
 {

@@ -1,16 +1,19 @@
-#include "../mini-shell.h"
+#include "../minishell.h"
 
-int    is_operator(int type)
+int    is_operator(node_type type,int len ,char *str)
 {
     if (type == PIPE)
         return (1);
-    if (type == O_RED)
-        return (2);
-    if (type == I_RED)
-        return (3);
-    if (type == APP || type == HER_DOC)
-        return (4);
-    return (0);
+    if (type == REDIR)
+    {
+        if (len == 2)
+            return (4);
+        if (str[0] == '>')
+            return (2);
+        else
+            return (3);
+    }
+    return(0);
 }
 
 void printf_error_syntax(char *str)
@@ -23,17 +26,23 @@ void printf_error_syntax(char *str)
 
 int check_syntax(t_token *tok)
 {
+    int type1;
+    int type2;
+
     while (tok)
     {
+        type1 = is_operator(tok->type,tok->len,tok->str);
+        if (tok->prev)
+            type2 = is_operator(tok->prev->type,tok->prev->len,tok->prev->str);
         // first case if same special token 
-        if (tok->prev && is_operator(tok->type) && is_operator(tok->prev->type))
+        if (tok->prev && type1 && type2)
         {
-            if (is_operator(tok->prev->type) == is_operator(tok->type))
+            if (type2 == type1)
             {
                 printf_error_syntax(tok->str);
                 return (1);
             }
-            else if (is_operator(tok->prev->type) != 1)
+            else if (type2 != 1)
             {
                 printf_error_syntax(tok->str);
                 return (1);

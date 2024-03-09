@@ -1,6 +1,6 @@
-#include "../mini-shell.h"
+#include "../minishell.h"
 
-void	ft_lstadd_back(t_token **lst, int len , int type , int index)
+void	ft_lstadd_back(t_token **lst, int len , node_type type , int index)
 {
     t_token	*new;
     t_token	*p;
@@ -33,7 +33,6 @@ int redirection_detect(char *input , t_token **tokens, int i)
 {
     char tmp[2];
     int j;
-    int type;
 
     j = -1;
     tmp[0] = '<';
@@ -42,23 +41,44 @@ int redirection_detect(char *input , t_token **tokens, int i)
     {
         if (input[i] == tmp[j] && input[i + 1] != tmp[j])
         {
-            if (input[i] == '<')
-                type = I_RED;
-            else
-                type = O_RED;
-            ft_lstadd_back(tokens, 1, type, i);
+            // if (input[i] == '<')
+            //     type = I_RED;
+            // else
+            //     type = O_RED;
+            ft_lstadd_back(tokens, 1, REDIR, i);
             return (1);
         }
         else if (input[i] == tmp[j] && input[i + 1] == tmp[j])
         {
-            if (input[i] == '<')
-                type = HER_DOC;
-            else
-                type = APP;
-            ft_lstadd_back(tokens, 2, type, i);
+            // if (input[i] == '<')
+            //     type = HER_DOC;
+            // else
+            //     type = APP;
+            ft_lstadd_back(tokens, 2, REDIR, i);
             return (2);
         }
     }
+    // while (++j < 2)
+    // {
+    //     if (input[i] == tmp[j] && input[i + 1] != tmp[j])
+    //     {
+    //         if (input[i] == '<')
+    //             type = REDIR;
+    //         else
+    //             type = REDIR;
+    //         ft_lstadd_back(tokens, 1, type, i);
+    //         return (1);
+    //     }
+    //     else if (input[i] == tmp[j] && input[i + 1] == tmp[j])
+    //     {
+    //         if (input[i] == '<')
+    //             type = REDIR;
+    //         else
+    //             type = REDIR;
+    //         ft_lstadd_back(tokens, 2, type, i);
+    //         return (2);
+    //     }
+    // }
     if(input[i] == '|')
     {
         ft_lstadd_back(tokens, 1, PIPE, i);
@@ -94,7 +114,7 @@ int is_word(t_token **tokens, char *input, int *i)
     }
     if (j == *i)
         return (0);
-    ft_lstadd_back(tokens, *i - j, WORD, j);
+    ft_lstadd_back(tokens, *i - j, CMD, j);
     return (1);
 }
 

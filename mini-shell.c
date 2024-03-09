@@ -1,4 +1,5 @@
-#include "mini-shell.h"
+#include "minishell.h"
+#include "parsing/parsing.h"
 
 int main(int ac, char **av, char **env)
 {
@@ -18,17 +19,20 @@ int main(int ac, char **av, char **env)
 
         SplitTokens(input, &tokens);
         tokenisation(&tokens,input);
-        
-
-        if (check_syntax(tokens))
+//        print_tokens(tokens);
+if (check_syntax(tokens))
         {
             free_tokens(&tokens);
             free(input);
             continue;
         }
+        printf("\n\n\n");
+        parse_command(&tokens);
+    //    print_tree(parse_command(&tokens));
+        
+        ft_exit(input,&tokens);
         free_tokens(&tokens);
         free(input);
-        ft_exit(input, tokens);
     }
 }
 
