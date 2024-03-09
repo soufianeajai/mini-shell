@@ -42,7 +42,9 @@ void print_tree(t_tree_node *tree)
 			printf("\n*-> %s",cmd->arguments[i]);
 	}	
 	else
+	{
 		printf("momo");
+	}
 }
 
 
@@ -108,7 +110,7 @@ void ft_lstadd_back_redir(t_redir_node **head, t_redir_node *new)
 
 	if (new)
 	{
-		if (!*head)
+		if (!head)
 		{
 			*head = new;
 		}
@@ -138,7 +140,7 @@ t_tree_node	*parse_simple_command(t_token **tokens)
 	executable = 0;
 	arguments = 0;
 	redir_node = 0;
-	head_redir = 0;
+	head_redir = &redir_node;
 	while ((*tokens) && (*tokens)->type != PIPE)
 	{
 		if ((*tokens)->type == CMD)
@@ -157,7 +159,7 @@ t_tree_node	*parse_simple_command(t_token **tokens)
 		}
 	}
 	cmd_node = create_cmd_node(executable, arguments);
-	if (head_redir)
+	if (head_redir && *head_redir)
 	{
 		// redir_node = *head_redir;
 		// while ((*head_redir)->next)
@@ -167,6 +169,7 @@ t_tree_node	*parse_simple_command(t_token **tokens)
 		node = add_to_tree((void *)(*head_redir), REDIR);
 	}
 	else if (!(redir_node) && cmd_node){
+		printf ("yes\n");
 		node = add_to_tree((void *)cmd_node, CMD);
 
 	}
