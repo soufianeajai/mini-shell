@@ -31,7 +31,13 @@ int check_syntax(t_token *tok)
 
     while (tok)
     {
+
         type1 = is_operator(tok->type,tok->len,tok->str);
+        if (type1 && !tok->next)
+        {
+            printf_error_syntax(tok->str);
+            return (1);
+        }
         if (tok->prev)
             type2 = is_operator(tok->prev->type,tok->prev->len,tok->prev->str);
         // first case if same special token 

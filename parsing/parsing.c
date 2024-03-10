@@ -17,6 +17,11 @@ void print_tree(t_tree_node *tree)
 			return;
 		printf("\n--> type = %u , redir_type = %u\n",redcmd->type, redcmd->redir_type);
 		printf("\n--> filename = %s\n",redcmd->filename);
+		printf("\n--> cmd:");	
+		printf("\n--> type = %u , cmd = %s\n",redcmd->cmd->type, redcmd->cmd->executable);
+		printf("\n->arguments:");
+		while (redcmd->cmd->arguments && redcmd->cmd->arguments[++i])
+			printf("\n*-> %s",redcmd->cmd->arguments[i]);
 	}
 	else if (tree && tree->type == PIPE)
 	{

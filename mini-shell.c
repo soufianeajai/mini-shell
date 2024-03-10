@@ -20,7 +20,7 @@ int main(int ac, char **av, char **env)
         SplitTokens(input, &tokens);
         tokenisation(&tokens,input);
 //        print_tokens(tokens);
-if (check_syntax(tokens))
+        if (check_syntax(tokens))
         {
             free_tokens(&tokens);
             free(input);
