@@ -15,13 +15,20 @@ void print_tree(t_tree_node *tree)
 		redcmd = (t_redir_node *)tree->node;
 		if (!redcmd)
 			return;
-		printf("\n--> type = %u , redir_type = %u\n",redcmd->type, redcmd->redir_type);
-		printf("\n--> filename = %s\n",redcmd->filename);
-		printf("\n--> cmd:");	
-		printf("\n--> type = %u , cmd = %s\n",redcmd->cmd->type, redcmd->cmd->executable);
-		printf("\n->arguments:");
-		while (redcmd->cmd->arguments && redcmd->cmd->arguments[++i])
-			printf("\n*-> %s",redcmd->cmd->arguments[i]);
+			while (redcmd && redcmd->next)
+			{
+				printf("\nredir_type = %s",(redcmd)->filename);
+				redcmd = (redcmd)->next;
+
+			}
+			printf("\nredir_type = %s",(redcmd)->filename);
+			printf("\n--> executable = %s\n",redcmd->cmd->executable);
+			while (redcmd->cmd->arguments && redcmd->cmd->arguments[++i])
+				printf("\n*-> %s",redcmd->cmd->arguments[i]);
+		// printf("\n--> cmd = %s",redcmd->cmd->executable);
+		// printf("\n	arguments:");
+		// while (redcmd->cmd->arguments && redcmd->cmd->arguments[++i])
+		// 	printf("  %s",redcmd->cmd->arguments[i]);
 	}
 	else if (tree && tree->type == PIPE)
 	{
@@ -29,9 +36,9 @@ void print_tree(t_tree_node *tree)
 		if (!pipecmd)
 			return;
 		printf("\n--> type = %u\n",pipecmd->type);
-		printf("\n--> left:");
+		printf("\n--> left pipe:");
 		print_tree(pipecmd->left);
-		printf("\n--> right:");
+		printf("\n--> right pipe:");
 		print_tree(pipecmd->right);
 	}
 	else
@@ -117,6 +124,7 @@ void ft_lstadd_back_redir(t_redir_node **head, t_redir_node *new)
 	{
 		if (!head)
 		{
+			
 			*head = new;
 		}
 		else
@@ -145,7 +153,7 @@ t_tree_node	*parse_simple_command(t_token **tokens)
 	executable = 0;
 	arguments = 0;
 	redir_node = 0;
-	head_redir = &redir_node;
+	head_redir = 0;
 	while ((*tokens) && (*tokens)->type != PIPE)
 	{
 		if ((*tokens)->type == CMD)
@@ -160,9 +168,22 @@ t_tree_node	*parse_simple_command(t_token **tokens)
 		while ((*tokens) && (*tokens)->type == REDIR)
 		{
 			redir_node = parse_redirection(tokens);
-			ft_lstadd_back_redir(head_redir, redir_node);
+			if (!head_redir)
+			{
+				head_redir = malloc(sizeof(t_redir_node*));
+        		*head_redir = redir_node;
+			}
+			else
+				ft_lstadd_back_redir(head_redir, redir_node);
 		}
 	}
+	        // if (head_redir)
+			// while (*head_redir)
+			// {
+			// 	printf("\nredir_type = %s",(*head_redir)->filename);
+			// 	*head_redir = (*head_redir)->next;
+
+			// }
 	cmd_node = create_cmd_node(executable, arguments);
 	if (head_redir && *head_redir)
 	{
@@ -172,6 +193,7 @@ t_tree_node	*parse_simple_command(t_token **tokens)
 		// (*head_redir)->cmd = cmd_node;
 		redir_node->cmd = cmd_node;
 		node = add_to_tree((void *)(*head_redir), REDIR);
+		
 	}
 	else if (!(redir_node) && cmd_node){
 		printf ("yes\n");
