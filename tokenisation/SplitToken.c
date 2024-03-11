@@ -87,22 +87,6 @@ int redirection_detect(char *input , t_token **tokens, int i)
     return (0);
 }
 
-
-int detect_env(char *input, int i)
-{
-    if (input[i] == '\"')
-    {
-        i++;
-        while (input[i] && input[i] != '\"')
-        {
-            
-            if (input[i] == '$')
-                return (1);
-            i++;
-        }
-    }
-    return (0);
-}
 int is_word(t_token **tokens, char *input, int *i)
 {
     int j;
@@ -117,10 +101,14 @@ int is_word(t_token **tokens, char *input, int *i)
         if (input[*i] == '\'' || input[*i] == '\"')
         {
             
-            k = *i;env_flag = detect_env(input, k);
+            k = *i;
             (*i)++;
             while (input[*i] && input[*i] != input[k])
+            {
+                 if (input[*i] == '$')
+                     env_flag = 1;
                 (*i)++;
+            }
             (*i)++;
             continue;
         }
