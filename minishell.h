@@ -27,6 +27,7 @@ typedef enum
 	CMD,
 	PIPE,
 	REDIR,
+	ENV,
 }						node_type;
 
 typedef struct s_token

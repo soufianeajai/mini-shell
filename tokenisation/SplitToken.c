@@ -87,18 +87,37 @@ int redirection_detect(char *input , t_token **tokens, int i)
     return (0);
 }
 
+
+int detect_env(char *input, int i)
+{
+    if (input[i] == '\"')
+    {
+        i++;
+        while (input[i] && input[i] != '\"')
+        {
+            
+            if (input[i] == '$')
+                return (1);
+            i++;
+        }
+    }
+    return (0);
+}
 int is_word(t_token **tokens, char *input, int *i)
 {
     int j;
     int k;
+    int env_flag;
 
     j = *i;
     k = -1;
+    env_flag = 0;
     while (input[*i])
     {
         if (input[*i] == '\'' || input[*i] == '\"')
         {
-            k = *i;
+            
+            k = *i;env_flag = detect_env(input, k);
             (*i)++;
             while (input[*i] && input[*i] != input[k])
                 (*i)++;
@@ -106,7 +125,11 @@ int is_word(t_token **tokens, char *input, int *i)
             continue;
         }
         if(input[*i] != '<' && input[*i] != '>' && input[*i] != '|')
+        {
+            if (input[*i] == '$')
+                env_flag = 1;
             (*i)++;
+        }
         else 
             break;
         if(input[*i] && ft_isspace(input[*i]))
@@ -114,7 +137,11 @@ int is_word(t_token **tokens, char *input, int *i)
     }
     if (j == *i)
         return (0);
-    ft_lstadd_back(tokens, *i - j, CMD, j);
+    printf("env_flag = %d\n", env_flag);
+    if (env_flag)
+        ft_lstadd_back(tokens, *i - j, ENV, j);
+    else
+        ft_lstadd_back(tokens, *i - j, CMD, j);
     return (1);
 }
 

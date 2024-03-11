@@ -19,16 +19,16 @@ int main(int ac, char **av, char **env)
 
         SplitTokens(input, &tokens);
         tokenisation(&tokens,input);
-//        print_tokens(tokens);
+        print_tokens(tokens);
         if (check_syntax(tokens))
         {
             free_tokens(&tokens);
             free(input);
             continue;
         }
-        printf("\n\n\n");
+      //  printf("\n\n\n");
       //  parse_command(&tokens);
-        print_tree(parse_command(&tokens));
+      //  print_tree(parse_command(&tokens));
         
         //ft_exit(input,&tokens);
         free_tokens(&tokens);
