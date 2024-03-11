@@ -1,8 +1,6 @@
 
 #include "parsing.h"
 
-
-
 void print_tree(t_tree_node *tree)
 {
 	t_cmd_node *cmd;
