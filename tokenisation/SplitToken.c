@@ -92,6 +92,7 @@ int is_word(t_token **tokens, char *input, int *i)
     int j;
     int k;
     int env_flag;
+    int flag_quote;
 
     j = *i;
     k = -1;
@@ -100,15 +101,19 @@ int is_word(t_token **tokens, char *input, int *i)
     {
         if (input[*i] == '\'' || input[*i] == '\"')
         {
-            
+            flag_quote = 0;
             k = *i;
             (*i)++;
+            printf("_____%c______\n", input[k]);
             while (input[*i] && input[*i] != input[k])
             {
-                 if (input[*i] == '$')
+                printf("input[*i] = %c\n", input[*i]);
+                 if (input[*i] == '$' && flag_quote == 0 && input[k] == '\"')
                      env_flag = 1;
                 (*i)++;
             }
+            if(input[*i] == input[k])
+                flag_quote = 1;
             (*i)++;
             continue;
         }
