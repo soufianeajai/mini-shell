@@ -57,15 +57,13 @@ typedef struct s_env
 	struct s_env *next;
 } t_env;
 
-// typedef struct s_command
-// {
-// 	t_cmd *cmd;               // The command to execute
-// 	char *input_redirection;  // '<' The file to redirect input from,or NULL  no input redirection
-// 	char *output_redirection; // '>' The file to redirect output to,or NULL  no output redirection
-// 	int append;               // '>>' 1 if output redirection should append,0 otherwise
-// 	int quote_type;           // 0 for no quotes, 1 for single quotes,2 for double quotes
-// 	struct s_command *next;   // The next command in the list
-// }			t_command;
+//environement
+
+// void env_copy(t_env **env, char **environ);
+// void print_env(t_env *tmp, char *input); 
+// char *ft_getenv(t_env *env, char *key);
+// char *get_path_cmd(t_env *env, t_cmd_node *cmd);
+
 
 
 //syntax error : 
@@ -97,12 +95,5 @@ char *mystrdup(t_token *tokens, char *input);
 void ft_strlcpy(char *dst, const char *src, size_t dstsize);
 
 
-//env
-void env_copy(t_env **env, char **environ);
-void print_env(t_env *tmp, char *input); 
-
-
-//builtins
-void ft_exit(char *input,t_token **tokens);
 
 #endif

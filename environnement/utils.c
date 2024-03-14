@@ -1,5 +1,5 @@
-#include"minishell.h"
-
+#include "../minishell.h"
+#include "../parsing/parsing.h"
 
 
 char *ft_getenv(t_env *env, char *key)
@@ -40,5 +40,6 @@ char *get_path_cmd(t_env *env, t_cmd_node *cmd)
 		free(path_cmd);
 		path_cmd = NULL;
 	}
-	return (path_cmd);
+	ft_free(path);
+	return (NULL);
 }
