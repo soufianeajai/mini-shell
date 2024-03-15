@@ -67,9 +67,18 @@ void handling_qoutes(t_token **tk)
 			if ((flag = is_qoutes(tmp->str[i])))
 				i++;
 			while (tmp->str[i] && (!is_qoutes(tmp->str[i]) || (flag != is_qoutes(tmp->str[i]) && flag != 0)))
-				stock[j++] = tmp->str[i++];
-			if (tmp->str[i] && flag == is_qoutes(tmp->str[i++]))
-				flag = 0;
+			{
+              //  printf("\n------is_qoutes------> %d",is_qoutes(tmp->str[i]));
+              //  printf("\n-> %c , --> qoutes = %d ",tmp->str[i], flag);
+                stock[j++] = tmp->str[i++];}
+
+            //printf("*****------is_qoutes------> %d",is_qoutes(tmp->str[i]));
+              //  printf("\n-> %c , --> qoutes = %d *****",tmp->str[i], flag);
+			if (tmp->str[i] && flag == is_qoutes(tmp->str[i]))
+			{
+                i++;
+                flag = 0;
+            }
 		}
 		stock[j] = '\0';
 		free(tmp->str);
