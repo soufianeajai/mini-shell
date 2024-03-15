@@ -93,7 +93,8 @@ void SplitTokens(char *input, t_token **tokens);
 void print_tokens(t_token *tokens);
 char *mystrdup(t_token *tokens, char *input);
 void ft_strlcpy(char *dst, const char *src, size_t dstsize);
-
+void handling_qoutes(t_token **t);
+int is_qoutes(char c);
 
 
 #endif
