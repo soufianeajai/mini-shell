@@ -39,6 +39,46 @@ void tokenisation(t_token **tokens, char *input)
     tmp = NULL;
 }
 
+int is_qoutes(char c)
+{
+	if (c == '\"')
+		return (2);
+	if (c == '\'')
+		return (1);
+	return (0);
+}
+
+void handling_qoutes(t_token **tk)
+{
+	t_token *tmp;
+	int i;
+	int j;
+	int flag;
+	char stock[100];
+	
+	tmp = *tk;
+	flag = 0;
+	while (tmp)
+	{
+		j = 0;
+		i = 0;
+		while(tmp->str && tmp->str[i])
+		{
+			if ((flag = is_qoutes(tmp->str[i])))
+				i++;
+			while (tmp->str[i] && (!is_qoutes(tmp->str[i]) || (flag != is_qoutes(tmp->str[i]) && flag != 0)))
+				stock[j++] = tmp->str[i++];
+			if (tmp->str[i] && flag == is_qoutes(tmp->str[i++]))
+				flag = 0;
+		}
+		stock[j] = '\0';
+		free(tmp->str);
+		tmp->str = NULL;
+		tmp->str = ft_strdup(stock);
+		tmp = tmp->next;
+	}
+}
+
 void free_tokens(t_token **tokens)
 {
     t_token *tmp;
