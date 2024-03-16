@@ -1,5 +1,5 @@
+#include "env.h"
 #include "../minishell.h"
-
 static void ft_lstadd_back_env(t_env **lst, int index, char *str)
 {
     t_env *new;
@@ -7,13 +7,22 @@ static void ft_lstadd_back_env(t_env **lst, int index, char *str)
 
     new = malloc(sizeof(t_env));
     if(!new)
-        return ;    
-    
+        return ; 
     new->key = malloc(sizeof(char) * (index + 1));
+    if (!new->key)
+	{
+		free(new);
+		return ;
+	}
     new->value = malloc(sizeof(char) * (ft_strlen(str) - index + 1));
-    if (!new->key || !new->value)
-        return ;
+    if (!new->value)
+	{	    
+		free(new->key);
+		free(new);
+        	return ;
+	}
     ft_strlcpy(new->key, str, index + 1);
+    printf("\n key = %s",new->key);
     ft_strlcpy(new->value, str + index + 1, ft_strlen(str) - index + 1);
     new->next = NULL;
     p = *lst;
@@ -32,11 +41,12 @@ void env_copy(t_env **env, char **environ)
     int i;
 
     i = 0;
-    while (environ[i])
-    {
-        ft_lstadd_back_env(env, ft_strchr(environ[i], '='), environ[i]);
-        i++;
-    }
+    if (environ)
+    	while (environ[i])
+    	{
+        	ft_lstadd_back_env(env, ft_strchr(environ[i], '='), environ[i]);
+        	i++;
+    	}
 }
 
 void print_env(t_env *tmp, char *input)

@@ -37,3 +37,16 @@ int ft_isspace(char c)
 		return (1);
 	return (0);
 }
+
+void	ft_free(char **tab)
+{
+	int	i;
+
+	i = 0;
+	while (tab[i])
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
+}

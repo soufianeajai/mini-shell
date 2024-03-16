@@ -1,5 +1,4 @@
-#include "../minishell.h"
-#include "../parsing/parsing.h"
+#include "execute.h"
 
 int is_builtin(t_cmd_node *cmd)
 {
@@ -31,15 +30,20 @@ int ft_error(char *cmd, char *error)
     ft_putstr_fd("\n", 2);
     return (127);
 }
+void execute_builtin(t_env *env, t_cmd_node *cmd)
+{
+	return ;
+}
 
 void execute_smiple_cmd(t_env *env, t_cmd_node *cmd)
 {
-    char *path_cmd;
-
+	pid_t pid;
+	char *path_cmd;
+	
     // i need cmd in argument to execute it
 
-    if (is_builtin(cmd->executable))
-        exit (execute_builtin(env, cmd));
+    if (is_builtin(cmd))
+        execute_builtin(env, cmd);
     
     path_cmd = get_path_cmd(env, cmd);
     if (!path_cmd)

@@ -16,7 +16,7 @@ int main(int ac, char **av, char **env)
         input = readline(YELLOW"\n➜ sh-mini ✗ "NC);
         if (!input)
             exit(0);
-        print_env(env_list, input);
+       // print_env(env_list, input);
         if (ft_strlen(input) > 0)
             add_history(input);
         //clear_history();

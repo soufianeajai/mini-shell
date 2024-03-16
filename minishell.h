@@ -49,23 +49,6 @@ typedef struct s_cmd
 	char **args;
 }			t_cmd;
 
-
-typedef struct s_env
-{
-	char *key;
-	char *value;
-	struct s_env *next;
-} t_env;
-
-//environement
-
-// void env_copy(t_env **env, char **environ);
-// void print_env(t_env *tmp, char *input); 
-// char *ft_getenv(t_env *env, char *key);
-// char *get_path_cmd(t_env *env, t_cmd_node *cmd);
-
-
-
 //syntax error : 
 int check_syntax(t_token *tok);
 void printf_error_syntax(char *str);
@@ -81,9 +64,7 @@ int			ft_strchr(const char *s, int c);
 void		ft_putstr_fd(char *s, int fd);
 size_t		count_strings(char **strings);
 int			ft_isspace(char c);
-
-
-
+void	ft_free(char **tab);
 
 
 //tokenisation

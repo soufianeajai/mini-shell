@@ -1,6 +1,6 @@
 #include "../minishell.h"
 #include "../parsing/parsing.h"
-
+#include "env.h"
 
 char *ft_getenv(t_env *env, char *key)
 {
@@ -25,7 +25,7 @@ char *get_path_cmd(t_env *env, t_cmd_node *cmd)
 
 	i = 0;
 	// /bin + / =  /bin/  + ls = /bin/ls
-	path = ft_split(ft_getenv(env, "PATH"), ":");
+	path = ft_split(ft_getenv(env, "PATH"), ':');
 	while (path[i] && cmd->executable)
 	{
 		util = ft_strjoin(path[i++], "/");
