@@ -1,7 +1,5 @@
 #include "minishell.h"
-#include "parsing/parsing.h"
-#include "environnement/env.h"
-//#include "execution/execute.h"
+#include "execution/execute.h"
 
 int main(int ac, char **av, char **env)
 {
@@ -11,6 +9,7 @@ int main(int ac, char **av, char **env)
 
     tokens = NULL;
     env_copy(&env_list, env);
+
     while(1)
     {
         input = readline(YELLOW"\n➜ sh-mini ✗ "NC);
@@ -23,8 +22,8 @@ int main(int ac, char **av, char **env)
 
         SplitTokens(input, &tokens);
         tokenisation(&tokens,input);
-	handling_qoutes(&tokens);
-        print_tokens(tokens);
+	    handling_qoutes(&tokens);
+        //print_tokens(tokens);
         if (check_syntax(tokens))
         {
             free_tokens(&tokens);
@@ -32,7 +31,8 @@ int main(int ac, char **av, char **env)
             continue;
         }
         printf("\n\n\n");
-  //     execute_tree(parse_command(&tokens), env_list);
+        t_tree_node *tree = parse_command(&tokens);
+        execute_tree(tree, env_list);
        //  print_tree(parse_command(&tokens));
         
         //ft_exit(input,&tokens);

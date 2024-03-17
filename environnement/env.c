@@ -22,7 +22,6 @@ static void ft_lstadd_back_env(t_env **lst, int index, char *str)
         	return ;
 	}
     ft_strlcpy(new->key, str, index + 1);
-    printf("\n key = %s",new->key);
     ft_strlcpy(new->value, str + index + 1, ft_strlen(str) - index + 1);
     new->next = NULL;
     p = *lst;

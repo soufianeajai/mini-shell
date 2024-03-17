@@ -193,11 +193,8 @@ t_tree_node	*parse_simple_command(t_token **tokens)
 		node = add_to_tree((void *)(*head_redir), REDIR);
 		
 	}
-	else if (!(redir_node) && cmd_node){
-		printf ("yes\n");
+	else if (!(redir_node) && cmd_node)
 		node = add_to_tree((void *)cmd_node, CMD);
-
-	}
 	//printf("\n+++%s\n",((t_cmd_node *)node->node)->executable);
 	return (node);
 }

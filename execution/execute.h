@@ -1,8 +1,10 @@
+#ifndef EXECUTE_H
+#define EXECUTE_H
 #include "../parsing/parsing.h"
 #include "../environnement/env.h"
 
 //execute tree
-void execute_tree(t_tree_node *tree, t_env *env);
+int execute_tree(t_tree_node *tree, t_env *env);
 
 
 //execute simple cmd 
@@ -17,3 +19,5 @@ int is_builtin(t_cmd_node *cmd);
 
 //error 
 int ft_error(char *cmd, char *error);
+
+#endif

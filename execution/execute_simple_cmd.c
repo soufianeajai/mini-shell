@@ -1,5 +1,5 @@
 #include "execute.h"
-
+#include "../environnement/env.h"
 int is_builtin(t_cmd_node *cmd)
 {
     if (ft_strncmp(cmd->executable, "echo", 5) == 0)
@@ -25,8 +25,7 @@ int ft_error(char *cmd, char *error)
     if (cmd)
         ft_putstr_fd(cmd, 2);
     ft_putstr_fd(": ", 2);
-    if (error)
-        perror(error);
+        ft_putstr_fd(error, 2);
     ft_putstr_fd("\n", 2);
     return (127);
 }
@@ -35,7 +34,7 @@ void execute_builtin(t_env *env, t_cmd_node *cmd)
 	return ;
 }
 
-void execute_smiple_cmd(t_env *env, t_cmd_node *cmd)
+void execute_simple_cmd(t_env *env, t_cmd_node *cmd)
 {
 	pid_t pid;
 	char *path_cmd;
@@ -51,11 +50,10 @@ void execute_smiple_cmd(t_env *env, t_cmd_node *cmd)
         free(path_cmd);
         exit(ft_error(cmd->executable, "command not found"));
     }
-
-    if (execve(path_cmd, cmd->arguments, NULL) == -1)
+    if(execve(path_cmd, cmd->arguments, NULL) == -1)
     {
         free(path_cmd);
-        exit (ft_error(cmd->executable, "execve"));
+        exit (ft_error(cmd->executable, "error in execve"));
     }
 
 }

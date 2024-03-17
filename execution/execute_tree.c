@@ -1,15 +1,24 @@
 #include "execute.h"
 
-void execute_tree(t_tree_node *tree, t_env *env)
+int execute_tree(t_tree_node *tree, t_env *env)
 {
 	int pid_left;
 	int pid_right;
+	int status;
+	int fd[2];
 
 	if (!tree)
-		return ;
+		return (-1);;
 	if (tree->type == CMD)
-		execute_simple_cmd(env, (t_cmd_node *)(tree->node));
-
+	{
+		pid_left = fork();
+		if (pid_left == 0)
+			execute_simple_cmd(env, (t_cmd_node *)(tree->node));
+		else
+			waitpid(pid_left, &status, 0);
+		return (status);
+	}
+	return (-1);
 }
 
 

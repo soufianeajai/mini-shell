@@ -30,7 +30,7 @@ char *get_path_cmd(t_env *env, t_cmd_node *cmd)
 	{
 		util = ft_strjoin(path[i++], "/");
 		path_cmd = ft_strjoin(util, cmd->executable);
-		if (access(path_cmd, X_OK) != 1)
+		if (access(path_cmd, X_OK) == 0)
 		{
 			free(util);
 			ft_free(path);
