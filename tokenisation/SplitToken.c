@@ -119,8 +119,12 @@ int is_word(t_token **tokens, char *input, int *i)
         }
         if(input[*i] != '<' && input[*i] != '>' && input[*i] != '|')
         {
+            if (input[*i] == '\'' || input[*i] == '\"')
+                continue;
             if (input[*i] == '$')
                 env_flag = 1;
+            if (input[*i] && ft_isspace(input[*i]))
+                break;
             (*i)++;
         }
         else 

@@ -30,9 +30,9 @@ int main(int ac, char **av, char **env)
             free(input);
             continue;
         }
-        printf("\n\n\n");
+        //printf("\n\n\n");
         t_tree_node *tree = parse_command(&tokens);
-        execute_tree(tree, env_list);
+        printf("\n-> %d\n",execute_tree(tree, env_list));
        //  print_tree(parse_command(&tokens));
         
         //ft_exit(input,&tokens);
