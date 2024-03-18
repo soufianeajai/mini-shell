@@ -57,3 +57,66 @@ void execute_simple_cmd(t_env *env, t_cmd_node *cmd)
     }
 
 }
+
+void execute_redir(t_env *env, t_redir_node *cmd)
+{
+    int fd_in;
+    int fd_out;  
+    t_redir_node *tmp;
+    int fd_file;
+
+    fd_in = dup(0);
+    fd_out = dup(1);
+    while (cmd)
+    {
+        if (cmd->redir_type == IN)
+        {
+            fd_file = open(cmd->filename, O_RDONLY);
+            if (fd_file == -1)
+                exit(ft_error(cmd->filename, "No such file or directory"));
+            dup2(fd_file,0);
+        }
+        else if (cmd->redir_type == OUT)
+        {
+            fd_file = open(cmd->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+            if (fd_file == -1)
+                exit(ft_error(cmd->filename, "No such file or directory"));
+            dup2(fd_file,1);
+        }
+        else if (cmd->redir_type == APPEND)
+        {
+            fd_file = open(cmd->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
+            if (fd_file == -1)
+                exit(ft_error(cmd->filename, "No such file or directory"));
+            dup2(fd_file,1);
+        }
+        else if (cmd->redir_type == HER_DOC)
+        {
+            int fd[2];
+	        char buf[1024];	
+            bzero(buf, 1024);
+	        if (pipe(fd))
+	        {
+	        	perror("pipe");
+	        	exit(1);
+	        }
+            while (read(fd_in, buf, sizeof(buf)))
+		    {
+
+			    if (strncmp(buf,ft_strjoin(cmd->filename,"\n"), strlen(cmd->filename) + 1) == 0)
+                    break;
+		        	write(fd[1], buf, ft_strlen(buf));
+                bzero(buf, 1024);
+	        }
+            dup2(fd[0], 0);
+            close(fd[0]);
+            close(fd[1]);
+        }
+        tmp = cmd;
+        cmd = cmd->next;
+    }
+    close(fd_file);
+    execute_simple_cmd(env, tmp->cmd);
+}
+
+
