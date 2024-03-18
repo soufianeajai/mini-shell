@@ -54,6 +54,8 @@ size_t		ft_strlen(const char *s);
 char		*ft_strjoin(char *s1, char *s2);
 char		*ft_strdup(char *src);
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
+void	*ft_memset(void *s, int c, size_t len);
+void	ft_bzero(void *s, size_t n);
 int			ft_strchr(const char *s, int c);
 void		ft_putstr_fd(char *s, int fd);
 size_t		count_strings(char **strings);

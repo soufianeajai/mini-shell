@@ -1,8 +1,6 @@
 #include "minishell.h"
 #include "execution/execute.h"
 
-
-
 int main(int ac, char **av, char **env)
 {
     char* input;
@@ -19,6 +17,8 @@ int main(int ac, char **av, char **env)
             exit(0);
         if (ft_strlen(input) > 0)
             add_history(input);
+        else 
+            continue;
         //clear_history();
 
         SplitTokens(input, &tokens);
@@ -34,7 +34,8 @@ int main(int ac, char **av, char **env)
         }
         //printf("\n\n\n");
         t_tree_node *tree = parse_command(&tokens);
-        printf("%d",execute_tree(tree, env_list));
+        execute_tree(tree, env_list);
+        // printf("%d",execute_tree(tree, env_list));
         
         print_env(env_list, input);
         if (ft_strncmp(input, "exit", 5) == 0)

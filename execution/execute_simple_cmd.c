@@ -64,6 +64,8 @@ void execute_redir(t_env *env, t_redir_node *cmd)
     int fd_out;  
     t_redir_node *tmp;
     int fd_file;
+    int fd[2];
+	char buf[1024];	
 
     fd_in = dup(0);
     fd_out = dup(1);
@@ -92,21 +94,19 @@ void execute_redir(t_env *env, t_redir_node *cmd)
         }
         else if (cmd->redir_type == HER_DOC)
         {
-            int fd[2];
-	        char buf[1024];	
-            bzero(buf, 1024);
+            ft_bzero(buf, 1024);
 	        if (pipe(fd))
 	        {
 	        	perror("pipe");
 	        	exit(1);
 	        }
-            while (read(fd_in, buf, sizeof(buf)))
+            while (1)
 		    {
-
-			    if (strncmp(buf,ft_strjoin(cmd->filename,"\n"), strlen(cmd->filename) + 1) == 0)
+                ft_putstr_fd("> ", fd_out);
+                if(read(fd_in, buf, sizeof(buf)) <= 0 || (strncmp(buf,cmd->filename, strlen(cmd->filename)) == 0))
                     break;
 		        	write(fd[1], buf, ft_strlen(buf));
-                bzero(buf, 1024);
+                ft_bzero(buf, 1024);
 	        }
             dup2(fd[0], 0);
             close(fd[0]);

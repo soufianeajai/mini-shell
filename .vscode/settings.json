@@ -3,6 +3,8 @@
         "unistd.h": "c",
         "history.h": "c",
         "parsing.h": "c",
-        "execute.h": "c"
+        "execute.h": "c",
+        "env.h": "c",
+        "minishell.h": "c"
     }
 }
