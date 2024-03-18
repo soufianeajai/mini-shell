@@ -15,12 +15,6 @@
 extern void	rl_replace_line(const char *, int);
 //extern int	g_signal;
 
-// #define WORD 0
-// #define PIPE 1
-// #define I_RED 2
-// #define O_RED 3
-// #define APP 4
-// #define HER_DOC 5
 
 typedef enum
 {

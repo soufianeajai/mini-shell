@@ -14,25 +14,25 @@ static void ft_lstadd_back_env(t_env **lst, int index, char *str)
 		free(new);
 		return ;
 	}
-    new->value = malloc(sizeof(char) * (ft_strlen(str) - index + 1));
+    new->value = malloc(sizeof(char) * (ft_strlen(str) - index));
     if (!new->value)
 	{	    
 		free(new->key);
 		free(new);
-        	return ;
+        return ;
 	}
     ft_strlcpy(new->key, str, index + 1);
-    ft_strlcpy(new->value, str + index + 1, ft_strlen(str) - index + 1);
+    ft_strlcpy(new->value, str + index + 1, ft_strlen(str) - index);
     new->next = NULL;
     p = *lst;
-    if (*lst == NULL)
-        *lst = new;
-    else
-    {
-        while (p->next)
-            p = p->next;
-        p->next = new;
-    }
+    if (lst && *lst == NULL)
+            *lst = new;
+        else
+        {
+            while (p->next)
+                p = p->next;
+            p->next = new;
+        }
 }
 
 void env_copy(t_env **env, char **environ)

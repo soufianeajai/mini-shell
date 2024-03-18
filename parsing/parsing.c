@@ -161,7 +161,7 @@ t_tree_node	*parse_simple_command(t_token **tokens)
 				executable = strdup((*tokens)->str);
 				consume(tokens);
 			}
-			arguments = get_arguments(arguments, tokens);
+			arguments = get_arguments(executable, arguments, tokens);
 		}
 		while ((*tokens) && (*tokens)->type == REDIR)
 		{
@@ -236,7 +236,7 @@ redir_type	get_redir_type(t_token **tokens)
 		type = HER_DOC;
 	return (type);
 }
-char	**get_arguments(char **arguments, t_token **tokens)
+char	**get_arguments(char *exec, char **arguments, t_token **tokens)
 {
 	char	**args;
 	int		len_args;
@@ -244,12 +244,13 @@ char	**get_arguments(char **arguments, t_token **tokens)
 	int		len;
 
 
-	i = 0;
+	i = 1;
 	len = count_len(arguments);
 	len_args = count_args(*tokens) + len;
-	args = malloc(sizeof(char *) * (len_args + 1));
+	args = malloc(sizeof(char *) * (len_args + 2));
 	if (!args)
-		return (0);	
+		return (0);
+	args[0] = strdup(exec);
 	while (i < len)
 	{
 		args[i] = strdup(arguments[i]);
