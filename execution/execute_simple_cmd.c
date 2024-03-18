@@ -65,7 +65,8 @@ void execute_redir(t_env *env, t_redir_node *cmd)
     t_redir_node *tmp;
     int fd_file;
     int fd[2];
-	char buf[1024];	
+	char buf[1024];
+    int status = 0;
 
     fd_in = dup(0);
     fd_out = dup(1);
@@ -73,10 +74,15 @@ void execute_redir(t_env *env, t_redir_node *cmd)
     {
         if (cmd->redir_type == IN)
         {
+            if (status == 1)
+            {
+                dup2(fd_in,fd[0]);
+                //close(fd[0]);
+            }
             fd_file = open(cmd->filename, O_RDONLY);
             if (fd_file == -1)
                 exit(ft_error(cmd->filename, "No such file or directory"));
-            dup2(fd_file,0);
+            dup2(fd_file,fd_in);
         }
         else if (cmd->redir_type == OUT)
         {
@@ -94,7 +100,9 @@ void execute_redir(t_env *env, t_redir_node *cmd)
         }
         else if (cmd->redir_type == HER_DOC)
         {
-            ft_bzero(buf, 1024);
+            status = 1;
+            char *input;
+           // ft_bzero(buf, 1024);
 	        if (pipe(fd))
 	        {
 	        	perror("pipe");
@@ -102,14 +110,17 @@ void execute_redir(t_env *env, t_redir_node *cmd)
 	        }
             while (1)
 		    {
-                ft_putstr_fd("> ", fd_out);
-                if(read(fd_in, buf, sizeof(buf)) <= 0 || (strncmp(buf,cmd->filename, strlen(cmd->filename)) == 0))
+                input = readline("> ");
+               // ft_putstr_fd("> ", fd_out);
+                if(!input || strncmp(input,cmd->filename, strlen(cmd->filename) -1 ) == 0)
                     break;
-		        	write(fd[1], buf, ft_strlen(buf));
-                ft_bzero(buf, 1024);
+		        	write(fd[1], input, ft_strlen(input));
+                    free(input);
+                    input = NULL;
+               // ft_bzero(buf, 1024);
 	        }
             dup2(fd[0], 0);
-            close(fd[0]);
+            //close(fd[0]);
             close(fd[1]);
         }
         tmp = cmd;

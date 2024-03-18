@@ -6,12 +6,7 @@ int execute_tree(t_tree_node *tree, t_env *env)
 	int pid_right;
 	int status;
 	int fd[2];
-	int save_stdin;
-	int save_stdout;
 
-	
-	save_stdin = dup(STDIN_FILENO);
-	save_stdout = dup(STDOUT_FILENO);
 	if (!tree)
 		return (-1);;
 	// if (tree->type == CMD)
@@ -42,7 +37,10 @@ int execute_tree(t_tree_node *tree, t_env *env)
 				execute_redir(env, (t_redir_node *)(tree->node));
 			}
 			else
-				printf("\npipe\n");
+			{
+				printf("pipe\n");
+				//ok i need to create a pipe
+			}
 		else
 			{
 				waitpid(pid_left, &status, 0);
