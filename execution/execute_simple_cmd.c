@@ -66,7 +66,6 @@ void execute_redir(t_env *env, t_redir_node *cmd)
     int fd_file;
     int fd[2];
 	char buf[1024];
-    int status = 0;
 
     fd_in = dup(0);
     fd_out = dup(1);
@@ -74,11 +73,6 @@ void execute_redir(t_env *env, t_redir_node *cmd)
     {
         if (cmd->redir_type == IN)
         {
-            if (status == 1)
-            {
-                dup2(fd_in,fd[0]);
-                //close(fd[0]);
-            }
             fd_file = open(cmd->filename, O_RDONLY);
             if (fd_file == -1)
                 exit(ft_error(cmd->filename, "No such file or directory"));
@@ -100,7 +94,6 @@ void execute_redir(t_env *env, t_redir_node *cmd)
         }
         else if (cmd->redir_type == HER_DOC)
         {
-            status = 1;
             char *input;
            // ft_bzero(buf, 1024);
 	        if (pipe(fd))
@@ -119,13 +112,15 @@ void execute_redir(t_env *env, t_redir_node *cmd)
                     input = NULL;
                // ft_bzero(buf, 1024);
 	        }
-            dup2(fd[0], 0);
+            dup2(fd[0], fd_in);
             //close(fd[0]);
             close(fd[1]);
         }
         tmp = cmd;
         cmd = cmd->next;
     }
+    dup2(fd_in, 0);
+    close(fd_in);
     close(fd_file);
     execute_simple_cmd(env, tmp->cmd);
 }
