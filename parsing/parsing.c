@@ -205,7 +205,9 @@ t_redir_node	*parse_redirection(t_token **tokens)
 	t_redir_node	*node;
 	redir_type		type;
 	char			*filename;
+	int 			flag_heredoc;
 
+	flag_heredoc = 0;
 	if ((*tokens) && (*tokens)->type == REDIR)
 	{
 		node = malloc(sizeof(t_redir_node));
@@ -213,16 +215,21 @@ t_redir_node	*parse_redirection(t_token **tokens)
 		node->filename = 0;
 		node->type = REDIR;
 		node->next = 0;
-		node->redir_type = get_redir_type(tokens);
+		node->redir_type = get_redir_type(tokens, &flag_heredoc);
 		consume(tokens);
-		node->filename = strdup((*tokens)->str);
+
+		//free strdup !!!
+		if (flag_heredoc)
+			node->filename = ft_strjoin(strdup((*tokens)->str), "\n");
+		else
+			node->filename = strdup((*tokens)->str);
 		consume(tokens);
 	}
 	else
 		node = 0;	
 	return (node);
 }
-redir_type	get_redir_type(t_token **tokens)
+redir_type	get_redir_type(t_token **tokens, int *flag_heredoc)
 {
 	redir_type	type;
 
@@ -233,7 +240,10 @@ redir_type	get_redir_type(t_token **tokens)
 	if (!strncmp((*tokens)->str, ">>", 2))
 		type = APPEND;
 	if (!strncmp((*tokens)->str, "<<", 2))
+	{
+		*flag_heredoc = 1;
 		type = HER_DOC;
+	}
 	return (type);
 }
 char	**get_arguments(char *exec, char **arguments, t_token **tokens)
