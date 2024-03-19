@@ -16,6 +16,13 @@ char *ft_getenv(t_env *env, char *key)
 	return (NULL);
 }
 
+int is_path( t_cmd_node *cmd)
+{
+	if (access(cmd->executable, X_OK) == 0)
+		return (1);
+	return (0);
+}
+
 char *get_path_cmd(t_env *env, t_cmd_node *cmd)
 {
 	char **path;
@@ -25,6 +32,8 @@ char *get_path_cmd(t_env *env, t_cmd_node *cmd)
 
 	i = 0;
 	// /bin + / =  /bin/  + ls = /bin/ls
+	if (is_path(cmd))
+		return (cmd->executable);
 	path = ft_split(ft_getenv(env, "PATH"), ':');
 	while (path[i] && cmd->executable)
 	{

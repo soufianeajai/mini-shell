@@ -78,6 +78,7 @@ void execute_redir(t_env *env, t_redir_node *cmd)
             if (fd_file == -1)
                 exit(ft_error(cmd->filename, "No such file or directory"));
             dup2(fd_file,fd_in);
+            close(fd_file);
         }
         else if (cmd->redir_type == OUT)
         {
@@ -85,6 +86,7 @@ void execute_redir(t_env *env, t_redir_node *cmd)
             if (fd_file == -1)
                 exit(ft_error(cmd->filename, "No such file or directory"));
             dup2(fd_file,fd_out);
+            close(fd_file);
         }
         else if (cmd->redir_type == APPEND)
         {
@@ -92,6 +94,7 @@ void execute_redir(t_env *env, t_redir_node *cmd)
             if (fd_file == -1)
                 exit(ft_error(cmd->filename, "No such file or directory"));
             dup2(fd_file,fd_out);
+            close(fd_file);
         }
         else if (cmd->redir_type == HER_DOC)
         {
@@ -118,17 +121,17 @@ void execute_redir(t_env *env, t_redir_node *cmd)
                 free(input);
                 input = NULL;
 	        }
+            close(fd[1]);
             dup2(fd[0], fd_in);
             close(fd[0]);
-            close(fd[1]);
         }
         tmp = cmd;
         cmd = cmd->next;
     }
     dup2(fd_in, 0);
     dup2(fd_out, 1);
-    close(fd_in);close(fd_out);
-    close(fd_file);
+    close(fd_in);
+    close(fd_out);
     execute_simple_cmd(env, tmp->cmd);
 }
 

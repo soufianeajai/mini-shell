@@ -27,25 +27,24 @@ int execute_tree(t_tree_node *tree, t_env *env)
 	// 		waitpid(pid_left, &status, 0);
 	// 	return (status);
 	// }
-
-	pid_left = fork();
+	if (tree->type == CMD)
+	{
+		pid_left = fork();
 		if (pid_left == 0)
-			if (tree->type == CMD)
-				execute_simple_cmd(env, (t_cmd_node *)(tree->node));
-			else if (tree->type == REDIR)
-			{
-				execute_redir(env, (t_redir_node *)(tree->node));
-			}
-			else
-			{
-				printf("pipe\n");
-				//ok i need to create a pipe
-			}
+			execute_simple_cmd(env, (t_cmd_node *)(tree->node));
 		else
-			{
-				waitpid(pid_left, &status, 0);
-				return (status);
-			}
+			waitpid(pid_left, &status, 0);
+		return (status);
+	}
+	if (tree->type == REDIR)
+	{
+		pid_left = fork();
+		if (pid_left == 0)
+			execute_redir(env, (t_redir_node *)(tree->node));
+		else
+			waitpid(pid_left, &status, 0);	
+		return (status);
+	}
 	return (-1);
 }
 
