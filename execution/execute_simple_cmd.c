@@ -65,7 +65,8 @@ void execute_redir(t_env *env, t_redir_node *cmd)
     t_redir_node *tmp;
     int fd_file;
     int fd[2];
-	char buf[1024];
+	char *input;
+    char *tmp_char;
 
     fd_in = dup(0);
     fd_out = dup(1);
@@ -83,20 +84,19 @@ void execute_redir(t_env *env, t_redir_node *cmd)
             fd_file = open(cmd->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
             if (fd_file == -1)
                 exit(ft_error(cmd->filename, "No such file or directory"));
-            dup2(fd_file,1);
+            dup2(fd_file,fd_out);
         }
         else if (cmd->redir_type == APPEND)
         {
             fd_file = open(cmd->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
             if (fd_file == -1)
                 exit(ft_error(cmd->filename, "No such file or directory"));
-            dup2(fd_file,1);
+            dup2(fd_file,fd_out);
         }
         else if (cmd->redir_type == HER_DOC)
         {
-            char *input;
-           // ft_bzero(buf, 1024);
-	        if (pipe(fd))
+            int start = 0;
+            if (pipe(fd))
 	        {
 	        	perror("pipe");
 	        	exit(1);
@@ -104,23 +104,30 @@ void execute_redir(t_env *env, t_redir_node *cmd)
             while (1)
 		    {
                 input = readline("> ");
-               // ft_putstr_fd("> ", fd_out);
-                if(!input || strncmp(input,cmd->filename, strlen(cmd->filename) -1 ) == 0)
-                    break;
-		        	write(fd[1], input, ft_strlen(input));
+                if(!input || strcmp(input, cmd->filename) == 0) 
+                {
                     free(input);
                     input = NULL;
-               // ft_bzero(buf, 1024);
+                    break;
+                }
+                if (start)
+                    write(fd[1], "\n", 1);
+                else
+                    start = 1;
+                write(fd[1], input, ft_strlen(input));
+                free(input);
+                input = NULL;
 	        }
             dup2(fd[0], fd_in);
-            //close(fd[0]);
+            close(fd[0]);
             close(fd[1]);
         }
         tmp = cmd;
         cmd = cmd->next;
     }
     dup2(fd_in, 0);
-    close(fd_in);
+    dup2(fd_out, 1);
+    close(fd_in);close(fd_out);
     close(fd_file);
     execute_simple_cmd(env, tmp->cmd);
 }

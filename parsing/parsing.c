@@ -219,9 +219,9 @@ t_redir_node	*parse_redirection(t_token **tokens)
 		consume(tokens);
 
 		//free strdup !!!
-		if (flag_heredoc)
-			node->filename = ft_strjoin(strdup((*tokens)->str), "\n");
-		else
+		// if (flag_heredoc)
+		// 	node->filename = ft_strjoin(strdup((*tokens)->str), "\n");
+		// else
 			node->filename = strdup((*tokens)->str);
 		consume(tokens);
 	}
@@ -241,7 +241,7 @@ redir_type	get_redir_type(t_token **tokens, int *flag_heredoc)
 		type = APPEND;
 	if (!strncmp((*tokens)->str, "<<", 2))
 	{
-		*flag_heredoc = 1;
+		//*flag_heredoc = 1;
 		type = HER_DOC;
 	}
 	return (type);
