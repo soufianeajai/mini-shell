@@ -59,13 +59,12 @@ void print_tree(t_tree_node *tree)
 
 
 
-t_tree_node	*parse_command(t_token **tokens)
+t_tree_node	*parse_command(t_token **tokens, t_env **env_list)
 {
-	t_tree_node *pipeline;
+	t_tree_node *tree;
 
-	pipeline = parse_pipeline(tokens);
-
-	return (pipeline);
+	tree = parse_pipeline(tokens);
+	return (tree);
 }
 
 void	consume(t_token **tokens)

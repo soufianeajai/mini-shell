@@ -26,6 +26,12 @@
 // 	struct s_token		*next;
 // }						t_token;
 
+typedef struct s_env
+{
+        char *key;
+        char *value;
+        struct s_env *next;
+} t_env;
 
 typedef enum
 {
@@ -64,7 +70,7 @@ typedef struct s_redir_node
 	struct s_redir_node	*next;
 }						t_redir_node;
 
-t_tree_node	*parse_command(t_token **tokens);
+t_tree_node	*parse_command(t_token **tokens, t_env **env_list);
 void	consume(t_token **tokens);
 t_pipe_node	*create_pipe_node(t_tree_node *left, t_tree_node *right);
 t_tree_node	*add_to_tree(void *node, node_type type);
