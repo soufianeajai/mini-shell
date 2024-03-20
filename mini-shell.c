@@ -1,6 +1,8 @@
 #include "minishell.h"
 #include "execution/execute.h"
 
+
+// optimize lstadd_back
 int main(int ac, char **av, char **env)
 {
     char* input;
@@ -34,7 +36,7 @@ int main(int ac, char **av, char **env)
         }
         //printf("\n\n\n");
         t_tree_node *tree = parse_command(&tokens);
-        execute_tree(tree, env_list);
+        execute_tree(tree, env_list, 0);
         // printf("%d",execute_tree(tree, env_list));
         
         print_env(env_list, input);
