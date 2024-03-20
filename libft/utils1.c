@@ -47,9 +47,9 @@ char	*ft_strjoin(char *s1, char *s2)
 	if (!str)
 		return (NULL);
 	i = 0;
-	while (*s1)
+	while (s1 && *s1)
 		str[i++] = *(s1++);
-	while (*s2)
+	while (s2 && *s2)
 		str[i++] = *(s2++);
 	str[i] = 0;
 	return (str);
