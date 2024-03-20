@@ -1,5 +1,6 @@
 
 #include "parsing.h"
+#include "../environnement/env.h"
 
 void print_tree(t_tree_node *tree)
 {
@@ -57,14 +58,119 @@ void print_tree(t_tree_node *tree)
 	}
 }
 
-
-
-t_tree_node	*parse_command(t_token **tokens, t_env **env_list)
+t_tree_node	*parse_command(t_token **tokens, t_env *env_list)
 {
 	t_tree_node *tree;
 
+	expand_env(tokens, env_list);
 	tree = parse_pipeline(tokens);
 	return (tree);
+}
+
+void	expand_env(t_token **token, t_env *env_list)
+{
+	t_token *temp;
+
+	temp = *token;
+	while (temp)
+	{
+		if (temp->type == ENV)
+		{
+			temp->str = get_env_value(temp->str, env_list);
+			if (temp->str && *temp->str == '\0')
+			{
+				temp->str = NULL;
+			}
+			temp->type = CMD;
+		}
+		temp = temp->next;
+	}
+}
+char	*get_env_value(char *str, t_env *env_list)
+{
+	t_env	*env;
+	char	*key;
+	char	*expanded_value;
+
+	env = env_list;
+	expanded_value = get_value_before(str);
+	while (*str && *str != '$')
+		str++;
+	//expanded_value = ft_strjoin(expanded_value, get_value_before(str));
+	while (*str)
+	{
+		if (*str == '$' && *(str + 1))
+		{
+			str++;
+			if (isalpha_num(*str))
+			{
+				key = get_key(str);
+				while (*str && *str != '$' && isalpha_num(*str))
+					str++;
+				expanded_value = ft_strjoin(expanded_value, ft_getenv(env_list, key));
+			}
+			else
+			{
+				expanded_value = ft_strjoin(expanded_value, get_value_before(str));	
+				while (*str && *str != '$')
+					str++;
+			}
+		}
+		else if (*str == '$')
+		{
+			expanded_value = ft_strjoin(expanded_value, "$");
+			str++;
+		}
+		else
+		{
+			expanded_value = ft_strjoin(expanded_value, get_value_before(str));
+			while (*str && *str != '$')
+				str++;
+		}
+	}
+	return (expanded_value);
+}
+int isalpha_num(char c)
+{
+	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9'))
+		return (1);
+	return (0);
+}
+char *get_key(char *str)
+{
+	int		i;
+	char	*key;
+
+	i = 0;
+	while (str[i] && str[i] != '$' && isalpha_num(str[i]))
+		i++;
+	key = malloc(i + 1);
+	i = 0;
+	while (str[i] && str[i] != '$' && isalpha_num(str[i]))
+	{	
+		key[i] = str[i];
+		i++;
+	}
+	key[i] = 0;
+	return (key);
+}
+char	*get_value_before(char *str)
+{
+	int		i;
+	char	*value;
+
+	i = 0;
+	while (str[i] && str[i] != '$')
+		i++;
+	value = malloc(i + 1);
+	i = 0;
+	while (str[i] && str[i] != '$')
+	{
+		value[i] = str[i];
+		i++;
+	}
+	value[i] = 0;
+	return (value);
 }
 
 void	consume(t_token **tokens)
@@ -262,12 +368,12 @@ char	**get_arguments(char *exec, char **arguments, t_token **tokens)
 	args[0] = strdup(exec);
 	while (i < len)
 	{
-		args[i] = strdup(arguments[i]);
+		args[i] = ft_strdup(arguments[i]);
 		i++;
 	}
-	while (i < len_args)
+	while (i < len_args && (*tokens)->str)
 	{
-		args[i] = strdup((*tokens)->str);
+		args[i] = ft_strdup((*tokens)->str);
 		i++;
 		consume(tokens);
 	}
@@ -280,7 +386,7 @@ int	count_len(char **arguments)
 	int len;
 
 	len = 0;
-	if (arguments)
+	if (arguments && *arguments)
 	{
 		while (arguments[len])
 			len++;

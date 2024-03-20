@@ -70,7 +70,7 @@ typedef struct s_redir_node
 	struct s_redir_node	*next;
 }						t_redir_node;
 
-t_tree_node	*parse_command(t_token **tokens, t_env **env_list);
+t_tree_node	*parse_command(t_token **tokens, t_env *env_list);
 void	consume(t_token **tokens);
 t_pipe_node	*create_pipe_node(t_tree_node *left, t_tree_node *right);
 t_tree_node	*add_to_tree(void *node, node_type type);
@@ -85,6 +85,13 @@ int	count_len(char **arguments);
 void	free_str_list(char **str);
 void print_tree(t_tree_node *tree);
 void ft_lstadd_back_redir(t_redir_node **head, t_redir_node *new);
+void	expand_env(t_token **tokens, t_env *env_list);
+char	*get_env_value(char *str, t_env *env_list);
+int isalpha_num(char c);
+char *get_key(char *str);
+char	*get_value_before(char *str);
+
+
 
 
 

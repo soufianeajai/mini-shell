@@ -33,7 +33,7 @@ int main(int ac, char **av, char **env)
             continue;
         }
         //printf("\n\n\n");
-        t_tree_node *tree = parse_command(&tokens, &env_list);
+        t_tree_node *tree = parse_command(&tokens, env_list);
         execute_tree(tree, env_list);
         // printf("%d",execute_tree(tree, env_list));
         
