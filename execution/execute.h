@@ -5,7 +5,7 @@
 #include <fcntl.h>
 
 //execute tree
-int execute_tree(t_tree_node *tree, t_env *env, int flag);
+int execute_tree(t_tree_node *tree, t_env *env);
 
 
 //execute simple cmd 

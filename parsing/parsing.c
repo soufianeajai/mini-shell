@@ -79,6 +79,7 @@ void	expand_env(t_token **token, t_env *env_list)
 			temp->str = get_env_value(temp->str, env_list);
 			if (temp->str && *temp->str == '\0')
 			{
+				free(temp->str);
 				temp->str = NULL;
 			}
 			temp->type = CMD;
@@ -267,6 +268,7 @@ t_tree_node	*parse_simple_command(t_token **tokens)
 				consume(tokens);
 			}
 			arguments = get_arguments(executable, arguments, tokens);
+		//	printf("\n%s",arguments[1]);
 		}
 		while ((*tokens) && (*tokens)->type == REDIR)
 		{
@@ -377,6 +379,8 @@ char	**get_arguments(char *exec, char **arguments, t_token **tokens)
 		i++;
 		consume(tokens);
 	}
+	if (i < len_args)
+		consume(tokens);
 	args[i] = 0;
 //	free_str_list(arguments);
 	return (args);

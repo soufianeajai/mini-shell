@@ -1,25 +1,25 @@
 #include "execute.h"
 
-void loop_pipe(t_pipe_node *tree, t_env *env , int save_0, int save_1)
-{
+// void loop_pipe(t_pipe_node *tree, t_env *env , int save_0, int save_1)
+// {
 
-	if (pipe(fd) == -1)
-	{
-		perror("pipe");
-		exit(1);
-	}
-	close(fd[0]);
-	dup2(fd[1], save_1);
-	execute_tree(((t_tree_node *)tree->left), env, fd, 1);
+// 	if (pipe(fd) == -1)
+// 	{
+// 		perror("pipe");
+// 		exit(1);
+// 	}
+// 	close(fd[0]);
+// 	dup2(fd[1], save_1);
+// 	execute_tree(((t_tree_node *)tree->left), env, fd, 1);
 	
 	
-	close(fd[1]);
-	dup2(fd[0], save_0);
-	execute_tree(((t_tree_node *)tree->right), env ,fd , 2);
-	close(fd[0]);
-}
+// 	close(fd[1]);
+// 	dup2(fd[0], save_0);
+// 	execute_tree(((t_tree_node *)tree->right), env ,fd , 2);
+// 	close(fd[0]);
+// }
 
-int execute_tree(t_tree_node *tree, t_env *env, int flag)
+int execute_tree(t_tree_node *tree, t_env *env)
 {
 	int pid_left;
 	int pid_right;
@@ -32,10 +32,10 @@ int execute_tree(t_tree_node *tree, t_env *env, int flag)
 	int save_0 = dup(0);
 	int save_1 = dup(1);
 	
-	if (tree->type == PIPE)
-	{
-		loop_pipe((t_pipe_node *)tree->node, env, fd , flag);
-	}
+	// if (tree->type == PIPE)
+	// {
+	// 	loop_pipe((t_pipe_node *)tree->node, env, fd , flag);
+	// }
 	if (tree->type == CMD)
 	{
 		pid_left = fork();

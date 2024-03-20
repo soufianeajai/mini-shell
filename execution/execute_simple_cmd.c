@@ -98,7 +98,6 @@ void execute_redir(t_env *env, t_redir_node *cmd)
         }
         else if (cmd->redir_type == HER_DOC)
         {
-            int start = 0;
             if (pipe(fd))
 	        {
 	        	perror("pipe");
@@ -113,11 +112,7 @@ void execute_redir(t_env *env, t_redir_node *cmd)
                     input = NULL;
                     break;
                 }
-                if (start)
-                    write(fd[1], "\n", 1);
-                else
-                    start = 1;
-                write(fd[1], input, ft_strlen(input));
+                write(fd[1], input, ft_strlen(input)); write(fd[1], "\n", 1);
                 free(input);
                 input = NULL;
 	        }
