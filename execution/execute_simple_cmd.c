@@ -58,7 +58,7 @@ void execute_simple_cmd(t_env *env, t_cmd_node *cmd)
 
 }
 
-void execute_redir(t_env *env, t_redir_node *cmd)
+void execute_redir(t_env *env, t_redir_node *cmd, int save_0)
 {
     int fd_in;
     int fd_out;  
@@ -98,6 +98,7 @@ void execute_redir(t_env *env, t_redir_node *cmd)
         }
         else if (cmd->redir_type == HER_DOC)
         {
+            dup2(save_0, 0);
             if (pipe(fd))
 	        {
 	        	perror("pipe");
@@ -117,6 +118,7 @@ void execute_redir(t_env *env, t_redir_node *cmd)
                 input = NULL;
 	        }
             close(fd[1]);
+            close(save_0);
             dup2(fd[0], fd_in);
             close(fd[0]);
         }

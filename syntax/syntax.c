@@ -21,7 +21,7 @@ void printf_error_syntax(char *str)
     ft_putstr_fd("syntax error near unexpected token ", 2);
     ft_putstr_fd("`", 2);
     ft_putstr_fd(str, 2);
-    ft_putstr_fd("`", 2);
+    ft_putstr_fd("`\n", 2);
 }
 
 int check_syntax(t_token *tok)

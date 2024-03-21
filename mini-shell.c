@@ -36,7 +36,10 @@ int main(int ac, char **av, char **env)
         }
         //printf("\n\n\n");
         t_tree_node *tree = parse_command(&tokens, env_list);
-        execute_tree(tree, env_list);
+        if (tree->type == REDIR || tree->type ==CMD)
+            execute_simple(tree, env_list);
+        else
+            execute(tree, env_list);
         // printf("%d",execute_tree(tree, env_list));
         
         print_env(env_list, input);
