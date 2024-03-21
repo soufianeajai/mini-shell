@@ -40,7 +40,8 @@ void execute_simple_cmd(t_env *env, t_cmd_node *cmd)
 	char *path_cmd;
 	
     // i need cmd in argument to execute it
-
+    if(cmd->executable == NULL)
+        exit(0);
     if (is_builtin(cmd))
         execute_builtin(env, cmd);
     
