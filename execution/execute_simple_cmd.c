@@ -41,10 +41,9 @@ void execute_simple_cmd(t_env *env, t_cmd_node *cmd)
 	
     // i need cmd in argument to execute it
 
-    if ((cmd->executable) && is_builtin(cmd))
-    {
-            execute_builtin(env, cmd);
-    }
+    if (is_builtin(cmd))
+        execute_builtin(env, cmd);
+    
     path_cmd = get_path_cmd(env, cmd);
     if (!path_cmd)
     {
