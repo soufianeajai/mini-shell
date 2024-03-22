@@ -41,9 +41,10 @@ void execute_simple_cmd(t_env *env, t_cmd_node *cmd)
 	
     // i need cmd in argument to execute it
 
-    if (is_builtin(cmd))
-        execute_builtin(env, cmd);
-    
+    if ((cmd->executable) && is_builtin(cmd))
+    {
+            execute_builtin(env, cmd);
+    }
     path_cmd = get_path_cmd(env, cmd);
     if (!path_cmd)
     {
@@ -96,30 +97,30 @@ void execute_redir(t_env *env, t_redir_node *cmd)
             dup2(fd_file,fd_out);
             close(fd_file);
         }
-        else if (cmd->redir_type == HER_DOC)
-        {
-            if (pipe(fd))
-	        {
-	        	perror("pipe");
-	        	exit(1);
-	        }
-            while (1)
-		    {
-                input = readline("> ");
-                if(!input || strcmp(input, cmd->filename) == 0) 
-                {
-                    free(input);
-                    input = NULL;
-                    break;
-                }
-                write(fd[1], input, ft_strlen(input)); write(fd[1], "\n", 1);
-                free(input);
-                input = NULL;
-	        }
-            close(fd[1]);
-            dup2(fd[0], fd_in);
-            close(fd[0]);
-        }
+        // else if (cmd->redir_type == HER_DOC)
+        // {
+        //     if (pipe(fd))
+	    //     {
+	    //     	perror("pipe");
+	    //     	exit(1);
+	    //     }
+        //     while (1)
+		//     {
+        //         input = readline("> ");
+        //         if(!input || strcmp(input, cmd->filename) == 0) 
+        //         {
+        //             free(input);
+        //             input = NULL;
+        //             break;
+        //         }
+        //         write(fd[1], input, ft_strlen(input)); write(fd[1], "\n", 1);
+        //         free(input);
+        //         input = NULL;
+	    //     }
+        //     close(fd[1]);
+        //     dup2(fd[0], fd_in);
+        //     close(fd[0]);
+        // }
         tmp = cmd;
         cmd = cmd->next;
     }
