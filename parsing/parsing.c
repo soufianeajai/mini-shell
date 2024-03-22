@@ -1,7 +1,50 @@
 
 #include "parsing.h"
 #include "../environnement/env.h"
+#include <fcntl.h>
 
+
+static int	my_len(int nbr)
+{
+	int		len;
+
+	len = 0;
+	if (nbr <= 0)
+		len++;
+	while (nbr)
+	{
+		nbr = nbr / 10;
+		len++;
+	}
+	return (len);
+}
+
+char	*ft_itoa(int n)
+{
+	char			*str;
+	int				nbr_elements;
+	long			nbr;
+
+	nbr = n;
+	nbr_elements = my_len(n);
+	str = (char *)malloc(nbr_elements + 1);
+	if (!str)
+		return (0);
+	str[nbr_elements] = 0;
+	if (nbr == 0)
+		str[0] = '0';
+	else if (nbr < 0)
+	{
+		nbr = -nbr;
+		str[0] = '-';
+	}
+	while (nbr > 0)
+	{
+		str[--nbr_elements] = nbr % 10 + 48;
+		nbr = nbr / 10;
+	}
+	return (str);
+}
 void print_tree(t_tree_node *tree)
 {
 	t_cmd_node *cmd;
@@ -66,6 +109,7 @@ t_tree_node	*parse_command(t_token **tokens, t_env *env_list)
 	tree = parse_pipeline(tokens);
 	return (tree);
 }
+
 
 void	expand_env(t_token **token, t_env *env_list)
 {
@@ -133,7 +177,7 @@ char	*get_env_value(char *str, t_env *env_list)
 }
 int isalpha_num(char c)
 {
-	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9'))
+	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '_')
 		return (1);
 	return (0);
 }
@@ -305,16 +349,72 @@ t_tree_node	*parse_simple_command(t_token **tokens)
 	//printf("\n+++%s\n",((t_cmd_node *)node->node)->executable);
 	return (node);
 }
+#include <stdlib.h>
+#include <string.h>
 
+char *generate_random_name() {
+    static unsigned int counter = 0; // Static counter to ensure uniqueness for each call
+    char *filename = malloc(16); // Allocate memory for the filename
+
+    if (!filename) {
+        return NULL; // Allocation failed
+    }
+
+    // Use the counter and the address of a local variable (for randomness)
+    unsigned long randomness = (unsigned long)&filename + counter;
+
+    // Convert the randomness into a 6-character string
+    const char charset[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    size_t charsetSize = sizeof(charset) - 1; // Exclude the null terminator
+
+    strcpy(filename, "file_"); // Prefix
+    for (int i = 5; i < 11; ++i) { // Start filling after "file_"
+        filename[i] = charset[randomness % charsetSize];
+        randomness /= charsetSize; // Move to the next character
+    }
+    filename[11] = '\0'; // Null-terminate the string
+
+    counter++; // Increment the counter for the next call
+
+    return filename;
+}
+
+char	*check_her_doc (t_token **token)
+{
+	t_redir_node *redir;
+	char *input;
+	int fd;
+	char *filename;
+
+	filename = ft_strdup(".her_doc");
+	redir = (t_redir_node *)(*token);
+	fd = open(filename, O_RDWR | O_CREAT | O_TRUNC, 0644);
+	while (1)
+	{
+		input = readline("> ");
+		if(!input || strcmp(input, redir->filename) == 0) 
+		{
+			free(input);
+			input = NULL;
+			break;
+		}
+		write(fd, input, ft_strlen(input));
+		write(fd, "\n", 1);
+		free(input);
+		input = NULL;
+	}
+	free(redir->filename);
+	close(fd);
+	return (filename);
+}
 
 t_redir_node	*parse_redirection(t_token **tokens)
 {
 	t_redir_node	*node;
 	redir_type		type;
 	char			*filename;
-	int 			flag_heredoc;
+	int				nbr_here_doc = 0;
 
-	flag_heredoc = 0;
 	if ((*tokens) && (*tokens)->type == REDIR)
 	{
 		node = malloc(sizeof(t_redir_node));
@@ -322,21 +422,25 @@ t_redir_node	*parse_redirection(t_token **tokens)
 		node->filename = 0;
 		node->type = REDIR;
 		node->next = 0;
-		node->redir_type = get_redir_type(tokens, &flag_heredoc);
-		consume(tokens);
-
-		//free strdup !!!
-		// if (flag_heredoc)
-		// 	node->filename = ft_strjoin(strdup((*tokens)->str), "\n");
-		// else
+		node->redir_type = get_redir_type(tokens);
+		if (node->redir_type == HER_DOC)
+		{
+			consume(tokens);
+			node->filename = check_her_doc(tokens);
+			node->redir_type = IN;
+		}
+		else
+		{
+			consume(tokens);
 			node->filename = strdup((*tokens)->str);
+		}
 		consume(tokens);
 	}
 	else
 		node = 0;	
 	return (node);
 }
-redir_type	get_redir_type(t_token **tokens, int *flag_heredoc)
+redir_type	get_redir_type(t_token **tokens)
 {
 	redir_type	type;
 
