@@ -12,9 +12,6 @@ void execute(t_tree_node *tree, t_env *env);
 void execute_simple_cmd(t_env *env, t_cmd_node *cmd);
 void execute_redir(t_env *env,t_redir_node *cmd);
 
-//builtin : 
-void execute_builtin(t_env *env, t_cmd_node *cmd);
-int is_builtin(t_cmd_node *cmd);
 
 
 
