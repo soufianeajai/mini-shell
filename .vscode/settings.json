@@ -5,6 +5,7 @@
         "parsing.h": "c",
         "execute.h": "c",
         "env.h": "c",
-        "minishell.h": "c"
+        "minishell.h": "c",
+        "builtin.h": "c"
     }
 }

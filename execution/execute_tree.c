@@ -1,4 +1,5 @@
 #include "execute.h"
+#include "../builtins/builtin.h"
 
 int execute_simple(t_tree_node *tree , t_env *env)
 {
@@ -8,6 +9,12 @@ int execute_simple(t_tree_node *tree , t_env *env)
 
 	if (tree->type == CMD)
 	{
+		if (is_builtin((t_cmd_node *)(tree->node)))
+   		 {
+        	int exit_code = execute_builtin(env, (t_cmd_node *)(tree->node));
+       		printf("exit code: %d\n", exit_code);
+        	return exit_code;
+    	}
 		pid_left = fork();
 		if (pid_left == 0)
 			execute_simple_cmd(env, (t_cmd_node *)(tree->node));
@@ -17,6 +24,12 @@ int execute_simple(t_tree_node *tree , t_env *env)
 	}
 	if (tree->type == REDIR)
 	{
+		if (is_builtin((t_cmd_node *)(tree->node)))
+   		 {
+        	int exit_code = execute_builtin(env, (t_cmd_node *)(tree->node));
+       		printf("exit code: %d\n", exit_code);
+        	return exit_code;
+    	}
 		pid_left = fork();
 		if (pid_left == 0)
 			execute_redir(env, (t_redir_node *)(tree->node));

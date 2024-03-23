@@ -13,7 +13,7 @@ int ft_error(char *cmd, char *error)
     return (127);
 }
 
-
+ 
 void execute_simple_cmd(t_env *env, t_cmd_node *cmd)
 {
 	pid_t pid;
@@ -27,7 +27,8 @@ void execute_simple_cmd(t_env *env, t_cmd_node *cmd)
     {
         exit_code = execute_builtin(env, cmd);
         printf("exit code: %d\n", exit_code);
-        return;
+        exit(exit_code);
+        
     }
     path_cmd = get_path_cmd(env, cmd);
     if (!path_cmd)
