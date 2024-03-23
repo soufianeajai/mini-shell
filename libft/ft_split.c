@@ -94,8 +94,10 @@ char	**ft_split(char const *s, char c)
 
 	i = 0;
 	j = 0;
+	if (!s)
+		return (NULL);
 	p = (char **)malloc(sizeof(char *) * (count_w(s, c) + 1));
-	if (!p || !s)
+	if (!p)
 		return (NULL);
 	while (s[i])
 	{

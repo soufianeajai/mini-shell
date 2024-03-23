@@ -42,8 +42,7 @@ int main(int ac, char **av, char **env)
             execute(tree, env_list);
         // printf("%d",execute_tree(tree, env_list));
         
-        print_env(env_list, input);
-        if (ft_strncmp(input, "exit", 5) == 0)
+       if (ft_strncmp(input, "exit", 5) == 0)
             break;
         //ft_exit(input,&tokens);
         free_tokens(&tokens);

@@ -43,7 +43,7 @@ void	ft_free(char **tab)
 	int	i;
 
 	i = 0;
-	while (tab[i])
+	while (tab && tab[i])
 	{
 		free(tab[i]);
 		i++;

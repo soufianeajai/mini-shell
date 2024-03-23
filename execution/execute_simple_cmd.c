@@ -1,23 +1,6 @@
 #include "execute.h"
 #include "../environnement/env.h"
-int is_builtin(t_cmd_node *cmd)
-{
-    if (cmd && ft_strncmp(cmd->executable, "echo", 5) == 0)
-        return (1);
-    if (cmd && ft_strncmp(cmd->executable, "cd", 3) == 0)
-        return (1);
-    if (cmd && ft_strncmp(cmd->executable, "pwd", 4) == 0)
-        return (1);
-    if (cmd && ft_strncmp(cmd->executable, "export", 7) == 0)
-        return (1);
-    if (cmd && ft_strncmp(cmd->executable, "unset", 6) == 0)
-        return (1);
-    if (cmd && ft_strncmp(cmd->executable, "env", 4) == 0)
-        return (1);
-    if (cmd && ft_strncmp(cmd->executable, "exit", 5) == 0)
-        return (1);
-    return (0);
-}
+#include "../builtins/builtin.h"
 
 int ft_error(char *cmd, char *error)
 {
@@ -29,52 +12,37 @@ int ft_error(char *cmd, char *error)
     ft_putstr_fd("\n", 2);
     return (127);
 }
-void execute_builtin(t_env *env, t_cmd_node *cmd)
-{
-	return ;
-}
 
-char **lst_to_arr(t_env *env)
-{
-    int i = 0;
-    t_env *curr = env;
-    while (curr)
-    {
-        curr = curr->next;
-        i++;
-    }
-    char **arr = malloc(sizeof(char *) * (i + 1));
-    i = 0;
-    while (env)
-    {
-        arr[i] = ft_strjoin(env->key, "=");
-        arr[i] = ft_strjoin(arr[i], env->value);
-        env = env->next;
-        i++;
-    }
-    arr[i] = NULL;
-    return (arr);
-}
 
 void execute_simple_cmd(t_env *env, t_cmd_node *cmd)
 {
 	pid_t pid;
 	char *path_cmd;
+    int exit_code;
 	
     // i need cmd in argument to execute it
-
+    if(cmd->executable == NULL)
+        exit(0);
     if (is_builtin(cmd))
-        execute_builtin(env, cmd);
-    
+    {
+        exit_code = execute_builtin(env, cmd);
+        printf("exit code: %d\n", exit_code);
+        return;
+    }
     path_cmd = get_path_cmd(env, cmd);
     if (!path_cmd)
     {
         free(path_cmd);
         exit(ft_error(cmd->executable, "command not found"));
     }
-    char **arr = lst_to_arr(env);
-    if(execve(path_cmd, cmd->arguments, arr) == -1)
+    if(execve(path_cmd, cmd->arguments, NULL) == -1)
     {
+        // case $c (variable not set) from strdup = allocate '\0' and set to cmd and first arg
+        if(cmd->arguments[0][0] == '\0')
+        {
+            free(path_cmd);
+            exit(0);
+        }
         free(path_cmd);
         exit (ft_error(cmd->executable, "error in execve"));
     }
@@ -119,30 +87,30 @@ void execute_redir(t_env *env, t_redir_node *cmd)
             dup2(fd_file,fd_out);
             close(fd_file);
         }
-        // else if (cmd->redir_type == HER_DOC)
-        // {
-        //     if (pipe(fd))
-	    //     {
-	    //     	perror("pipe");
-	    //     	exit(1);
-	    //     }
-        //     while (1)
-		//     {
-        //         input = readline("> ");
-        //         if(!input || strcmp(input, cmd->filename) == 0) 
-        //         {
-        //             free(input);
-        //             input = NULL;
-        //             break;
-        //         }
-        //         write(fd[1], input, ft_strlen(input)); write(fd[1], "\n", 1);
-        //         free(input);
-        //         input = NULL;
-	    //     }
-        //     close(fd[1]);
-        //     dup2(fd[0], fd_in);
-        //     close(fd[0]);
-        // }
+        else if (cmd->redir_type == HER_DOC)
+        {
+            if (pipe(fd))
+	        {
+	        	perror("pipe");
+	        	exit(1);
+	        }
+            while (1)
+		    {
+                input = readline("> ");
+                if(!input || strcmp(input, cmd->filename) == 0) 
+                {
+                    free(input);
+                    input = NULL;
+                    break;
+                }
+                write(fd[1], input, ft_strlen(input)); write(fd[1], "\n", 1);
+                free(input);
+                input = NULL;
+	        }
+            close(fd[1]);
+            dup2(fd[0], fd_in);
+            close(fd[0]);
+        }
         tmp = cmd;
         cmd = cmd->next;
     }
