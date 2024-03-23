@@ -10,7 +10,7 @@
 #define YELLOW "\e[33m"
 #define BYELLOW "\e[1;33m"
 #define RED "\e[31m"
-#define GREEN "\e[32m"
+#define GREEN "\e[1;32m"
 
 extern void	rl_replace_line(const char *, int);
 //extern int	g_signal;

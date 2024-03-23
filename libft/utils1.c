@@ -94,7 +94,7 @@ char	*ft_strdup(char *src)
 	if (!new)
 		return (NULL);
 	i = 0;
-	while (src && src[i])
+	while (src[i])
 	{
 		new[i] = src[i];
 		i++;

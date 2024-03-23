@@ -48,15 +48,15 @@ void env_copy(t_env **env, char **environ)
     	}
 }
 
-// void print_env(t_env *tmp, char *input)
-// {
-//     if (ft_strncmp(input, "env", 4) == 0 || ft_strncmp(input, "printenv", 9) == 0)
-//         while (tmp)
-//         {
-//             ft_putstr_fd(tmp->key, 1);
-//             ft_putstr_fd("=", 1);
-//             ft_putstr_fd(tmp->value, 1);
-//             ft_putstr_fd("\n", 1);
-//             tmp = tmp->next;
-//         }
-// }
+void print_env(t_env *tmp, char *input)
+{
+    if (ft_strncmp(input, "env", 4) == 0 || ft_strncmp(input, "printenv", 9) == 0)
+        while (tmp)
+        {
+            ft_putstr_fd(tmp->key, 1);
+            ft_putstr_fd("=", 1);
+            ft_putstr_fd(tmp->value, 1);
+            ft_putstr_fd("\n", 1);
+            tmp = tmp->next;
+        }
+}
