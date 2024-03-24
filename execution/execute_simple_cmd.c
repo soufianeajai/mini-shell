@@ -13,7 +13,27 @@ int ft_error(char *cmd, char *error)
     return (127);
 }
 
- 
+ char **lst_to_arr(t_env *env)
+{
+    int i = 0;
+    t_env *curr = env;
+    while (curr)
+    {
+        curr = curr->next;
+        i++;
+    }
+    char **arr = malloc(sizeof(char *) * (i + 1));
+    i = 0;
+    while (env)
+    {
+        arr[i] = ft_strjoin(env->key, "=");
+        arr[i] = ft_strjoin(arr[i], env->value);
+        env = env->next;
+        i++;
+    }
+    arr[i] = NULL;
+    return (arr);
+}
 void execute_simple_cmd(t_env *env, t_cmd_node *cmd)
 {
 	pid_t pid;
@@ -36,7 +56,8 @@ void execute_simple_cmd(t_env *env, t_cmd_node *cmd)
         free(path_cmd);
         exit(ft_error(cmd->executable, "command not found"));
     }
-    if(execve(path_cmd, cmd->arguments, NULL) == -1)
+    char **arr = lst_to_arr(env);
+    if(execve(path_cmd, cmd->arguments, arr) == -1)
     {
         // case $c (variable not set) from strdup = allocate '\0' and set to cmd and first arg
         if(cmd->arguments[0][0] == '\0')
