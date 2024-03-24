@@ -119,24 +119,26 @@ int is_word(t_token **tokens, char *input, int *i)
         }
         if(input[*i] != '<' && input[*i] != '>' && input[*i] != '|')
         {
+            
             if (input[*i] == '\'' || input[*i] == '\"')
                 continue;
             if (input[*i] == '$')
                 env_flag = 1;
             if (input[*i] && ft_isspace(input[*i]))
                 break;
-            (*i)++;
+            
         }
         else 
             break;
         if(input[*i] && ft_isspace(input[*i]))
-            break;
+            break;(*i)++;
     }
     if (j == *i)
         return (0);
-   // printf("env_flag = %d\n", env_flag);
     if (env_flag)
+    {
         ft_lstadd_back(tokens, *i - j, ENV, j);
+    }
     else
         ft_lstadd_back(tokens, *i - j, CMD, j);
     return (1);

@@ -58,7 +58,7 @@ t_tree_node	*parse_simple_command(t_token **tokens)
 		{
 			if (!executable)
 			{
-				executable = strdup((*tokens)->str);
+				executable = ft_strdup((*tokens)->str);
 				consume(tokens);
 			}
 			arguments = get_arguments(executable, arguments, tokens);

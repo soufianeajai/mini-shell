@@ -68,13 +68,13 @@ redir_type	get_redir_type(t_token **tokens)
 {
 	redir_type	type;
 
-    if (!strncmp((*tokens)->str, "<", 1))
+    if (!ft_strncmp((*tokens)->str, "<", 1))
 		type = IN;
-	if (!strncmp((*tokens)->str, ">", 1))
+	if (!ft_strncmp((*tokens)->str, ">", 1))
 		type = OUT;
-	if (!strncmp((*tokens)->str, ">>", 2))
+	if (!ft_strncmp((*tokens)->str, ">>", 2))
 		type = APPEND;
-	if (!strncmp((*tokens)->str, "<<", 2))
+	if (!ft_strncmp((*tokens)->str, "<<", 2))
 		type = HER_DOC;
 	return (type);
 }

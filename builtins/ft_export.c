@@ -7,6 +7,11 @@ int check_valid_identifier(char *arg)
     i = 0;
     while (arg[i] && arg[i] != '=')
     {
+        if (arg[i] == '+' && arg[i + 1] == '=' && i != 0)
+        {
+            i++;
+            continue;
+        }
         if ((!isalpha_num(arg[i]) && arg[i] != '_'))
         {
             ft_putstr_fd("minishell: export: `", 2);

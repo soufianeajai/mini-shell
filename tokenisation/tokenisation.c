@@ -26,6 +26,24 @@ char *mystrdup(t_token *tokens, char *input)
     return (token);
 }
 
+void no_expaind_her_doc(t_token **token)
+{
+    t_token *tok;
+
+    tok = *token;
+    while (tok)
+    {
+        if(tok->type == REDIR && !ft_strncmp(tok->str, "<<", 2))
+        {
+            if(tok->next !=NULL && tok->next->type == ENV)
+            {
+                tok->next->type = CMD;
+            }
+        }
+        tok = tok->next;
+    }
+}
+
 void tokenisation(t_token **tokens, char *input)
 {
     t_token *tmp;
@@ -37,6 +55,7 @@ void tokenisation(t_token **tokens, char *input)
         tmp = tmp->next;
     }
     tmp = NULL;
+    no_expaind_her_doc(tokens);
 }
 
 int is_qoutes(char c)

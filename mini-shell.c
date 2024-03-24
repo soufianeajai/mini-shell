@@ -44,7 +44,6 @@ int main(int ac, char **av, char **env)
         
        if (ft_strncmp(input, "exit", 5) == 0)
             break;
-        //ft_exit(input,&tokens);
         free_tokens(&tokens);
         free(input);
     }
