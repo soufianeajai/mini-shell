@@ -1,6 +1,6 @@
 #include "env.h"
 #include "../minishell.h"
-static void ft_lstadd_back_env(t_env **lst, int index, char *str)
+void ft_lstadd_back_env(t_env **lst, int index, char *str)
 {
     t_env *new;
     t_env *p;
