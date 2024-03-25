@@ -9,7 +9,7 @@ char	*check_her_doc (t_token **token, t_env *env_list)
 	int fd;
 	char *filename;
 
-	filename = ft_strdup(".her_doc");
+	filename = ft_strdup(".her_doc.c");
 	redir = (t_redir_node *)(*token);
 	fd = open(filename, O_RDWR | O_CREAT | O_TRUNC, 0644);
 	while (1)
