@@ -6,6 +6,7 @@
         "execute.h": "c",
         "env.h": "c",
         "minishell.h": "c",
-        "builtin.h": "c"
+        "builtin.h": "c",
+        "errno.h": "c"
     }
 }

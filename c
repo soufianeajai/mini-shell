@@ -1,0 +1,15 @@
+Makefile
+README.md
+builtins
+c
+draw.tldr
+environnement
+execution
+libft
+mini-shell.c
+mini-shell.o
+minishell
+minishell.h
+parsing
+syntax
+tokenisation

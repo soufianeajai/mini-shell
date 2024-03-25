@@ -1,6 +1,10 @@
 #include "execute.h"
 #include "../environnement/env.h"
 #include "../builtins/builtin.h"
+#include <sys/wait.h>
+#include <errno.h>
+#include <string.h>
+
 
 int ft_error(char *cmd, char *error)
 {
@@ -8,6 +12,7 @@ int ft_error(char *cmd, char *error)
     if (cmd)
         ft_putstr_fd(cmd, 2);
     ft_putstr_fd(": ", 2);
+    if (error)
         ft_putstr_fd(error, 2);
     ft_putstr_fd("\n", 2);
     return (127);
@@ -46,11 +51,12 @@ void execute_simple_cmd(t_env *env, t_cmd_node *cmd)
     if (is_builtin(cmd))
     {
         exit_code = execute_builtin(env, cmd);
-        printf("exit code: %d\n", exit_code);
+    //    printf("exit code: %d\n", exit_code);
         exit(exit_code);
         
     }
     path_cmd = get_path_cmd(env, cmd);
+    
     if (!path_cmd)
     {
         free(path_cmd);
@@ -59,13 +65,13 @@ void execute_simple_cmd(t_env *env, t_cmd_node *cmd)
     char **arr = lst_to_arr(env);
     if(execve(path_cmd, cmd->arguments, arr) == -1)
     {
+      
         // case $c (variable not set) from strdup = allocate '\0' and set to cmd and first arg
         if(cmd->arguments[0][0] == '\0')
-        {
+        { 
             free(path_cmd);
             exit(0);
         }
-        free(path_cmd);
         exit (ft_error(cmd->executable, "error in execve"));
     }
 

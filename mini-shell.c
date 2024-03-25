@@ -28,18 +28,16 @@ int main(int ac, char **av, char **env)
 	    handling_qoutes(&tokens);
         //print_tokens(tokens);
 
-        if (check_syntax(tokens))
-        {
-            free_tokens(&tokens);
-            free(input);
-            continue;
-        }
+       
         //printf("\n\n\n");
         t_tree_node *tree = parse_command(&tokens, env_list);
-        if (tree->type == REDIR || tree->type ==CMD)
-            execute_simple(tree, env_list);
-        else
-            execute(tree, env_list);
+        if (tree)
+        {
+            if (tree->type == REDIR || tree->type ==CMD)
+                execute_simple(tree, env_list);
+            else
+                execute(tree, env_list);
+        }
         // printf("%d",execute_tree(tree, env_list));
         
        if (ft_strncmp(input, "exit", 5) == 0)

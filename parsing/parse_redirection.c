@@ -31,6 +31,15 @@ char	*check_her_doc (t_token **token)
 	return (filename);
 }
 
+int is_special_char(char *c)
+{
+	if (c)
+	{
+		if (*c == '>' || *c == '<' || *c == '|')
+			return (1);
+	}
+	return (0);
+}
 t_redir_node	*parse_redirection(t_token **tokens)
 {
 	t_redir_node	*node;
@@ -49,14 +58,22 @@ t_redir_node	*parse_redirection(t_token **tokens)
 		// need to add expand to her_doc
 		if (node->redir_type == HER_DOC)
 		{
-			consume(tokens);
-			node->filename = check_her_doc(tokens);
-			node->redir_type = IN;
+			if (is_special_char((*tokens)->next->str))
+			{
+				//need to exit witth exit code and free ....
+				return(NULL);
+			}
+			else
+			{
+				consume(tokens);
+				node->filename = check_her_doc(tokens);
+				node->redir_type = IN;
+			}
 		}
 		else
 		{
 			consume(tokens);
-			node->filename = strdup((*tokens)->str);
+			node->filename = ft_strdup((*tokens)->str);
 		}
 		consume(tokens);
 	}

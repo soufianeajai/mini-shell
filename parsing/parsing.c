@@ -7,6 +7,7 @@ t_tree_node	*parse_command(t_token **tokens, t_env *env_list)
 {
 	t_tree_node *tree;
 
+	check_syntax(*tokens);
 	expand_env(tokens, env_list);
 	tree = parse_pipeline(tokens);
 	return (tree);
@@ -66,6 +67,11 @@ t_tree_node	*parse_simple_command(t_token **tokens)
 		while ((*tokens) && (*tokens)->type == REDIR)
 		{
 			redir_node = parse_redirection(tokens);
+			if (!redir_node)
+			{
+				return (0);
+			}
+			
 			if (!head_redir)
 			{
 				head_redir = malloc(sizeof(t_redir_node*));
