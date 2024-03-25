@@ -22,7 +22,7 @@ static int util(t_cmd_node *cmd, int index)
     return (0);
 }
 
-static void remove_env(t_env **env, char *key)
+void remove_env(t_env **env, char *key)
 {
     t_env *tmp;
     t_env *prev;

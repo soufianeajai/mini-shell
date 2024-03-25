@@ -12,7 +12,7 @@ int ft_pwd(t_cmd_node *cmd , t_env *env);
 int ft_cd(t_env *env, t_cmd_node *cmd);
 int ft_env(t_env *env);
 int ft_unset(t_env *env, t_cmd_node *cmd);
-
+void remove_env(t_env **env, char *key);
 int ft_export(t_env *env, t_cmd_node *cmd);
 // int ft_unset(t_cmd_node *cmd);
 // int ft_env(t_cmd_node *cmd);
