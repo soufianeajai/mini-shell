@@ -2,7 +2,7 @@
 #include "../environnement/env.h"
 #include <fcntl.h>
 
-char	*check_her_doc (t_token **token)
+char	*check_her_doc (t_token **token, t_env *env_list)
 {
 	t_redir_node *redir;
 	char *input;
@@ -21,6 +21,7 @@ char	*check_her_doc (t_token **token)
 			input = NULL;
 			break;
 		}
+		input = get_env_value(input, env_list);
 		write(fd, input, ft_strlen(input));
 		write(fd, "\n", 1);
 		free(input);
@@ -40,7 +41,7 @@ int is_special_char(char *c)
 	}
 	return (0);
 }
-t_redir_node	*parse_redirection(t_token **tokens)
+t_redir_node	*parse_redirection(t_token **tokens, t_env *env_list)
 {
 	t_redir_node	*node;
 	redir_type		type;
@@ -60,13 +61,12 @@ t_redir_node	*parse_redirection(t_token **tokens)
 		{
 			if (is_special_char((*tokens)->next->str))
 			{
-				//need to exit witth exit code and free ....
 				return(NULL);
 			}
 			else
 			{
 				consume(tokens);
-				node->filename = check_her_doc(tokens);
+				node->filename = check_her_doc(tokens, env_list);
 				node->redir_type = IN;
 			}
 		}

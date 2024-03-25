@@ -9,11 +9,11 @@ t_tree_node	*parse_command(t_token **tokens, t_env *env_list)
 
 	check_syntax(*tokens);
 	expand_env(tokens, env_list);
-	tree = parse_pipeline(tokens);
+	tree = parse_pipeline(tokens, env_list);
 	return (tree);
 }
 
-t_tree_node	*parse_pipeline(t_token **tokens)
+t_tree_node	*parse_pipeline(t_token **tokens, t_env *env_list)
 {
 	t_pipe_node	*pipe_node;
 	t_tree_node	*tree_node;
@@ -22,14 +22,14 @@ t_tree_node	*parse_pipeline(t_token **tokens)
 
 	pipe_node = 0;
 	tree_node = 0;
-	left = parse_simple_command(tokens);
+	left = parse_simple_command(tokens, env_list);
 	
 	if (!left)
 		return (0);
 	if (*tokens && (*tokens)->type == PIPE)
 	{
 		consume(tokens);
-		right = parse_pipeline(tokens);
+		right = parse_pipeline(tokens, env_list);
 		pipe_node = create_pipe_node(left, right);
 		tree_node = add_to_tree((void *)pipe_node, PIPE);
 		return (tree_node);
@@ -37,7 +37,7 @@ t_tree_node	*parse_pipeline(t_token **tokens)
 	return (left);
 }
 
-t_tree_node	*parse_simple_command(t_token **tokens)
+t_tree_node	*parse_simple_command(t_token **tokens, t_env *env_list)
 {
 	t_cmd_node		*cmd_node;
 	t_tree_node		*node;
@@ -66,7 +66,7 @@ t_tree_node	*parse_simple_command(t_token **tokens)
 		}
 		while ((*tokens) && (*tokens)->type == REDIR)
 		{
-			redir_node = parse_redirection(tokens);
+			redir_node = parse_redirection(tokens, env_list);
 			if (!redir_node)
 			{
 				return (0);

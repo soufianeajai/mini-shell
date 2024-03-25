@@ -69,13 +69,11 @@ void execute_pipe(t_pipe_node *pipe_node, t_env *env)
         execute_tree(pipe_node->right, env);
         exit(0);
     }
-	waitpid(pid2, NULL, 0);
-	waitpid(pid1, NULL, 0);
 	
     close(fd[0]);
     close(fd[1]);
-
-    
+	waitpid(pid2, NULL, 0);
+	waitpid(pid1, NULL, 0);
 }
 void execute(t_tree_node *tree, t_env *env)
 {
