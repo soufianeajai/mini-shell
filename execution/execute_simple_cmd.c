@@ -51,7 +51,7 @@ void execute_simple_cmd(t_env *env, t_cmd_node *cmd)
     if (is_builtin(cmd))
     {
         exit_code = execute_builtin(env, cmd);
-    //    printf("exit code: %d\n", exit_code);
+        printf("exit code: %d\n", exit_code);
         exit(exit_code);
         
     }

@@ -35,7 +35,7 @@ int execute_builtin(t_env *env, t_cmd_node *cmd)
         return (ft_unset(env, cmd));
     if (ft_strncmp(cmd->executable, "env", 4) == 0)
         return (ft_env(env));
-    // if (ft_strncmp(cmd->executable, "exit", 5) == 0)
-    //     return (ft_exit(cmd));
+    if (ft_strncmp(cmd->executable, "exit", 5) == 0)
+        ft_exit(cmd);
     return (0);
 }
