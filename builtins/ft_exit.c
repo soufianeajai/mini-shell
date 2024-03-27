@@ -10,10 +10,10 @@ int ft_isdigit(int c)
 
 
 
-long long my_atoi(const char *str) {
-    long long res;
+size_t my_atoi(const char *str) {
+    size_t res;
     int sign;
-    long long tmp;
+    size_t tmp;
 
     res = 0;
     sign = 1;
@@ -61,11 +61,10 @@ int ft_error_exit(char *arg, int flag)
 void ft_exit(t_cmd_node *cmd)
 {
     int i;
-    long long j;
+    size_t j;
 
     i = 0;
     j = 0;
-
     if(count_len(cmd->arguments) == 1)
     {
         ft_putstr_fd("exit\n", 2);
@@ -86,7 +85,8 @@ void ft_exit(t_cmd_node *cmd)
             return ;
         }
         j = my_atoi(cmd->arguments[1]);
-        if ((j < 0 && cmd->arguments[1][i] != '-') || (j > 0 && cmd->arguments[1][i] == '-'))
+        printf("exit %zu \n",j);
+        if ((j < 0 && cmd->arguments[1][i] != '-') || (j > 0 && cmd->arguments[1][i] == '-') || j == 9223372036854775807)
             exit(ft_error_exit(cmd->arguments[1], 1));
         exit(j % 256);
     }
