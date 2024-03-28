@@ -1,0 +1,24 @@
+total 592
+drwxr-xr-x  23 afanidi  candidates     782 Mar 28 22:44 .
+drwxr-xr-x  17 afanidi  candidates     578 Mar 27 00:57 ..
+-rw-r--r--   1 afanidi  candidates    6148 Mar 25 21:55 .DS_Store
+drwxr-xr-x  14 afanidi  candidates     476 Mar 28 03:30 .git
+-rw-r--r--   1 afanidi  candidates     874 Mar 28 22:44 .her_doc.c
+drwxr-xr-x   3 afanidi  candidates     102 Mar 25 21:55 .vscode
+-rw-r--r--   1 afanidi  candidates     860 Mar 28 00:18 Makefile
+-rw-r--r--   1 afanidi  candidates      32 Mar 25 21:55 README.md
+drwxr-xr-x  19 afanidi  candidates     646 Mar 28 22:37 builtins
+-rw-r--r--   1 afanidi  candidates  191836 Mar 25 21:55 draw.tldr
+drwxr-xr-x   7 afanidi  candidates     238 Mar 28 22:37 environnement
+drwxr-xr-x   7 afanidi  candidates     238 Mar 28 22:44 execution
+-rw-r--r--   1 afanidi  candidates       0 Mar 28 22:44 file
+-rw-r--r--   1 afanidi  candidates       0 Mar 28 22:44 file1
+drwxr-xr-x  10 afanidi  candidates     340 Mar 28 22:37 libft
+-rwxr-xr-x   1 afanidi  candidates   38704 Mar 28 22:12 lss
+-rw-r--r--   1 afanidi  candidates    1019 Mar 28 01:10 mini-shell.c
+-rw-r--r--   1 afanidi  candidates    1524 Mar 28 22:37 mini-shell.o
+-rwxr-xr-x   1 afanidi  candidates   34236 Mar 28 22:44 minishell
+-rw-r--r--   1 afanidi  candidates    1782 Mar 28 03:20 minishell.h
+drwxr-xr-x  15 afanidi  candidates     510 Mar 28 22:37 parsing
+drwxr-xr-x   4 afanidi  candidates     136 Mar 28 22:37 syntax
+drwxr-xr-x   6 afanidi  candidates     204 Mar 28 22:37 tokenisation

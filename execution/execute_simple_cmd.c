@@ -57,13 +57,25 @@ void execute_simple_cmd(t_env *env, t_cmd_node *cmd)
     path_cmd = get_path_cmd(env, cmd);
     if (!path_cmd)
     {
-        if(cmd->flag_env == 1)
+        if(cmd->flag_env == 1 && cmd->executable && cmd->executable[0] == '\0')
         {
             free(path_cmd);
             exit(0);
         }
-        free(path_cmd);
-        exit(ft_error(cmd->executable, "command not found"));
+        if (cmd->executable && cmd->flag_env == 1)
+        {
+            ft_free(cmd->arguments);
+            cmd->arguments = ft_split(cmd->executable, ' ');
+            free(cmd->executable);
+            cmd->executable = ft_strdup(cmd->arguments[0]);
+            path_cmd = get_path_cmd(env, cmd);
+        }
+        
+        if (!path_cmd)
+        {
+            free(path_cmd);
+            exit(ft_error(cmd->executable, "command not found"));
+        }
     }
     char **arr = lst_to_arr(env);
     if(execve(path_cmd, cmd->arguments, arr) == -1)
@@ -94,54 +106,8 @@ void execute_redir(t_env *env, t_redir_node *cmd)
     fd_out = dup(1);
     while (cmd)
     {
-        if (cmd->redir_type == IN)
-        {
-            fd_file = open(cmd->filename, O_RDONLY);
-            if (fd_file == -1)
-                exit(ft_error(cmd->filename, "No such file or directory"));
-            dup2(fd_file,fd_in);
-            close(fd_file);
-        }
-        else if (cmd->redir_type == OUT)
-        {
-            fd_file = open(cmd->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-            if (fd_file == -1)
-                exit(ft_error(cmd->filename, "No such file or directory"));
-            dup2(fd_file,fd_out);
-            close(fd_file);
-        }
-        else if (cmd->redir_type == APPEND)
-        {
-            fd_file = open(cmd->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
-            if (fd_file == -1)
-                exit(ft_error(cmd->filename, "No such file or directory"));
-            dup2(fd_file,fd_out);
-            close(fd_file);
-        }
-        else if (cmd->redir_type == HER_DOC)
-        {
-            if (pipe(fd))
-	        {
-	        	perror("pipe");
-	        	exit(1);
-	        }
-            while (1)
-		    {
-                input = readline("> ");
-                if(!input || strcmp(input, cmd->filename) == 0) 
-                {
-                    free(input);
-                    input = NULL;
-                    break;
-                }
-                write(fd[1], input, ft_strlen(input)); write(fd[1], "\n", 1);
-                free(input);
-                input = NULL;
-	        }
-            close(fd[1]);
-            dup2(fd[0], fd_in);
-            close(fd[0]);
-        }
+        if (cmd->redir_type == IN || cmd->redir_type == OUT || cmd->redir_type == APPEND)
+            util_redir(cmd, cmd->redir_type , fd_in, fd_out);
         tmp = cmd;
         cmd = cmd->next;
     }
@@ -153,3 +119,25 @@ void execute_redir(t_env *env, t_redir_node *cmd)
 }
 
 
+
+
+void util_redir(t_redir_node *cmd , redir_type type,int fd_in, int fd_out)
+{
+    int fd_file;
+
+    if(type == IN)
+    fd_file = open(cmd->filename, O_RDONLY);
+    if (type  == OUT)
+    fd_file = open(cmd->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (type == APPEND)
+    fd_file = open(cmd->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
+
+    if (fd_file == -1)
+        exit(ft_error(cmd->filename, "No such file or directory"));
+
+    if (type == IN)
+        dup2(fd_file,fd_in);
+    else
+        dup2(fd_file,fd_out);
+    close(fd_file);
+}

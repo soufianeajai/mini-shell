@@ -46,7 +46,6 @@ char	*get_env_value(char *input, t_env *env_list)
 	key = NULL;
 	while (input && *input)
 	{
-		printf("input: %s\n", input);
 		if (*input == '$' && isalpha_num(*(input + 1)))
 		{
 			if (is_alpha(*(input + 1)))

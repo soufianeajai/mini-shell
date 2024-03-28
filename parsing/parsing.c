@@ -6,10 +6,16 @@
 t_tree_node	*parse_command(t_token **tokens, t_env *env_list)
 {
 	t_tree_node *tree;
+	int syntax_error;
 
-	check_syntax(*tokens);
+	syntax_error = check_syntax(*tokens);
 	expand_env(tokens, env_list);
 	tree = parse_pipeline(tokens, env_list);
+	if(syntax_error)
+	{
+		//free_tree(tree);
+		return (0);
+	}
 	return (tree);
 }
 

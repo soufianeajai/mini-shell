@@ -76,7 +76,6 @@ void execute_pipe(t_pipe_node *pipe_node, t_env *env)
 }
 void execute(t_tree_node *tree, t_env *env)
 {
-
 	if (!tree)
 		return;
 	execute_tree(tree, env);

@@ -134,14 +134,14 @@ void free_tokens(t_token **tokens)
     tokens = 0;
 }
 
-void print_tokens(t_token *tokens)
-{
-    while (tokens)
-    {
-        //if (tokens->prev != NULL)
-            //printf("\n prev : %s",tokens->prev->str);
-        printf("\n--->%s _ type = %u\n", tokens->str , tokens->type);
-        tokens = tokens->next;
-    }
-}
+// void print_tokens(t_token *tokens)
+// {
+//     while (tokens)
+//     {
+//         //if (tokens->prev != NULL)
+//             //printf("\n prev : %s",tokens->prev->str);
+//         printf("\n--->%s _ type = %u\n", tokens->str , tokens->type);
+//         tokens = tokens->next;
+//     }
+// }
 

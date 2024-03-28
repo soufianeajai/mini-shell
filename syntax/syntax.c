@@ -56,7 +56,5 @@ int check_syntax(t_token *tok)
         }
         tok = tok->next;
     }
-
-    // 
     return (0);
 }

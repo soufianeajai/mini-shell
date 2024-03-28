@@ -60,9 +60,9 @@ t_redir_node	*parse_redirection(t_token **tokens, t_env *env_list)
 		// need to add expand to her_doc
 		if (node->redir_type == HER_DOC)
 		{
-			if (is_special_char((*tokens)->next->str))
+			if ((*tokens)->next && is_special_char((*tokens)->next->str))
 				return(NULL);
-			else
+			else if (((*tokens)->next))
 			{
 				consume(tokens);
 				node->filename = check_her_doc(tokens, env_list);

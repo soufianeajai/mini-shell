@@ -94,9 +94,7 @@ void handle_key_value(char *arg, t_env *env)
         index--;
     }
     key = ft_substr(arg, 0, index);
-    value = ft_substr(arg, index + 1, ft_strlen(arg) - index - 1);
-    printf("key: %s\n", key);
-    printf("dd value: %s\n", value);
+    value = ft_substr(arg, index + 1, ft_strlen(arg) - index - 1);  
     add_to_env(append, env, key, value);
 
     free(key);
