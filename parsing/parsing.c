@@ -45,6 +45,7 @@ t_tree_node	*parse_simple_command(t_token **tokens, t_env *env_list)
 	char			*executable;
 	char			**arguments;
 	t_redir_node	**head_redir;
+	int flag_env;
 	int j = 0;
 
 	cmd_node = 0;
@@ -57,6 +58,7 @@ t_tree_node	*parse_simple_command(t_token **tokens, t_env *env_list)
 	{
 		if ((*tokens)->type == CMD)
 		{
+			flag_env = (*tokens)->flag_env;
 			if (!executable)
 			{
 				executable = ft_strdup((*tokens)->str);
@@ -81,7 +83,7 @@ t_tree_node	*parse_simple_command(t_token **tokens, t_env *env_list)
 				ft_lstadd_back_redir(head_redir, redir_node);
 		}
 	}
-	cmd_node = create_cmd_node(executable, arguments);
+	cmd_node = create_cmd_node(executable, arguments, flag_env);
 	if (head_redir && *head_redir)
 	{
 		redir_node->cmd = cmd_node;

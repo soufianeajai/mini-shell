@@ -52,13 +52,16 @@ void execute_simple_cmd(t_env *env, t_cmd_node *cmd)
     {
         exit_code = execute_builtin(env, cmd);
         printf("exit code: %d\n", exit_code);
-        exit(exit_code);
-        
+        exit(exit_code);    
     }
     path_cmd = get_path_cmd(env, cmd);
-    
     if (!path_cmd)
     {
+        if(cmd->flag_env == 1)
+        {
+            free(path_cmd);
+            exit(0);
+        }
         free(path_cmd);
         exit(ft_error(cmd->executable, "command not found"));
     }

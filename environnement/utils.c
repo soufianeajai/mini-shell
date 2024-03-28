@@ -9,7 +9,7 @@ char *ft_getenv(t_env *env, char *key)
 	tmp = env;
 	while (tmp && tmp->key)
 	{
-		if (ft_strncmp(tmp->key,key,ft_strlen(key)) == 0)
+		if (ft_strcmp(tmp->key,key) == 0)
 			return (tmp->value);
 		tmp = tmp->next;
 	}
@@ -18,7 +18,7 @@ char *ft_getenv(t_env *env, char *key)
 
 int is_path( t_cmd_node *cmd)
 {
-	if (access(cmd->executable, X_OK) == 0)
+	if (access(cmd->executable, X_OK) == 0 && (ft_strncmp(cmd->executable, "./", 2) == 0 || ft_strncmp(cmd->executable, "/", 1) == 0))
 		return (1);
 	return (0);
 }
@@ -36,10 +36,10 @@ char *get_path_cmd(t_env *env, t_cmd_node *cmd)
 		return (cmd->executable);
 	path = ft_split(ft_getenv(env, "PATH"), ':');
 	while (path && path[i] && cmd->executable && cmd->executable[0] != '/' && cmd->executable[0] != '.')
-	{
+	{	
 		util = ft_strjoin(path[i++], "/");
 		path_cmd = ft_strjoin(util, cmd->executable);
-		if (access(path_cmd, X_OK) == 0)
+		if (access(path_cmd, X_OK) == 0 && cmd->executable[0] != '\0')
 		{
 			free(util);
 			ft_free(path);

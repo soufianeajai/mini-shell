@@ -1,5 +1,5 @@
 NAME = minishell
-SRCS = libft/utils1.c libft/utils2.c libft/ft_split.c \
+SRCS = libft/utils1.c libft/utils2.c libft/utils3.c libft/ft_split.c \
 tokenisation/SplitToken.c syntax/syntax.c tokenisation/tokenisation.c \
 environnement/env.c environnement/utils.c\
 builtins/builtins_functions.c builtins/ft_echo.c builtins/ft_pwd.c \

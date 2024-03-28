@@ -34,6 +34,7 @@ typedef struct s_token
 	char				*str;
 	struct s_token		*prev;
 	struct s_token		*next;
+	int					flag_env;
 }						t_token;
 
 
@@ -51,6 +52,7 @@ void printf_error_syntax(char *str);
 int    is_operator(node_type type,int len ,char *str);
 
 // libft
+int	ft_strcmp(const char *s1, const char *s2);
 char		**ft_split(char const *s, char c);
 size_t		ft_strlen(const char *s);
 char		*ft_strjoin(char *s1, char *s2);
