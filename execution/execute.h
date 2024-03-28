@@ -4,18 +4,12 @@
 #include "../environnement/env.h"
 #include <fcntl.h>
 
-//execute tree
 void execute_tree(t_tree_node *tree, t_env *env);
-int execute_simple(t_tree_node *tree ,t_env *env);
+void exec_CMD(t_tree_node *tree , t_env *env);
+void exec_REDIR(t_tree_node *tree , t_env *env);
 void execute(t_tree_node *tree, t_env *env);
-//execute simple cmd 
 void execute_simple_cmd(t_env *env, t_cmd_node *cmd);
 void execute_redir(t_env *env,t_redir_node *cmd);
-
-
-
-
-//error 
 int ft_error(char *cmd, char *error);
 
 #endif

@@ -15,6 +15,7 @@ void	ft_lstadd_back(t_token **lst, int len , node_type type , int index)
             new->flag_env = 1;
         else
             new->flag_env = 0;
+        new->type_qoutes = -1;
         new->index = index;
         new->next = NULL;
         new->prev = NULL;

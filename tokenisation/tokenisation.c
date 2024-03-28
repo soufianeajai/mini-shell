@@ -58,13 +58,24 @@ void tokenisation(t_token **tokens, char *input)
     no_expaind_her_doc(tokens);
 }
 
-int is_qoutes(char c)
+int is_qoutes(char c, t_token **tok)
 {
 	if (c == '\"')
-		return (2);
+	{
+        if ((*tok)->type_qoutes == -1)
+        {
+            
+            (*tok)->type_qoutes = 2;
+        }
+        return (2);
+    }
 	if (c == '\'')
-		return (1);
-	return (0);
+	{
+        if ((*tok)->type_qoutes == -1)
+            (*tok)->type_qoutes = 1;
+        return (1);
+    }
+    return (0);
 }
 
 void handling_qoutes(t_token **tk)
@@ -83,9 +94,9 @@ void handling_qoutes(t_token **tk)
 		i = 0;
 		while(tmp->str && tmp->str[i])
 		{
-			if ((flag = is_qoutes(tmp->str[i])))
+			if ((flag = is_qoutes(tmp->str[i], &tmp)))
 				i++;
-			while (tmp->str[i] && (!is_qoutes(tmp->str[i]) || (flag != is_qoutes(tmp->str[i]) && flag != 0)))
+			while (tmp->str[i] && (!is_qoutes(tmp->str[i], &tmp) || (flag != is_qoutes(tmp->str[i], &tmp) && flag != 0)))
 			{
               //  printf("\n------is_qoutes------> %d",is_qoutes(tmp->str[i]));
               //  printf("\n-> %c , --> qoutes = %d ",tmp->str[i], flag);
@@ -93,7 +104,7 @@ void handling_qoutes(t_token **tk)
 
             //printf("*****------is_qoutes------> %d",is_qoutes(tmp->str[i]));
               //  printf("\n-> %c , --> qoutes = %d *****",tmp->str[i], flag);
-			if (tmp->str[i] && flag == is_qoutes(tmp->str[i]))
+			if (tmp->str[i] && flag == is_qoutes(tmp->str[i], &tmp))
 			{
                 i++;
                 flag = 0;

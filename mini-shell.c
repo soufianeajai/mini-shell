@@ -14,7 +14,7 @@ int main(int ac, char **av, char **env)
 
     while(1)
     {   
-        input = readline("➜ ~SH~MiNi~ ✗ ");
+        input = readline("➜  MiNiSh ✗ ");
         if (!input)
             exit(0);
         if (ft_strlen(input) > 0)
@@ -22,8 +22,7 @@ int main(int ac, char **av, char **env)
             
         else 
             continue;
-        //clear_history();
-
+        
         SplitTokens(input, &tokens);
         tokenisation(&tokens,input);
 	    handling_qoutes(&tokens);
@@ -34,13 +33,13 @@ int main(int ac, char **av, char **env)
         t_tree_node *tree = parse_command(&tokens, env_list);
         if (tree)
         {
-            if (tree->type == REDIR || tree->type ==CMD)
-                execute_simple(tree, env_list);
-            else
+            if (tree->type ==CMD)
+                exec_CMD(tree, env_list);
+            else if (tree->type == REDIR)
+                exec_REDIR(tree, env_list);
+            else 
                 execute(tree, env_list);
         }
-       if (ft_strncmp(input, "exit", 5) == 0)
-            break;
         free_tokens(&tokens);
         free(input);
     }

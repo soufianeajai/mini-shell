@@ -65,11 +65,12 @@ void ft_exit(t_cmd_node *cmd)
 
     i = 0;
     j = 0;
-    if(count_len(cmd->arguments) == 1)
+    if(count_len(cmd->arguments) == 1 )
     {
+        //  !cmd for handle signal 
         ft_putstr_fd("exit\n", 2);
         // check grobal variable for exit code
-        exit(0);
+        exit(EXIT_CODE);
     }
     if (cmd->arguments[1])
     {
@@ -85,9 +86,9 @@ void ft_exit(t_cmd_node *cmd)
             return ;
         }
         j = my_atoi(cmd->arguments[1]);
-        printf("exit %zu \n",j);
         if ((j < 0 && cmd->arguments[1][i] != '-') || (j > 0 && cmd->arguments[1][i] == '-') || j == 9223372036854775807)
             exit(ft_error_exit(cmd->arguments[1], 1));
-        exit(j % 256);
+        EXIT_CODE = j % 256;
+        exit(EXIT_CODE);
     }
 }

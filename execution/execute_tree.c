@@ -1,44 +1,43 @@
 #include "execute.h"
 #include "../builtins/builtin.h"
 
-int execute_simple(t_tree_node *tree , t_env *env)
+void exec_CMD(t_tree_node *tree , t_env *env)
 {
 	int status;
-	int pid_left;
-	int pid_right;
+	int pid;
 
-	if (tree->type == CMD)
-	{
-		if (is_builtin((t_cmd_node *)(tree->node)))
-   		 {
-        	int exit_code = execute_builtin(env, (t_cmd_node *)(tree->node));
-       		printf("exit code: %d\n", exit_code);
-        	return exit_code;
-    	}
-		pid_left = fork();
-		if (pid_left == 0)
-			execute_simple_cmd(env, (t_cmd_node *)(tree->node));
-		else
-			waitpid(pid_left, &status, 0);
-		return (status);
+	if (is_builtin((t_cmd_node *)(tree->node)))
+   	{
+    	int exit_code = execute_builtin(env, (t_cmd_node *)(tree->node));
+		return;
+    	// printf("exit code: %d\n", exit_code);
+    	// return exit_code;
 	}
-	if (tree->type == REDIR)
-	{
-		if (is_builtin((t_cmd_node *)(tree->node)))
-   		 {
-        	int exit_code = execute_builtin(env, (t_cmd_node *)(tree->node));
-       		printf("exit code: %d\n", exit_code);
-        	return exit_code;
-    	}
-		pid_left = fork();
-		if (pid_left == 0)
-			execute_redir(env, (t_redir_node *)(tree->node));
-		else
-			waitpid(pid_left, &status, 0);	
-		return (status);
-	}
-	return (-1);
+	pid = fork();
+	if (pid == 0)
+		execute_simple_cmd(env, (t_cmd_node *)(tree->node));
+	else
+		waitpid(pid, &status, 0);
 }
+
+void exec_REDIR(t_tree_node *tree , t_env *env)
+{
+	int status;
+	int pid;
+	int exit_code;
+
+	if (is_builtin((t_cmd_node *)(tree->node)))
+   	{
+        exit_code = execute_builtin(env, (t_cmd_node *)(tree->node));
+		return;
+	}
+	pid = fork();
+	if (pid == 0)
+		execute_redir(env, (t_redir_node *)(tree->node));
+	else
+		waitpid(pid, &status, 0);
+}
+
 void execute_pipe(t_pipe_node *pipe_node, t_env *env)
 {
     int pid1;

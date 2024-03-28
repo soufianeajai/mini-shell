@@ -46,6 +46,7 @@ char	*get_env_value(char *input, t_env *env_list)
 	key = NULL;
 	while (input && *input)
 	{
+		printf("input: %s\n", input);
 		if (*input == '$' && isalpha_num(*(input + 1)))
 		{
 			if (is_alpha(*(input + 1)))
@@ -61,6 +62,11 @@ char	*get_env_value(char *input, t_env *env_list)
 				input = input + 2;
 				value = get_value(&input, 0);
 			}
+		}
+		else if (*input == '$' && *(input + 1) == '?')
+		{
+			value = ft_itoa(EXIT_CODE);
+			input = input + 2;
 		}
 		else if (*input == '$')
 		{

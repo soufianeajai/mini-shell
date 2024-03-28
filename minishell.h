@@ -14,9 +14,7 @@
 #define RED "\e[31m"
 #define GREEN "\e[32m"
 
-extern void	rl_replace_line(const char *, int);
-//extern int	g_signal;
-
+int EXIT_CODE;
 
 typedef enum
 {
@@ -35,6 +33,7 @@ typedef struct s_token
 	struct s_token		*prev;
 	struct s_token		*next;
 	int					flag_env;
+	int 				type_qoutes;
 }						t_token;
 
 
@@ -66,6 +65,8 @@ size_t		count_strings(char **strings);
 int			ft_isspace(char c);
 void	ft_free(char **tab);
 
+char *ft_itoa(int n);
+
 
 //tokenisation
 void free_tokens(t_token **tokens);
@@ -75,7 +76,7 @@ void print_tokens(t_token *tokens);
 char *mystrdup(t_token *tokens, char *input);
 void ft_strlcpy(char *dst, const char *src, size_t dstsize);
 void handling_qoutes(t_token **t);
-int is_qoutes(char c);
+int is_qoutes(char c, t_token **tok);
 
 
 #endif

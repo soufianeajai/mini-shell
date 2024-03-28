@@ -21,7 +21,8 @@ char	*check_her_doc (t_token **token, t_env *env_list)
 			input = NULL;
 			break;
 		}
-		input = get_env_value(input, env_list);
+		if (*token && (*token)->type_qoutes == -1)
+			input = get_env_value(input, env_list);
 		write(fd, input, ft_strlen(input));
 		write(fd, "\n", 1);
 		free(input);
@@ -60,9 +61,7 @@ t_redir_node	*parse_redirection(t_token **tokens, t_env *env_list)
 		if (node->redir_type == HER_DOC)
 		{
 			if (is_special_char((*tokens)->next->str))
-			{
 				return(NULL);
-			}
 			else
 			{
 				consume(tokens);
