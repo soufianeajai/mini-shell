@@ -42,14 +42,14 @@ char *get_path_cmd(t_env *env, t_cmd_node *cmd)
 		if (access(path_cmd, X_OK) == 0 && cmd->executable[0] != '\0')
 		{
 			free(util);
-			ft_free(path);
+			free_str_list(path);
 			return (path_cmd);
 		}
 		free(util);
 		free(path_cmd);
 		path_cmd = NULL;
 	}
-	ft_free(path);
+	free_str_list(path);
 	return (NULL);
 }
 

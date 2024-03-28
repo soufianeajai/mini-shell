@@ -67,3 +67,11 @@ char	*ft_itoa(int n)
 	}
 	return (str);
 }
+void	ft_free(char *str)
+{
+	if (str)
+	{
+		free(str);
+		str = NULL;
+	}
+}

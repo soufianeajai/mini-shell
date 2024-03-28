@@ -63,8 +63,8 @@ int			ft_strchr(const char *s, int c);
 void		ft_putstr_fd(char *s, int fd);
 size_t		count_strings(char **strings);
 int			ft_isspace(char c);
-void	ft_free(char **tab);
-
+void	ft_free(char *tab);
+void free_str_list(char **str);
 char *ft_itoa(int n);
 
 

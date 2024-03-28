@@ -64,7 +64,7 @@ void execute_simple_cmd(t_env *env, t_cmd_node *cmd)
         }
         if (cmd->executable && cmd->flag_env == 1)
         {
-            ft_free(cmd->arguments);
+            free_str_list(cmd->arguments);
             cmd->arguments = ft_split(cmd->executable, ' ');
             free(cmd->executable);
             cmd->executable = ft_strdup(cmd->arguments[0]);

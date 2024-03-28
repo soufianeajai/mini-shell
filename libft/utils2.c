@@ -38,15 +38,17 @@ int ft_isspace(char c)
 	return (0);
 }
 
-void	ft_free(char **tab)
+void	free_str_list(char **str)
 {
 	int	i;
-
 	i = 0;
-	while (tab && tab[i])
+	if (!str)
+		return ;
+	while (str[i])
 	{
-		free(tab[i]);
+		free(str[i]);
+		str[i] = 0;
 		i++;
 	}
-	free(tab);
+	free(str);
 }

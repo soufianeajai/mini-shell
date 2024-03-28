@@ -48,20 +48,7 @@ int	count_len(char **arguments)
 	return (len);
 }
 
-void	free_str_list(char **str)
-{
-	int	i;
-	i = 0;
-	if (!str)
-		return ;
-	while (str[i])
-	{
-		free(str[i]);
-		str[i] = 0;
-		i++;
-	}
-	free(str);
-}
+
 
 
 int	count_args(t_token *tokens)
