@@ -73,10 +73,10 @@ char	*get_env_value(char *input, t_env *env_list)
 		}
 		else if (*input == '$')
 		{
-			value = ft_strdup("$");
+			//value = ft_strdup("$");
 			input++;
 			//value = ft_strjoin(value, get_value(&input, 0), 3);
-			value = ft_strjoin(value, get_value(&input, 0), 2);
+			value = ft_strjoin("$", get_value(&input, 0), 2);
 		}
 		else
 			value = get_value(&input, 0);

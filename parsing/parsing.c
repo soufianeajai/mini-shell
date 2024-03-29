@@ -68,6 +68,12 @@ t_tree_node	*parse_simple_command(t_token **tokens, t_env *env_list, int syntax_
 			if (!executable)
 			{
 				executable = ft_strdup((*tokens)->str);
+				// cas : $> $<
+				if(ft_strcmp(executable, "$") == 0)
+				{
+					free(executable);
+					return (0);
+				}
 				consume(tokens);
 			}
 			arguments = get_arguments(executable, arguments, tokens);

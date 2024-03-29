@@ -65,7 +65,7 @@ void ft_exit(t_cmd_node *cmd, t_env *env)
 
     i = 0;
     j = 0;
-    free_env_list(env);
+    //free_env_list(env);
     if(count_len(cmd->arguments) == 1 )
     {
         //  !cmd for handle signal 
