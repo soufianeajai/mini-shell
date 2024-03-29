@@ -50,6 +50,7 @@ char	*get_env_value(char *input, t_env *env_list)
 	key = NULL;
 	while (input && *input)
 	{
+		ft_free(&value);
 		if (*input == '$' && isalpha_num(*(input + 1)))
 		{
 			if (is_alpha(*(input + 1)))
@@ -57,7 +58,6 @@ char	*get_env_value(char *input, t_env *env_list)
 				input++;
 				key = get_value(&input, 1);
 				value = ft_getenv(env_list, key);
-				ft_free(&key);
 				ft_free(&key);
 			}
 			else
@@ -78,12 +78,12 @@ char	*get_env_value(char *input, t_env *env_list)
 			char *tmp =  get_value(&input, 0);
 			//value = ft_strjoin(value, get_value(&input, 0), 3);
 			value = ft_strjoin("$", tmp, 0);
-			ft_free(&tmp);
+			free(tmp);
 		}
 		else
 			value = get_value(&input, 0);
-		result = ft_strjoin(result, value, 0);
-	//	ft_free(&value);
+		result = ft_strjoin(result, value, 1);
+		
 	}
 	return (result);
 }

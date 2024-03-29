@@ -9,7 +9,7 @@
 #include <fcntl.h>
 #include "../minishell.h"
 #include<termios.h>
-
+#include <sys/wait.h>
 
 
 // typedef enum

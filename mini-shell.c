@@ -64,6 +64,7 @@ int main(int ac, char **av, char **env)
     t_token *temp;
 
     
+    env_list = NULL;
     env_copy(&env_list, env);
     disable_raw_mode();
     while(1)
