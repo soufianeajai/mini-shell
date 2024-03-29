@@ -4,6 +4,7 @@
 
 void	consume(t_token **tokens)
 {
+	if (*tokens)
 		*tokens = (*tokens)->next;
 }
 t_pipe_node	*create_pipe_node(t_tree_node *left, t_tree_node *right)

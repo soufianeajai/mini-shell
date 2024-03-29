@@ -87,7 +87,8 @@ t_redir_node	*parse_redirection(t_token **tokens, t_env *env_list)
 		else
 		{
 			consume(tokens);
-			node->filename = ft_strdup((*tokens)->str);
+			if (*tokens)
+				node->filename = ft_strdup((*tokens)->str);
 		}
 		consume(tokens);
 	}

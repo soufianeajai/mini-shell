@@ -10,10 +10,10 @@ OBJS = $(SRCS:.c=.o)
 
 all : $(NAME)
 #%.o: %.c #builtins/ft_export.c builtins/ft_unset.c builtins/ft_env.c \
-#    cc $(CFLAGS) -c $< -o $@ 
+#    cc $(CFLAGS) -c $< -o $@ -fsanitize=address
 
 $(NAME) : $(OBJS)
-	cc  -g3 $(CFLAGS)   -o $@ $^ -fsanitize=address -lreadline -L /Users/$(USER)/Desktop/homebrew/opt/readline/lib -I /Users/$(USER)/Desktop/homebrew/opt/readline/include
+	cc  -g3 $(CFLAGS)   -o $@ $^  -lreadline -L /Users/$(USER)/Desktop/homebrew/opt/readline/lib -I /Users/$(USER)/Desktop/homebrew/opt/readline/include
 
 clean :
 	$(RM) $(OBJS) $(OBJSB)
