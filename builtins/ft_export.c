@@ -62,12 +62,10 @@ void add_to_env(int append,t_env *env, char *key, char *value)
     oldvalue = ft_getenv(env, key);
     if(append == 1)
     {   value++;
-    printf(" f value: %s\n", value);
         if (oldvalue)
         {
-            tmp = ft_strjoin(oldvalue, value);
+            tmp = ft_strjoin(oldvalue, value, 0);
             value = tmp;
-            printf("value: %s\n", value);
         }
         append = 0;
     }
@@ -124,8 +122,6 @@ int handling_args(char **arg, t_env *env)
             continue;
         }
         handle_key_value(arg[i], env);
-        // handling key value aand add to env
-      // ft_lstadd_back_env(&env, index, arg[i]);
         i++;
     }
     return (flag);

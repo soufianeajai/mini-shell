@@ -31,8 +31,8 @@ int ft_error(char *cmd, char *error)
     i = 0;
     while (env)
     {
-        arr[i] = ft_strjoin(env->key, "=");
-        arr[i] = ft_strjoin(arr[i], env->value);
+        arr[i] = ft_strjoin(env->key, "=", 0);
+        arr[i] = ft_strjoin(arr[i], env->value, 0);
         env = env->next;
         i++;
     }

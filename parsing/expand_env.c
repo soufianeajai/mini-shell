@@ -5,18 +5,21 @@
 void	expand_env(t_token **token, t_env *env_list)
 {
 	t_token	*temp;
+	char	*value;
+	char	**temp_str;
 
 	temp = *token;
 	while (temp)
 	{
 		if (temp->type == ENV)
 		{
-			temp->str = get_env_value(temp->str, env_list);
-			if (temp->str && *temp->str == '\0')
-			{
-				free(temp->str);
-				temp->str = NULL;
-			}
+			temp_str = &temp->str;
+			value = get_env_value(temp->str, env_list);
+			ft_free(temp_str);
+			if (value && *value == '\0')
+				ft_free(&value);
+			else
+				temp->str = value;
 			temp->type = CMD;
 		}
 		temp = temp->next;
@@ -53,8 +56,8 @@ char	*get_env_value(char *input, t_env *env_list)
 				input++;
 				key = get_value(&input, 1);
 				value = ft_getenv(env_list, key);
-				free(key);
-				key = NULL;
+				ft_free(&key);
+				ft_free(&key);
 			}
 			else
 			{
@@ -71,11 +74,11 @@ char	*get_env_value(char *input, t_env *env_list)
 		{
 			value = ft_strdup("$");
 			input++;
-			value = ft_strjoin(value, get_value(&input, 0));
+			value = ft_strjoin(value, get_value(&input, 0), 3);
 		}
 		else
 			value = get_value(&input, 0);
-		result = ft_strjoin(result, value);
+		result = ft_strjoin(result, value, 0);
 	}
 	return (result);
 }

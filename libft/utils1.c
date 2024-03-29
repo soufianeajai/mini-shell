@@ -38,20 +38,32 @@ size_t	ft_strlen(const char *s)
 		i++;
 	return (i);
 }
-char	*ft_strjoin(char *s1, char *s2)
+char	*ft_strjoin(char *s1, char *s2, int free_flag)
 {
 	char	*str;
 	size_t	i;
+	char	**temp1;
+	char	**temp2;
 
-	str = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
-	if (!str)
-		return (NULL);
 	i = 0;
+	temp1 = &s1;
+	temp2 = &s2;
+	if(!(str = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char))))
+		return (NULL);
 	while (s1 && *s1)
 		str[i++] = *(s1++);
 	while (s2 && *s2)
 		str[i++] = *(s2++);
 	str[i] = 0;
+	if (free_flag == 1)
+		ft_free(temp1);
+	if (free_flag == 2)
+		ft_free(temp2);
+	if (free_flag == 3)
+	{
+		ft_free(temp1); 
+		ft_free(temp2);
+	}
 	return (str);
 }
 

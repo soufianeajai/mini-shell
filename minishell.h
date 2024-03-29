@@ -54,7 +54,7 @@ int    is_operator(node_type type,int len ,char *str);
 int	ft_strcmp(const char *s1, const char *s2);
 char		**ft_split(char const *s, char c);
 size_t		ft_strlen(const char *s);
-char		*ft_strjoin(char *s1, char *s2);
+char	*ft_strjoin(char *s1, char *s2, int free_flag);
 char		*ft_strdup(char *src);
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
 void	*ft_memset(void *s, int c, size_t len);
@@ -63,7 +63,7 @@ int			ft_strchr(const char *s, int c);
 void		ft_putstr_fd(char *s, int fd);
 size_t		count_strings(char **strings);
 int			ft_isspace(char c);
-void	ft_free(char *tab);
+void	ft_free(char **str);
 void free_str_list(char **str);
 char *ft_itoa(int n);
 

@@ -6,6 +6,7 @@
 #include<stdio.h>
 #include<unistd.h>
 #include<stdlib.h>
+#include <fcntl.h>
 #include "../minishell.h"
 
 
@@ -94,7 +95,10 @@ char	*get_value(char **str, int flag);
 char	*check_her_doc (t_token **token, t_env *env_list);
 
 
-
+void free_cmd_node(t_cmd_node *cmd);
+void free_redir_node(t_redir_node *redir);
+void free_pipe_node(t_pipe_node *pipe);
+void free_tree(t_tree_node *tree);
 
 
 

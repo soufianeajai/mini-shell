@@ -37,8 +37,8 @@ char *get_path_cmd(t_env *env, t_cmd_node *cmd)
 	path = ft_split(ft_getenv(env, "PATH"), ':');
 	while (path && path[i] && cmd->executable && cmd->executable[0] != '/' && cmd->executable[0] != '.')
 	{	
-		util = ft_strjoin(path[i++], "/");
-		path_cmd = ft_strjoin(util, cmd->executable);
+		util = ft_strjoin(path[i++], "/", 0);
+		path_cmd = ft_strjoin(util, cmd->executable, 0);
 		if (access(path_cmd, X_OK) == 0 && cmd->executable[0] != '\0')
 		{
 			free(util);
@@ -78,4 +78,17 @@ void set_env_value(t_env **env, char *key, char *value)
 	while (tmp->next)
 		tmp = tmp->next;
 	tmp->next = new;
+}
+
+void free_env_list(t_env *env_list)
+{
+    t_env *temp;
+    while (env_list)
+    {
+        temp = env_list;
+        env_list = env_list->next;
+        ft_free((&temp->key));
+        ft_free(&(temp->value));
+        free(temp);
+    }
 }

@@ -1,7 +1,7 @@
 
 #include "parsing.h"
 #include "../environnement/env.h"
-#include <fcntl.h>
+
 
 t_tree_node	*parse_command(t_token **tokens, t_env *env_list)
 {
@@ -13,7 +13,7 @@ t_tree_node	*parse_command(t_token **tokens, t_env *env_list)
 	tree = parse_pipeline(tokens, env_list);
 	if(syntax_error)
 	{
-		//free_tree(tree);
+		free_tree(tree);
 		return (0);
 	}
 	return (tree);
