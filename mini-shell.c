@@ -63,11 +63,13 @@ int main(int ac, char **av, char **env)
     t_env *env_list;
     t_token *temp;
 
-    tokens = NULL;
+    
     env_copy(&env_list, env);
     disable_raw_mode();
     while(1)
-    {    handle_signals(); 
+    {
+        tokens = NULL;
+        handle_signals(); 
         input = readline("➜  MiNiSh ✗ ");
         if (!input)
         {
@@ -95,6 +97,7 @@ int main(int ac, char **av, char **env)
         }
         free_tree(tree);
         free_tokens(&temp);
+        
         free(input);
        
         //system("leaks minishell");

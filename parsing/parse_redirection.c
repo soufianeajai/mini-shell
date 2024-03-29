@@ -45,7 +45,7 @@ int is_special_char(char *c)
 	}
 	return (0);
 }
-t_redir_node	*parse_redirection(t_token **tokens, t_env *env_list)
+t_redir_node	*parse_redirection(t_token **tokens, t_env *env_list, int syntax_error)
 {
 	t_redir_node	*node;
 	redir_type		type;
@@ -60,6 +60,9 @@ t_redir_node	*parse_redirection(t_token **tokens, t_env *env_list)
 		node->type = REDIR;
 		node->next = 0;
 		node->redir_type = get_redir_type(tokens);
+		// suyuntax error and is not her_doc
+		if (syntax_error && node->redir_type != HER_DOC)
+			return (0);
 		// need to add expand to her_doc
 		if (node->redir_type == HER_DOC)
 		{

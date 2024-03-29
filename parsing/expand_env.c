@@ -44,7 +44,8 @@ char	*get_env_value(char *input, t_env *env_list)
 	char	*key;
 	char	*value;
 
-	result = ft_strdup("");
+	// result = ft_strdup("");
+	result = NULL;
 	value = NULL;
 	key = NULL;
 	while (input && *input)
@@ -74,11 +75,13 @@ char	*get_env_value(char *input, t_env *env_list)
 		{
 			value = ft_strdup("$");
 			input++;
-			value = ft_strjoin(value, get_value(&input, 0), 3);
+			//value = ft_strjoin(value, get_value(&input, 0), 3);
+			value = ft_strjoin(value, get_value(&input, 0), 2);
 		}
 		else
 			value = get_value(&input, 0);
 		result = ft_strjoin(result, value, 0);
+		ft_free(&value);
 	}
 	return (result);
 }
