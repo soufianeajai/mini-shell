@@ -55,36 +55,45 @@ char	*get_env_value(char *input, t_env *env_list)
 		{
 			if (is_alpha(*(input + 1)))
 			{
+				
 				input++;
 				key = get_value(&input, 1);
 				value = ft_getenv(env_list, key);
-				ft_free(&key);
+				ft_free(&key);printf("1111111111\n");
 			}
 			else
 			{
+				printf("22222222222\n");
 				input = input + 2;
 				value = get_value(&input, 0);
 			}
 		}
 		else if (*input == '$' && *(input + 1) == '?')
 		{
+			printf("33333333333\n");
 			value = ft_itoa(EXIT_CODE);
 			input = input + 2;
 		}
 		else if (*input == '$')
 		{
+			printf("444444444444\n");
 			//value = ft_strdup("$");
 			input++;
 			char *tmp =  get_value(&input, 0);
 			//value = ft_strjoin(value, get_value(&input, 0), 3);
-			value = ft_strjoin("$", tmp, 0);
-			free(tmp);
+			value = ft_strjoin(ft_strdup("$"), tmp, 2);
 		}
 		else
+		{
+			printf("555555555555555\n");
 			value = get_value(&input, 0);
+		}
 		result = ft_strjoin(result, value, 1);
-		
+		printf("value = %s\n", value);
+		printf("result =  %s\n", result);
+	//	ft_free(&value);
 	}
+	
 	return (result);
 }
 

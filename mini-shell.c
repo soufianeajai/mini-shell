@@ -62,7 +62,7 @@ int main(int ac, char **av, char **env)
     t_token *tokens;
     t_env *env_list;
     t_token *temp;
-
+//echo +++$++$USER$USER++dsfddf$
     
     env_list = NULL;
     env_copy(&env_list, env);

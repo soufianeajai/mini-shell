@@ -49,8 +49,11 @@ char	*ft_strjoin(char *s1, char *s2, int free_flag)
 	i = 0;
 	temp1 = s1;
 	temp2 = s2;
-	if(!(str = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char))))
-		return (NULL);
+	printf("yes\n");
+	str = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+//	if(!(str = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char))))
+//		return (NULL);
+	printf("no\n");
 	while (temp1 && *temp1)
 		str[i++] = *(temp1++);
 	while (temp2 && *temp2)
