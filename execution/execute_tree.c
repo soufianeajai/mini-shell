@@ -5,7 +5,8 @@ void exec_CMD(t_tree_node *tree , t_env *env)
 {
 	int status;
 	int pid;
-
+	
+	signal(SIGINT,SIG_IGN);
 	if (is_builtin((t_cmd_node *)(tree->node)))
    	{
     	int exit_code = execute_builtin(env, (t_cmd_node *)(tree->node));
@@ -17,7 +18,10 @@ void exec_CMD(t_tree_node *tree , t_env *env)
 	if (pid == 0)
 		execute_simple_cmd(env, (t_cmd_node *)(tree->node));
 	else
+	{
+		signal(SIGINT,ignore);
 		waitpid(pid, &status, 0);
+	}
 }
 
 void exec_REDIR(t_tree_node *tree , t_env *env)
@@ -26,6 +30,7 @@ void exec_REDIR(t_tree_node *tree , t_env *env)
 	int pid;
 	int exit_code;
 
+	signal(SIGINT,SIG_IGN);
 	if (is_builtin((t_cmd_node *)(tree->node)))
    	{
         exit_code = execute_builtin(env, (t_cmd_node *)(tree->node));
@@ -35,7 +40,10 @@ void exec_REDIR(t_tree_node *tree , t_env *env)
 	if (pid == 0)
 		execute_redir(env, (t_redir_node *)(tree->node));
 	else
+	{
+		signal(SIGINT,ignore);
 		waitpid(pid, &status, 0);
+	}
 }
 
 void execute_pipe(t_pipe_node *pipe_node, t_env *env)

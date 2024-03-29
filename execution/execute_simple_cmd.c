@@ -46,6 +46,7 @@ void execute_simple_cmd(t_env *env, t_cmd_node *cmd)
     int exit_code;
 	
     // i need cmd in argument to execute it
+    signal(SIGINT,SIG_DFL);
     if(cmd->executable == NULL)
         exit(0);
     if (is_builtin(cmd))
@@ -102,6 +103,7 @@ void execute_redir(t_env *env, t_redir_node *cmd)
 	char *input;
     char *tmp_char;
 
+    signal(SIGINT,SIG_DFL);
     fd_in = dup(0);
     fd_out = dup(1);
     while (cmd)

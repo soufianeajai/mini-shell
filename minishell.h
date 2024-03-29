@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <termios.h>
 
 
 #define NC "\e[0m"
@@ -35,6 +36,7 @@ typedef struct s_token
 	int					flag_env;
 	int 				type_qoutes;
 }						t_token;
+struct termios orig_termios;
 
 
 // check first herdoc  '<<' !!
@@ -69,6 +71,7 @@ char *ft_itoa(int n);
 
 
 //tokenisation
+extern void	rl_replace_line(const char *, int);
 void free_tokens(t_token **tokens);
 void tokenisation(t_token **tokens, char *input);
 void SplitTokens(char *input, t_token **tokens);

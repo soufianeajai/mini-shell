@@ -2,9 +2,11 @@ Makefile
 README.md
 builtins
 draw.tldr
+end
 environnement
 execution
 file
+homebrew
 libft
 mini-shell.c
 mini-shell.o

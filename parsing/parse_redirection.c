@@ -2,13 +2,18 @@
 #include "../environnement/env.h"
 #include <fcntl.h>
 
-char	*check_her_doc (t_token **token, t_env *env_list)
+void ignore(int sig)
+{
+	(void)sig;
+}
+void	check_her_doc (t_token **token, t_env *env_list)
 {
 	t_redir_node *redir;
 	char *input;
 	int fd;
 	char *filename;
 
+	signal(SIGINT,SIG_DFL);
 	filename = ft_strdup(".her_doc.c");
 	redir = (t_redir_node *)(*token);
 	fd = open(filename, O_RDWR | O_CREAT | O_TRUNC, 0644);
@@ -27,9 +32,8 @@ char	*check_her_doc (t_token **token, t_env *env_list)
 		write(fd, "\n", 1);
 		ft_free(&input);
 	}
-	ft_free(&(redir->filename));
+	free(redir->filename);
 	close(fd);
-	return (filename);
 }
 
 int is_special_char(char *c)
@@ -63,9 +67,21 @@ t_redir_node	*parse_redirection(t_token **tokens, t_env *env_list)
 				return(NULL);
 			else if (((*tokens)->next))
 			{
+				signal(SIGINT,SIG_IGN);
 				consume(tokens);
-				node->filename = check_her_doc(tokens, env_list);
-				node->redir_type = IN;
+				int pid = fork();
+				if (pid == 0)
+				{
+					check_her_doc(tokens, env_list);
+					exit(0);
+				}
+				else
+				{
+					signal(SIGINT, ignore);
+					node->filename = ft_strdup(".her_doc.c");
+					node->redir_type = IN;
+					waitpid(pid, NULL, 0);
+				}
 			}
 		}
 		else

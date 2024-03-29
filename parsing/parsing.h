@@ -8,6 +8,7 @@
 #include<stdlib.h>
 #include <fcntl.h>
 #include "../minishell.h"
+#include<termios.h>
 
 
 
@@ -92,13 +93,14 @@ char	*get_env_value(char *str, t_env *env_list);
 int isalpha_num(char c);
 char *get_key(char **str);
 char	*get_value(char **str, int flag);
-char	*check_her_doc (t_token **token, t_env *env_list);
+void	check_her_doc (t_token **token, t_env *env_list);
 
 
 void free_cmd_node(t_cmd_node *cmd);
 void free_redir_node(t_redir_node *redir);
 void free_pipe_node(t_pipe_node *pipe);
 void free_tree(t_tree_node *tree);
+void ignore(int sig);
 
 
 
