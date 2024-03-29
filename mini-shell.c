@@ -39,8 +39,8 @@ int main(int ac, char **av, char **env)
         free_tree(tree);
         free_tokens(&temp);
         free(input);
-        free_env_list(env_list);
-            system("leaks minishell");
+       // free_env_list(env_list);
+        system("leaks minishell");
         //    break;
     }
 }

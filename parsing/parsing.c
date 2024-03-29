@@ -50,7 +50,7 @@ t_tree_node	*parse_simple_command(t_token **tokens, t_env *env_list)
 	t_redir_node	*redir_node;
 	char			*executable;
 	char			**arguments;
-	t_redir_node	**head_redir;
+	t_redir_node	*head_redir;
 	int flag_env;
 	int j = 0;
 
@@ -76,24 +76,18 @@ t_tree_node	*parse_simple_command(t_token **tokens, t_env *env_list)
 		{
 			redir_node = parse_redirection(tokens, env_list);
 			if (!redir_node)
-			{
 				return (0);
-			}
-			
 			if (!head_redir)
-			{
-				head_redir = malloc(sizeof(t_redir_node*));
-        		*head_redir = redir_node;
-			}
+        		head_redir = redir_node;
 			else
-				ft_lstadd_back_redir(head_redir, redir_node);
+				ft_lstadd_back_redir(&head_redir, redir_node);
 		}
 	}
 	cmd_node = create_cmd_node(executable, arguments, flag_env);
-	if (head_redir && *head_redir)
+	if (head_redir)
 	{
 		redir_node->cmd = cmd_node;
-		node = add_to_tree((void *)(*head_redir), REDIR);
+		node = add_to_tree((void *)(head_redir), REDIR);
 		
 	}
 	else if (!(redir_node) && cmd_node)

@@ -25,10 +25,9 @@ char	*check_her_doc (t_token **token, t_env *env_list)
 			input = get_env_value(input, env_list);
 		write(fd, input, ft_strlen(input));
 		write(fd, "\n", 1);
-		free(input);
-		input = NULL;
+		ft_free(&input);
 	}
-	free(redir->filename);
+	ft_free(&(redir->filename));
 	close(fd);
 	return (filename);
 }

@@ -32,10 +32,7 @@ void ft_lstadd_back_redir(t_redir_node **head, t_redir_node *new)
 	if (new)
 	{
 		if (!head)
-		{
-			
-			*head = new;
-		}
+			head = &new;
 		else
 		{
 			tmp = *head;
