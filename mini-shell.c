@@ -83,7 +83,7 @@ int main(int ac, char **av, char **env)
 	    handling_qoutes(&tokens);
         temp = tokens;
         t_tree_node *tree = parse_command(&tokens, env_list);
-            printf("tree->type = %p\n", tree);
+
         if (tree)
         {
             if (tree->type ==CMD)
@@ -91,13 +91,13 @@ int main(int ac, char **av, char **env)
             else if (tree->type == REDIR)
                 exec_REDIR(tree, env_list);
             else 
-                execute(tree, env_list);
+                execute(tree, env_list);   
         }
         free_tree(tree);
         free_tokens(&temp);
         free(input);
-       // free_env_list(env_list);
-        system("leaks minishell");
+       
+        //system("leaks minishell");
         //    break;
     }
 }

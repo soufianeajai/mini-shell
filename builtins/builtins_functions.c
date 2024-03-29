@@ -36,6 +36,6 @@ int execute_builtin(t_env *env, t_cmd_node *cmd)
     if (ft_strncmp(cmd->executable, "env", 4) == 0)
         return (ft_env(env));
     if (ft_strncmp(cmd->executable, "exit", 5) == 0)
-        ft_exit(cmd);
+        ft_exit(cmd,env);
     return (0);
 }

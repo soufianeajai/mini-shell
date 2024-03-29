@@ -58,18 +58,21 @@ int ft_error_exit(char *arg, int flag)
     }
 
 }
-void ft_exit(t_cmd_node *cmd)
+void ft_exit(t_cmd_node *cmd, t_env *env)
 {
     int i;
     size_t j;
 
     i = 0;
     j = 0;
+    free_env_list(env);
     if(count_len(cmd->arguments) == 1 )
     {
         //  !cmd for handle signal 
         ft_putstr_fd("exit\n", 2);
+
         // check grobal variable for exit code
+        system("leaks minishell");
         exit(EXIT_CODE);
     }
     if (cmd->arguments[1])

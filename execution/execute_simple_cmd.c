@@ -4,6 +4,7 @@
 #include <sys/wait.h>
 #include <errno.h>
 #include <string.h>
+#include <sys/stat.h>
 
 
 int ft_error(char *cmd, char *error)
@@ -39,20 +40,38 @@ int ft_error(char *cmd, char *error)
     arr[i] = NULL;
     return (arr);
 }
+
+int check_path(const char *path, char *cmd) {
+    
+    struct stat path_stat;
+    
+    stat(path, &path_stat);
+    
+    if (S_ISDIR(path_stat.st_mode))
+    {
+        ft_error((char *)path, "is a directory");
+        if(cmd == NULL)
+            EXIT_CODE = 126;
+        else
+            EXIT_CODE = 1;
+        return 1;
+    }
+
+    return 0;
+}
 void execute_simple_cmd(t_env *env, t_cmd_node *cmd)
 {
 	pid_t pid;
 	char *path_cmd;
-    int exit_code;
+    char **arr;
 	
-    // i need cmd in argument to execute it
     signal(SIGINT,SIG_DFL);
     if(cmd->executable == NULL)
         exit(0);
     if (is_builtin(cmd))
     {
-        exit_code = execute_builtin(env, cmd);
-        printf("exit code: %d\n", exit_code);
+        int exit_code = execute_builtin(env, cmd);
+        // printf("exit code: %d\n", exit_code);
         exit(exit_code);    
     }
     path_cmd = get_path_cmd(env, cmd);
@@ -61,7 +80,8 @@ void execute_simple_cmd(t_env *env, t_cmd_node *cmd)
         if(cmd->flag_env == 1 && cmd->executable && cmd->executable[0] == '\0')
         {
             free(path_cmd);
-            exit(0);
+            EXIT_CODE = 0;
+            exit(EXIT_CODE);
         }
         if (cmd->executable && cmd->flag_env == 1)
         {
@@ -71,24 +91,27 @@ void execute_simple_cmd(t_env *env, t_cmd_node *cmd)
             cmd->executable = ft_strdup(cmd->arguments[0]);
             path_cmd = get_path_cmd(env, cmd);
         }
-        
         if (!path_cmd)
         {
             free(path_cmd);
-            exit(ft_error(cmd->executable, "command not found"));
+            EXIT_CODE = ft_error(cmd->executable, "command not found");
+            exit(EXIT_CODE);
         }
     }
-    char **arr = lst_to_arr(env);
+    arr = lst_to_arr(env);
     if(execve(path_cmd, cmd->arguments, arr) == -1)
     {
-      
         // case $c (variable not set) from strdup = allocate '\0' and set to cmd and first arg
-        if(cmd->arguments[0][0] == '\0')
-        { 
-            free(path_cmd);
-            exit(0);
-        }
-        exit (ft_error(cmd->executable, "error in execve"));
+        // if(cmd->arguments[0][0] == '\0')
+        // {
+        //     free(path_cmd);
+        //     EXIT_CODE = 0;
+        //     exit(EXIT_CODE);
+        // }
+        //exit(ft_error(cmd->executable, "error in execve"));
+        check_path(path_cmd,cmd->executable);
+        free(path_cmd);
+        exit(EXIT_CODE);
     }
 
 }
@@ -129,14 +152,16 @@ void util_redir(t_redir_node *cmd , redir_type type,int fd_in, int fd_out)
 
     if(type == IN)
     fd_file = open(cmd->filename, O_RDONLY);
-    if (type  == OUT)
+    else if (type  == OUT)
     fd_file = open(cmd->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    if (type == APPEND)
+    else if (type == APPEND)
     fd_file = open(cmd->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
 
     if (fd_file == -1)
+    {
+        EXIT_CODE = 1;
         exit(ft_error(cmd->filename, "No such file or directory"));
-
+    }
     if (type == IN)
         dup2(fd_file,fd_in);
     else

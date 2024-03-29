@@ -2,6 +2,7 @@
 
 void free_cmd_node(t_cmd_node *cmd)
 {
+	unlink(".her_doc.c");
 	if (cmd)
 	{
 		if (cmd->executable)
