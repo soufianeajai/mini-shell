@@ -77,12 +77,10 @@ t_tree_node	*parse_command(t_token **tokens, t_env *env_list);
 void	consume(t_token **tokens);
 t_pipe_node	*create_pipe_node(t_tree_node *left, t_tree_node *right);
 t_tree_node	*add_to_tree(void *node, node_type type);
-// t_tree_node	*parse_pipeline(t_token **tokens, t_env *env_list);
-// t_tree_node	*parse_simple_command(t_token **tokens, t_env *env_list);
-// t_redir_node	*parse_redirection(t_token **tokens, t_env *env_list);
-t_tree_node	*parse_pipeline(t_token **tokens, t_env *env_list, int syntax_error);
-t_tree_node	*parse_simple_command(t_token **tokens, t_env *env_list, int syntax_error);
-t_redir_node	*parse_redirection(t_token **tokens, t_env *env_list, int syntax_error);
+t_tree_node	*parse_pipeline(t_token **tokens, t_env *env_list);
+t_tree_node	*parse_simple_command(t_token **tokens, t_env *env_list);
+t_redir_node	*parse_redirection(t_token **tokens, t_env *env_list);
+
 
 redir_type	get_redir_type(t_token **tokens);
 char	**get_arguments(char  *exec, char ** arguments, t_token **tokens);

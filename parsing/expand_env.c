@@ -44,7 +44,7 @@ char	*get_env_value(char *input, t_env *env_list)
 	char	*key;
 	char	*value;
 
-	// result = ft_strdup("");
+	//result = ft_strdup("");
 	result = NULL;
 	value = NULL;
 	key = NULL;
