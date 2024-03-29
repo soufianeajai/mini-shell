@@ -13,7 +13,7 @@ all : $(NAME)
 #    cc $(CFLAGS) -c $< -o $@ #-fsanitize=address
 
 $(NAME) : $(OBJS)
-	cc  -g3 $(CFLAGS)   -o $@ $^ -lreadline -L /Users/sajaite/Desktop/homebrew/opt/readline/lib -I /Users/sajaite/Desktop/homebrew/opt/readline/include
+	cc  -g3 $(CFLAGS)   -o $@ $^ -lreadline -L /Users/$(USER)/Desktop/homebrew/opt/readline/lib -I /Users/$(USER)/Desktop/homebrew/opt/readline/include
 
 clean :
 	$(RM) $(OBJS) $(OBJSB)
