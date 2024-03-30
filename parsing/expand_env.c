@@ -44,56 +44,40 @@ char	*get_env_value(char *input, t_env *env_list)
 	char	*key;
 	char	*value;
 
-	//result = ft_strdup("");
 	result = NULL;
 	value = NULL;
 	key = NULL;
 	while (input && *input)
 	{
-		ft_free(&value);
 		if (*input == '$' && isalpha_num(*(input + 1)))
 		{
 			if (is_alpha(*(input + 1)))
 			{
-				
 				input++;
 				key = get_value(&input, 1);
 				value = ft_getenv(env_list, key);
-				ft_free(&key);printf("1111111111\n");
+				ft_free(&key);
 			}
 			else
 			{
-				printf("22222222222\n");
 				input = input + 2;
 				value = get_value(&input, 0);
 			}
 		}
 		else if (*input == '$' && *(input + 1) == '?')
 		{
-			printf("33333333333\n");
 			value = ft_itoa(EXIT_CODE);
 			input = input + 2;
 		}
 		else if (*input == '$')
 		{
-			printf("444444444444\n");
-			//value = ft_strdup("$");
 			input++;
-			char *tmp =  get_value(&input, 0);
-			//value = ft_strjoin(value, get_value(&input, 0), 3);
-			value = ft_strjoin(ft_strdup("$"), tmp, 2);
+			value = ft_strjoin("$", get_value(&input, 0), 2);
 		}
 		else
-		{
-			printf("555555555555555\n");
 			value = get_value(&input, 0);
-		}
-		result = ft_strjoin(result, value, 1);
-		printf("value = %s\n", value);
-		printf("result =  %s\n", result);
-	//	ft_free(&value);
+		result = ft_strjoin(result, value, 3);
 	}
-	
 	return (result);
 }
 

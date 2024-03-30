@@ -56,7 +56,7 @@ int check_path(const char *path, char *cmd) {
             EXIT_CODE = 1;
         return 1;
     }
-
+    printf("\ngg\n");
     return 0;
 }
 void execute_simple_cmd(t_env *env, t_cmd_node *cmd)
@@ -93,6 +93,8 @@ void execute_simple_cmd(t_env *env, t_cmd_node *cmd)
         }
         if (!path_cmd)
         {
+            if(check_path(path_cmd,cmd->executable))
+                exit(EXIT_CODE);
             free(path_cmd);
             EXIT_CODE = ft_error(cmd->executable, "command not found");
             exit(EXIT_CODE);

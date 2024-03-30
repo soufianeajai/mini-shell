@@ -39,6 +39,41 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
+// char	*ft_strjoin(char *s1, char *s2, int free_flag)
+// {
+// 	char	*str;
+// 	size_t	i;
+
+// 	int len1 = ft_strlen(s1);
+// 	int len2 = ft_strlen(s2);
+// 	i = 0;
+// 	if(!(str = malloc(len1 + len2 + 1)))
+// 		return (NULL);
+// 	while (i < len1)
+// 	{
+// 		str[i] = s1[i];
+// 		i++;
+// 	}
+// 	i = 0;
+// 	while (i < len2)
+// 	{
+// 		str[i] = s2[i];
+// 		i++;
+// 	}
+// 	str[i] = 0;
+// 	if (free_flag == 1)
+// 		ft_free(&s1);
+// 	if (free_flag == 2)
+// 		ft_free(&s2);
+// 	if (free_flag == 3)
+// 	{
+// 		ft_free(&s1); 
+// 		ft_free(&s2);
+// 	}
+// 	return (str);
+// }
+
+
 char	*ft_strjoin(char *s1, char *s2, int free_flag)
 {
 	char	*str;
@@ -49,11 +84,8 @@ char	*ft_strjoin(char *s1, char *s2, int free_flag)
 	i = 0;
 	temp1 = s1;
 	temp2 = s2;
-	printf("yes\n");
-	str = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
-//	if(!(str = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char))))
-//		return (NULL);
-	printf("no\n");
+	if(!(str = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char))))
+		return (NULL);
 	while (temp1 && *temp1)
 		str[i++] = *(temp1++);
 	while (temp2 && *temp2)

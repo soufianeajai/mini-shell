@@ -10,7 +10,7 @@ char *ft_getenv(t_env *env, char *key)
 	while (tmp && tmp->key)
 	{
 		if (ft_strcmp(tmp->key,key) == 0)
-			return (tmp->value);
+			return (ft_strdup(tmp->value));
 		tmp = tmp->next;
 	}
 	return (NULL);

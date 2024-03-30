@@ -21,6 +21,7 @@ void exec_CMD(t_tree_node *tree , t_env *env)
 	{
 		signal(SIGINT,ignore);
 		waitpid(pid, &status, 0);
+		//printf("\n%d\n",status);
 	}
 }
 
