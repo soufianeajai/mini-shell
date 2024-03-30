@@ -21,7 +21,7 @@ void exec_CMD(t_tree_node *tree , t_env *env)
 	{
 		signal(SIGINT,ignore);
 		waitpid(pid, &status, 0);
-		//printf("\n%d\n",status);
+		EXIT_CODE = WEXITSTATUS(status);
 	}
 }
 
@@ -44,6 +44,7 @@ void exec_REDIR(t_tree_node *tree , t_env *env)
 	{
 		signal(SIGINT,ignore);
 		waitpid(pid, &status, 0);
+		EXIT_CODE = WEXITSTATUS(status);
 	}
 }
 
@@ -51,7 +52,9 @@ void execute_pipe(t_pipe_node *pipe_node, t_env *env)
 {
     int pid1;
 	int pid2;
-    int fd[2];
+	int status1;
+	int status2;
+	int fd[2];
 
     if (pipe(fd) == -1)
     {

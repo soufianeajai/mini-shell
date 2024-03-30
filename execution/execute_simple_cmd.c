@@ -6,7 +6,6 @@
 #include <string.h>
 #include <sys/stat.h>
 
-
 int ft_error(char *cmd, char *error)
 {
     ft_putstr_fd("minishell: ", 2);
@@ -51,20 +50,20 @@ int check_path(const char *path, char *cmd) {
     {
         ft_error((char *)path, "is a directory");
         if(cmd == NULL)
-            EXIT_CODE = 126;
+                return (126);
+                 // EXIT_CODE = 126;
         else
-            EXIT_CODE = 1;
-        return 1;
+                return (1);
+            //EXIT_CODE = 1;
     }
-    printf("\ngg\n");
     return 0;
 }
 void execute_simple_cmd(t_env *env, t_cmd_node *cmd)
 {
-	pid_t pid;
-	char *path_cmd;
+        pid_t pid;
+        char *path_cmd;
     char **arr;
-	
+
     signal(SIGINT,SIG_DFL);
     if(cmd->executable == NULL)
         exit(0);
@@ -80,8 +79,8 @@ void execute_simple_cmd(t_env *env, t_cmd_node *cmd)
         if(cmd->flag_env == 1 && cmd->executable && cmd->executable[0] == '\0')
         {
             free(path_cmd);
-            EXIT_CODE = 0;
-            exit(EXIT_CODE);
+            //EXIT_CODE = 0;
+            exit(0);
         }
         if (cmd->executable && cmd->flag_env == 1)
         {
@@ -94,10 +93,10 @@ void execute_simple_cmd(t_env *env, t_cmd_node *cmd)
         if (!path_cmd)
         {
             if(check_path(path_cmd,cmd->executable))
-                exit(EXIT_CODE);
+                exit(check_path(path_cmd , cmd->executable));
             free(path_cmd);
-            EXIT_CODE = ft_error(cmd->executable, "command not found");
-            exit(EXIT_CODE);
+            exit(ft_error(cmd->executable, "command not found"));
+           // exit(EXIT_CODE);
         }
     }
     arr = lst_to_arr(env);
@@ -111,9 +110,9 @@ void execute_simple_cmd(t_env *env, t_cmd_node *cmd)
         //     exit(EXIT_CODE);
         // }
         //exit(ft_error(cmd->executable, "error in execve"));
-        check_path(path_cmd,cmd->executable);
+        int exite = check_path(path_cmd,cmd->executable);
         free(path_cmd);
-        exit(EXIT_CODE);
+        exit(exite);
     }
 
 }
@@ -125,7 +124,7 @@ void execute_redir(t_env *env, t_redir_node *cmd)
     t_redir_node *tmp;
     int fd_file;
     int fd[2];
-	char *input;
+        char *input;
     char *tmp_char;
 
     signal(SIGINT,SIG_DFL);
@@ -161,8 +160,8 @@ void util_redir(t_redir_node *cmd , redir_type type,int fd_in, int fd_out)
 
     if (fd_file == -1)
     {
-        EXIT_CODE = 1;
-        exit(ft_error(cmd->filename, "No such file or directory"));
+        ft_error(cmd->filename, "No such file or directory");
+        exit(1);
     }
     if (type == IN)
         dup2(fd_file,fd_in);
