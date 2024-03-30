@@ -83,8 +83,15 @@ void execute_pipe(t_pipe_node *pipe_node, t_env *env)
 	
     close(fd[0]);
     close(fd[1]);
-	waitpid(pid2, NULL, 0);
-	waitpid(pid1, NULL, 0);
+	waitpid(pid1, &status1, 0);
+	waitpid(pid2, &status2, 0);
+	EXIT_CODE = WEXITSTATUS(status1);
+	EXIT_CODE = WEXITSTATUS(status2);
+	//  while (wait(&status) > 0)
+	// {
+		
+	// 	EXIT_CODE = WEXITSTATUS(status);printf("\n %d hhh\n",EXIT_CODE);
+	// }
 }
 void execute(t_tree_node *tree, t_env *env)
 {
