@@ -1,5 +1,12 @@
 #include "parsing.h"
 
+void	*free_tree_util(char *executable, char **arguments, int flag_env,
+		t_redir_node *head_redir)
+{
+	free_tree(combine_cmd(create_cmd_node(executable, arguments, flag_env),
+			head_redir));
+	return (0);
+}
 void free_cmd_node(t_cmd_node *cmd)
 {
 	unlink(".her_doc.c");

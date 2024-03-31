@@ -1,5 +1,5 @@
-#include "parsing.h"
 #include "../environnement/env.h"
+#include "parsing.h"
 #include <fcntl.h>
 
 void	consume(t_token **tokens)
@@ -26,9 +26,9 @@ t_tree_node	*add_to_tree(void *node, node_type type)
 	ret_node->node = node;
 	return (ret_node);
 }
-void ft_lstadd_back_redir(t_redir_node **head, t_redir_node *new)
+void	ft_lstadd_back_redir(t_redir_node **head, t_redir_node *new)
 {
-	t_redir_node *tmp;
+	t_redir_node	*tmp;
 
 	if (new)
 	{

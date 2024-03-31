@@ -1,17 +1,15 @@
-
-#include "parsing.h"
 #include "../environnement/env.h"
-
+#include "parsing.h"
 
 t_tree_node	*parse_command(t_token **tokens, t_env *env_list)
 {
-	t_tree_node *tree;
-	int syntax_error;
+	t_tree_node	*tree;
+	int			syntax_error;
 
 	syntax_error = check_syntax(*tokens);
 	expand_env(tokens, env_list);
 	tree = parse_pipeline(tokens, env_list);
-	if(syntax_error)
+	if (syntax_error)
 	{
 		free_tree(tree);
 		return (0);
@@ -25,11 +23,12 @@ t_tree_node	*parse_pipeline(t_token **tokens, t_env *env_list)
 	t_tree_node	*tree_node;
 	t_tree_node	*left;
 	t_tree_node	*right;
+	int			flag_redir;
 
 	pipe_node = 0;
 	tree_node = 0;
-	left = parse_simple_command(tokens, env_list);
-	
+	flag_redir = 0;
+	left = parse_simple_command(tokens, env_list, &flag_redir);
 	if (!left)
 		return (0);
 	if (*tokens && (*tokens)->type == PIPE)
@@ -42,120 +41,104 @@ t_tree_node	*parse_pipeline(t_token **tokens, t_env *env_list)
 	}
 	return (left);
 }
-
-t_tree_node	*parse_simple_command(t_token **tokens, t_env *env_list)
+t_tree_node	*combine_cmd(t_cmd_node *cmd, t_redir_node *head)
 {
-	t_cmd_node		*cmd_node;
 	t_tree_node		*node;
+	t_redir_node	*redir;
+
+	node = 0;
+	redir = head;
+	if (head)
+	{
+		while (redir->next)
+			redir = redir->next;
+		redir->cmd = cmd;
+		node = add_to_tree((void *)(head), REDIR);
+	}
+	else
+		node = add_to_tree((void *)cmd, CMD);
+	return (node);
+}
+t_redir_node	*parse_redir(t_token **tokens, t_redir_node **head_redir,
+		t_env *env_list, int *flag_redir)
+{
 	t_redir_node	*redir_node;
+
+	redir_node = 0;
+	while ((*tokens) && (*tokens)->type == REDIR)
+	{
+		redir_node = parse_redirection(tokens, env_list, flag_redir);
+		if (!redir_node)
+			return (0);
+		if (!(*head_redir) && redir_node)
+			*head_redir = redir_node;
+		else
+			ft_lstadd_back_redir(head_redir, redir_node);
+	}
+	return (redir_node);
+}
+
+t_tree_node	*parse_simple_command(t_token **tokens, t_env *env_list,
+		int *flag_redir)
+{
+	t_redir_node	*head_redir;
 	char			*executable;
 	char			**arguments;
-	t_redir_node	*head_redir;
-	int flag_env;
-	int j = 0;
+	int				flag_env;
 
-	cmd_node = 0;
-	node = 0;
 	executable = 0;
 	arguments = 0;
-	redir_node = 0;
 	head_redir = 0;
 	while ((*tokens) && (*tokens)->type != PIPE)
 	{
 		if ((*tokens)->type == CMD)
 		{
-			flag_env = (*tokens)->flag_env;
-			if (!executable)
-			{
-				executable = ft_strdup((*tokens)->str);
-				// cas : $> $<
-				if(ft_strcmp(executable, "$") == 0)
-				{
-					free(executable);
-					return (0);
-				}
-				consume(tokens);
-			}
+			executable = parse_exec(tokens, executable, &flag_env);
 			arguments = get_arguments(executable, arguments, tokens);
 		}
-		while ((*tokens) && (*tokens)->type == REDIR)
+		else
 		{
-			redir_node = parse_redirection(tokens, env_list);
-			if (!redir_node)
-				return (0);
-			if (!head_redir)
-        		head_redir = redir_node;
-			else
-				ft_lstadd_back_redir(&head_redir, redir_node);
+			if (!parse_redir(tokens, &head_redir, env_list, flag_redir)
+				&& *flag_redir)
+				return ((t_tree_node *)free_tree_util(executable, arguments,
+						flag_env, head_redir));
 		}
 	}
-	cmd_node = create_cmd_node(executable, arguments, flag_env);
-	if (head_redir)
-	{
-		redir_node->cmd = cmd_node;
-		node = add_to_tree((void *)(head_redir), REDIR);
-		
-	}
-	else if (!(redir_node) && cmd_node)
-		node = add_to_tree((void *)cmd_node, CMD);
-	return (node);
+	return (combine_cmd(create_cmd_node(executable, arguments, flag_env),
+			head_redir));
 }
 
-
-
-
-// void print_tree(t_tree_node *tree)
+// t_tree_node	*parse_simple_command(t_token **tokens, t_env *env_list)
 // {
-// 	t_cmd_node *cmd;
-// 	t_redir_node *redcmd;
-// 	t_pipe_node *pipecmd;
-// 	int i = -1;
+// 	t_redir_node	*head_redir;
+// 	char			*executable;
+// 	char			**arguments;
+// 	int				flag_env;
+// 	int				flag_redir;
 
-// 	if (tree && tree->type == REDIR)
+// 	flag_redir = 0;
+// 	executable = 0;
+// 	arguments = 0;
+// 	head_redir = 0;
+// 	while ((*tokens) && (*tokens)->type != PIPE)
 // 	{
-// 		redcmd = (t_redir_node *)tree->node;
-// 		if (!redcmd)
-// 			return;
-// 			while (redcmd && redcmd->next)
+// 		if ((*tokens)->type == CMD)
+// 		{
+// 			executable = parse_exec(tokens, executable, &flag_env);
+// 			arguments = get_arguments(executable, arguments, tokens);
+// 		}
+// 		else
+// 		{
+// 			if (!parse_redir(tokens, &head_redir, env_list, &flag_redir)
+// 				&& flag_redir)
 // 			{
-// 				printf("\nredir_type = %s",(redcmd)->filename);
-// 				redcmd = (redcmd)->next;
-
+// 				free_tree(combine_cmd(create_cmd_node(executable, arguments,
+// 							flag_env),
+// 			head_redir));
+// 				return (0);
 // 			}
-// 			printf("\nredir_type = %s",(redcmd)->filename);
-// 			printf("\n--> executable = %s\n",redcmd->cmd->executable);
-// 			while (redcmd->cmd->arguments && redcmd->cmd->arguments[++i])
-// 				printf("\n*-> %s",redcmd->cmd->arguments[i]);
-// 		// printf("\n--> cmd = %s",redcmd->cmd->executable);
-// 		// printf("\n	arguments:");
-// 		// while (redcmd->cmd->arguments && redcmd->cmd->arguments[++i])
-// 		// 	printf("  %s",redcmd->cmd->arguments[i]);
+// 		}
 // 	}
-// 	else if (tree && tree->type == PIPE)
-// 	{
-// 		pipecmd = (t_pipe_node *)tree->node;
-// 		if (!pipecmd)
-// 			return;
-// 		printf("\n--> type = %u\n",pipecmd->type);
-// 		printf("\n--> left pipe:");
-// 		print_tree(pipecmd->left);
-// 		printf("\n--> right pipe:");
-// 		print_tree(pipecmd->right);
-// 	}
-// 	else
-// 		if (tree && tree->type == CMD)
-// 	{
-// 		printf("\n___________________________\n");
-// 		cmd = (t_cmd_node *)tree->node;
-// 		if (!cmd)
-// 			return;
-// 		printf("\n--> type = %u , cmd = %s\n",cmd->type, cmd->executable);
-// 		printf("\n->arguments:");
-// 		while (cmd->arguments && cmd->arguments[++i])
-// 			printf("\n*-> %s",cmd->arguments[i]);
-// 	}	
-// 	else
-// 	{
-// 		printf("momo");
-// 	}
+// 	return (combine_cmd(create_cmd_node(executable, arguments, flag_env),
+// 			head_redir));
 // }
