@@ -58,7 +58,7 @@ int check_path(const char *path, char *cmd) {
     }
     return 0;
 }
-void execute_simple_cmd(t_env *env, t_cmd_node *cmd)
+void execute_simple_cmd(t_env **env, t_cmd_node *cmd)
 {
         pid_t pid;
         char *path_cmd;
@@ -68,12 +68,8 @@ void execute_simple_cmd(t_env *env, t_cmd_node *cmd)
     if(cmd->executable == NULL)
         exit(0);
     if (is_builtin(cmd))
-    {
-        int exit_code = execute_builtin(env, cmd);
-        // printf("exit code: %d\n", exit_code);
-        exit(exit_code);    
-    }
-    path_cmd = get_path_cmd(env, cmd);
+        exit(execute_builtin(env, cmd));
+    path_cmd = get_path_cmd(*env, cmd);
     if (!path_cmd)
     {
         if(cmd->flag_env == 1 && cmd->executable && cmd->executable[0] == '\0')
@@ -88,7 +84,7 @@ void execute_simple_cmd(t_env *env, t_cmd_node *cmd)
             cmd->arguments = ft_split(cmd->executable, ' ');
             free(cmd->executable);
             cmd->executable = ft_strdup(cmd->arguments[0]);
-            path_cmd = get_path_cmd(env, cmd);
+            path_cmd = get_path_cmd(*env, cmd);
         }
         if (!path_cmd)
         {
@@ -99,7 +95,7 @@ void execute_simple_cmd(t_env *env, t_cmd_node *cmd)
            // exit(EXIT_CODE);
         }
     }
-    arr = lst_to_arr(env);
+    arr = lst_to_arr(*env);
     if(execve(path_cmd, cmd->arguments, arr) == -1)
     {
         // case $c (variable not set) from strdup = allocate '\0' and set to cmd and first arg
@@ -117,7 +113,7 @@ void execute_simple_cmd(t_env *env, t_cmd_node *cmd)
 
 }
 
-void execute_redir(t_env *env, t_redir_node *cmd)
+void execute_redir(t_env **env, t_redir_node *cmd)
 {
     int fd_in;
     int fd_out;  

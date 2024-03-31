@@ -1,7 +1,7 @@
 #include "execute.h"
 #include "../builtins/builtin.h"
 
-void exec_CMD(t_tree_node *tree , t_env *env)
+void exec_CMD(t_tree_node *tree , t_env **env)
 {
 	int status;
 	int pid;
@@ -9,10 +9,8 @@ void exec_CMD(t_tree_node *tree , t_env *env)
 	signal(SIGINT,SIG_IGN);
 	if (is_builtin((t_cmd_node *)(tree->node)))
    	{
-    	int exit_code = execute_builtin(env, (t_cmd_node *)(tree->node));
+    	EXIT_CODE = execute_builtin(env, (t_cmd_node *)(tree->node));
 		return;
-    	// printf("exit code: %d\n", exit_code);
-    	// return exit_code;
 	}
 	pid = fork();
 	if (pid == 0)
@@ -25,7 +23,7 @@ void exec_CMD(t_tree_node *tree , t_env *env)
 	}
 }
 
-void exec_REDIR(t_tree_node *tree , t_env *env)
+void exec_REDIR(t_tree_node *tree , t_env **env)
 {
 	int status;
 	int pid;
@@ -34,7 +32,7 @@ void exec_REDIR(t_tree_node *tree , t_env *env)
 	signal(SIGINT,SIG_IGN);
 	if (is_builtin((t_cmd_node *)(tree->node)))
    	{
-        exit_code = execute_builtin(env, (t_cmd_node *)(tree->node));
+        EXIT_CODE = execute_builtin(env, (t_cmd_node *)(tree->node));
 		return;
 	}
 	pid = fork();
@@ -48,7 +46,7 @@ void exec_REDIR(t_tree_node *tree , t_env *env)
 	}
 }
 
-void execute_pipe(t_pipe_node *pipe_node, t_env *env)
+void execute_pipe(t_pipe_node *pipe_node, t_env **env)
 {
     int pid1;
 	int pid2;
@@ -61,45 +59,42 @@ void execute_pipe(t_pipe_node *pipe_node, t_env *env)
         perror("pipe");
         exit(1);
     }
-
+	if (pid1 != 0)
     pid1 = fork();
     if (pid1 == 0)
     {
+		//printf("\nok1\n");
         close(fd[0]);
         dup2(fd[1], 1);
         close(fd[1]);
         execute_tree(pipe_node->left, env);
-        exit(0);
+		
+       // exit(0);
     }
     pid2 = fork();
     if (pid2 == 0)
     {
+		//printf("\nok2\n");
         close(fd[1]);
         dup2(fd[0], 0);
         close(fd[0]);
         execute_tree(pipe_node->right, env);
         exit(0);
     }
-	
     close(fd[0]);
     close(fd[1]);
 	waitpid(pid1, &status1, 0);
 	waitpid(pid2, &status2, 0);
-	EXIT_CODE = WEXITSTATUS(status1);
-	EXIT_CODE = WEXITSTATUS(status2);
-	//  while (wait(&status) > 0)
-	// {
-		
-	// 	EXIT_CODE = WEXITSTATUS(status);printf("\n %d hhh\n",EXIT_CODE);
-	// }
+	// EXIT_CODE = WEXITSTATUS(status1);
+	// EXIT_CODE = WEXITSTATUS(status2);
 }
-void execute(t_tree_node *tree, t_env *env)
+void execute(t_tree_node *tree, t_env **env)
 {
 	if (!tree)
 		return;
 	execute_tree(tree, env);
 }
-void execute_tree(t_tree_node *tree, t_env *env)
+void execute_tree(t_tree_node *tree, t_env **env)
 {
     if (!tree)
         return;
