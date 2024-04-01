@@ -1,5 +1,5 @@
-#include "parsing.h"
 #include "../environnement/env.h"
+#include "parsing.h"
 #include <fcntl.h>
 
 char	**get_arguments(char *exec, char **arguments, t_token **tokens)
@@ -9,19 +9,14 @@ char	**get_arguments(char *exec, char **arguments, t_token **tokens)
 	int		i;
 	int		len;
 
-
-	i = 1;
+	i = 0;
 	len = count_len(arguments);
 	len_args = count_args(*tokens) + len;
-	args = malloc(sizeof(char *) * (len_args + 2));
-	if (!args)
+	if (!(args = malloc(sizeof(char *) * (len_args + 2))))
 		return (0);
-	args[0] = strdup(exec);
-	while (i < len)
-	{
+	args[0] = ft_strdup(exec);
+	while (++i < len)
 		args[i] = ft_strdup(arguments[i]);
-		i++;
-	}
 	while (i < len_args && (*tokens)->str)
 	{
 		args[i] = ft_strdup((*tokens)->str);
@@ -37,7 +32,7 @@ char	**get_arguments(char *exec, char **arguments, t_token **tokens)
 
 int	count_len(char **arguments)
 {
-	int len;
+	int	len;
 
 	len = 0;
 	if (arguments && *arguments)
@@ -47,9 +42,6 @@ int	count_len(char **arguments)
 	}
 	return (len);
 }
-
-
-
 
 int	count_args(t_token *tokens)
 {

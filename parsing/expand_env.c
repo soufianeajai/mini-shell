@@ -25,45 +25,43 @@ void	expand_env(t_token **token, t_env *env_list)
 		temp = temp->next;
 	}
 }
-int	is_alpha(char c)
-{
-	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_')
-		return (1);
-	return (0);
-}
 
-int	isalpha_num(char c)
+
+char	*handle_expandable(char **input, t_env *env_list)
 {
-	if (is_alpha(c) || (c >= '0' && c <= '9'))
-		return (1);
-	return (0);
+	char	*key;
+	char	*value;
+
+	key = 0;
+	value = 0;
+	if (**input == '$' && isalpha_num(**(input + 1)))
+	{
+		if (is_alpha(**(input + 1)))
+		{
+			(*input)++;
+			key = get_value(input, 1);
+			value = ft_getenv(env_list, key);
+			ft_free(&key);
+		}
+		else
+		{
+			*input = *(input + 2);
+			value = get_value(input, 0);
+		}
+	}
+	return (value);
 }
 char	*get_env_value(char *input, t_env *env_list)
 {
 	char	*result;
-	char	*key;
 	char	*value;
 
 	result = NULL;
 	value = NULL;
-	key = NULL;
 	while (input && *input)
 	{
 		if (*input == '$' && isalpha_num(*(input + 1)))
-		{
-			if (is_alpha(*(input + 1)))
-			{
-				input++;
-				key = get_value(&input, 1);
-				value = ft_getenv(env_list, key);
-				ft_free(&key);
-			}
-			else
-			{
-				input = input + 2;
-				value = get_value(&input, 0);
-			}
-		}
+			value = handle_expandable(&input, env_list);
 		else if (*input == '$' && *(input + 1) == '?')
 		{
 			value = ft_itoa(EXIT_CODE);
@@ -83,9 +81,10 @@ char	*get_env_value(char *input, t_env *env_list)
 
 char	*get_value(char **str, int flag)
 {
-	char *start;
-	char *value;
-	char temp;
+	char	*start;
+	char	*value;
+	char	temp;
+
 	start = *str;
 	value = 0;
 	if (flag)

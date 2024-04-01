@@ -100,7 +100,7 @@ int main(int ac, char **av, char **env)
         
         free(input);
        
-        //system("leaks minishell");
+        system("leaks minishell");
           // break;
     }
 }

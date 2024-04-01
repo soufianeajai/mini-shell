@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "builtin.h"
-#include <stdint.h>
+
 void shell_level(t_env **env)
 {
 	int i;
