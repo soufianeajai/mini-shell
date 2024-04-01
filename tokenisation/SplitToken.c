@@ -46,44 +46,15 @@ int redirection_detect(char *input , t_token **tokens, int i)
     {
         if (input[i] == tmp[j] && input[i + 1] != tmp[j])
         {
-            // if (input[i] == '<')
-            //     type = I_RED;
-            // else
-            //     type = O_RED;
             ft_lstadd_back(tokens, 1, REDIR, i);
             return (1);
         }
         else if (input[i] == tmp[j] && input[i + 1] == tmp[j])
         {
-            // if (input[i] == '<')
-            //     type = HER_DOC;
-            // else
-            //     type = APP;
             ft_lstadd_back(tokens, 2, REDIR, i);
             return (2);
         }
     }
-    // while (++j < 2)
-    // {
-    //     if (input[i] == tmp[j] && input[i + 1] != tmp[j])
-    //     {
-    //         if (input[i] == '<')
-    //             type = REDIR;
-    //         else
-    //             type = REDIR;
-    //         ft_lstadd_back(tokens, 1, type, i);
-    //         return (1);
-    //     }
-    //     else if (input[i] == tmp[j] && input[i + 1] == tmp[j])
-    //     {
-    //         if (input[i] == '<')
-    //             type = REDIR;
-    //         else
-    //             type = REDIR;
-    //         ft_lstadd_back(tokens, 2, type, i);
-    //         return (2);
-    //     }
-    // }
     if(input[i] == '|')
     {
         ft_lstadd_back(tokens, 1, PIPE, i);

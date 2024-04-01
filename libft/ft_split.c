@@ -96,8 +96,7 @@ char	**ft_split(char const *s, char c)
 	j = 0;
 	if (!s)
 		return (NULL);
-	p = (char **)malloc(sizeof(char *) * (count_w(s, c) + 1));
-	if (!p)
+	if (!(p = (char **)malloc(sizeof(char *) * (count_w(s, c) + 1))))
 		return (NULL);
 	while (s[i])
 	{

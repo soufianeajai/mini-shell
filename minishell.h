@@ -67,7 +67,7 @@ void		ft_putstr_fd(char *s, int fd);
 size_t		count_strings(char **strings);
 int			ft_isspace(char c);
 void	ft_free(char **str);
-void free_str_list(char **str);
+void *free_str_list(char **str);
 char *ft_itoa(int n);
 char *ft_substr(char *s, unsigned int start, size_t len);
 size_t	my_atoi(const char *str);

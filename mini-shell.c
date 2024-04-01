@@ -101,6 +101,3 @@ int main(int ac, char **av, char **env)
           // break;
     }
 }
-
-
-    // enable_raw_mode add it to every exit point

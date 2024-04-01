@@ -37,6 +37,7 @@ void	check_her_doc(t_token **token, t_env *env_list)
 	close(fd);
 	exit(0);
 }
+
 t_redir_node	*create_redir_node(redir_type type)
 {
 	t_redir_node	*node;
@@ -85,6 +86,7 @@ t_redir_node	*handle_herdoc(t_token **tokens, t_env *env_list,
 	}
 	return (*redir_node);
 }
+
 t_redir_node	*parse_redirection(t_token **tokens, t_env *env_list, int *flag_redir)
 {
 	t_redir_node	*node;

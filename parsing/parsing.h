@@ -70,7 +70,7 @@ char	**get_arguments(char  *exec, char ** arguments, t_token **tokens);
 t_cmd_node	*create_cmd_node(char *executable, char **arguments, int flag_env);
 int	count_args(t_token *tokens);
 int	count_len(char **arguments);
-void	free_str_list(char **str);
+void	*free_str_list(char **str);
 void ft_lstadd_back_redir(t_redir_node **head, t_redir_node *new);
 void	expand_env(t_token **tokens, t_env *env_list);
 char	*get_env_value(char *str, t_env *env_list);

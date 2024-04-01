@@ -97,13 +97,7 @@ void handling_qoutes(t_token **tk)
 			if ((flag = is_qoutes(tmp->str[i], &tmp)))
 				i++;
 			while (tmp->str[i] && (!is_qoutes(tmp->str[i], &tmp) || (flag != is_qoutes(tmp->str[i], &tmp) && flag != 0)))
-			{
-              //  printf("\n------is_qoutes------> %d",is_qoutes(tmp->str[i]));
-              //  printf("\n-> %c , --> qoutes = %d ",tmp->str[i], flag);
-                stock[j++] = tmp->str[i++];}
-
-            //printf("*****------is_qoutes------> %d",is_qoutes(tmp->str[i]));
-              //  printf("\n-> %c , --> qoutes = %d *****",tmp->str[i], flag);
+                stock[j++] = tmp->str[i++];
 			if (tmp->str[i] && flag == is_qoutes(tmp->str[i], &tmp))
 			{
                 i++;
@@ -111,8 +105,7 @@ void handling_qoutes(t_token **tk)
             }
 		}
 		stock[j] = '\0';
-		free(tmp->str);
-		tmp->str = NULL;
+		ft_free(&(tmp->str));
 		tmp->str = ft_strdup(stock);
 		tmp = tmp->next;
 	}
@@ -134,14 +127,4 @@ void free_tokens(t_token **tokens)
     tokens = 0;
 }
 
-void print_tokens(t_token *tokens)
-{
-    while (tokens)
-    {
-        //if (tokens->prev != NULL)
-            //printf("\n prev : %s",tokens->prev->str);
-        printf("\n--->str : %s _ type = %u\n", tokens->str , tokens->type);
-        tokens = tokens->next;
-    }
-}
 

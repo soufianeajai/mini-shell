@@ -32,7 +32,6 @@ char	*get_path_cmd(t_env *env, t_cmd_node *cmd)
 	char	*util;
 
 	i = 0;
-	// /bin + / =  /bin/  + ls = /bin/ls
 	if (is_path(cmd))
 		return (cmd->executable);
 	path = ft_split(ft_getenv(env, "PATH"), ':');
@@ -51,8 +50,7 @@ char	*get_path_cmd(t_env *env, t_cmd_node *cmd)
 		free(path_cmd);
 		path_cmd = NULL;
 	}
-	free_str_list(path);
-	return (NULL);
+	return ((char *)free_str_list(path));
 }
 
 static t_env	*alloc_node_env(char *key, char *value)

@@ -38,12 +38,12 @@ int ft_isspace(char c)
 	return (0);
 }
 
-void	free_str_list(char **str)
+void	*free_str_list(char **str)
 {
 	int	i;
 	i = 0;
 	if (!str)
-		return ;
+		return (0);
 	while (str[i])
 	{
 		free(str[i]);
@@ -51,4 +51,6 @@ void	free_str_list(char **str)
 		i++;
 	}
 	free(str);
+	str = 0;
+	return (str);
 }
