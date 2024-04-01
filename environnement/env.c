@@ -4,14 +4,16 @@
 void util_add(char **key, char **value, int index, char *str)
 {
     char *temp;
+    int shl;
 
     ft_strlcpy(*key, str, index + 1);
     ft_strlcpy(*value, str + index + 1, ft_strlen(str) - index);
     if (!ft_strcmp(*key, "SHLVL"))
     {
-        temp = *value;
-        *value = ft_itoa(my_atoi(temp) + 1);
-        free(temp);
+        shl = my_atoi(*value);
+        ft_free(value);
+        *value = ft_itoa(shl + 1);
+        
     }
 } 
 void ft_lstadd_back_env(t_env **lst, int index, char *str)
@@ -59,8 +61,10 @@ static void add_env_first(t_env **env)
 void env_copy(t_env **env, char **environ)
 {
     int i;
-    
+    char * sh;
+
     i = 0;
+    sh = ft_getenv(*env, "SHLVL");
     if (!*environ)
     {
         add_env_first(env);
@@ -71,8 +75,10 @@ void env_copy(t_env **env, char **environ)
         ft_lstadd_back_env(env, ft_strchr(environ[i], '='), environ[i]);
         i++;
     }
-    if (!ft_getenv(*env, "SHLVL"))
+    if (!sh)
         set_env_value(env, "SHLVL", "1");
+    else
+        free(sh);
 }
 
 // void print_env(t_env *tmp, char *input)

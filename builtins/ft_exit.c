@@ -16,6 +16,7 @@ void shell_level(t_env **env)
 {
 	int i;
 	t_env *tmp;
+	int shl;
 
 	tmp = *env;
 	i = 0;
@@ -23,7 +24,9 @@ void shell_level(t_env **env)
 	{
 		if (!ft_strncmp(tmp->key, "SHLVL", 5))
 		{
-			tmp->value = ft_itoa(my_atoi(tmp->value) - 1);
+			shl = my_atoi(tmp->value);
+			ft_free(&tmp->value);
+			tmp->value = ft_itoa(shl - 1);
 			break;
 		}
 		tmp = tmp->next;
