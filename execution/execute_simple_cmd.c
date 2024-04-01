@@ -131,6 +131,7 @@ int execute_simple_cmd(t_env **env, t_cmd_node *cmd)
         }
     }
     arr = lst_to_arr(*env);
+    
     if(execve(path_cmd, cmd->arguments, arr) == -1)
     {
         // case$c (variable not set) from strdup = allocate '\0' and set to cmd and first arg

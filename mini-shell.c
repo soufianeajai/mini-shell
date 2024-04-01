@@ -2,8 +2,6 @@
 #include "execution/execute.h"
 #include "builtins/builtin.h"
 
-int sig = 0;
-
 void disable_raw_mode()
 {
     struct termios new_termios;
@@ -26,20 +24,16 @@ void sig_handler(int signal)
 {
     if (signal == SIGINT)
     {
+        //printf("ctrl+C\n");
+        //EXIT_CODE = 1;
         write(1, "\n", 1);
         rl_on_new_line();
         rl_replace_line("", 0);
-        //sig = 1;
+        
         rl_redisplay();
     }
-    else if (signal == SIGQUIT)
-    {
-        sig = 2;
-    }
-    else if (signal == SIGTSTP)
-    {
-        sig = 3; 
-    }
+    if (signal == SIGQUIT)
+        (void)signal;
 }
 void    handle_signals()
 {
@@ -49,9 +43,7 @@ void    handle_signals()
     // Ctrl+\ signal        
         if (signal(SIGQUIT, sig_handler) == SIG_ERR)
             ft_putstr_fd("Error: signal\n", 2);
-    // ctrl+D signal
-        if (signal(SIGTSTP, sig_handler) == SIG_ERR)
-            ft_putstr_fd("Error: signal\n", 2);
+
 }
 
 
@@ -62,19 +54,24 @@ int main(int ac, char **av, char **env)
     t_token *tokens;
     t_env *env_list;
     t_token *temp;
+    int flag_first;
 
+    EXIT_CODE = 1;
     env_list = NULL;
+    flag_first = 0;
     env_copy(&env_list, env);
     disable_raw_mode();
     while(1)
     {
+       // printf("\nEXIT_CODE : %d\n", EXIT_CODE);
         tokens = NULL;
         handle_signals(); 
         input = readline("➜  MiNiSh ✗ ");
+        // ctrl+D
         if (!input)
         {
             enable_raw_mode();
-            exit(0);
+            exit(EXIT_CODE);
         }
         if (ft_strlen(input) > 0)
             add_history(input);       

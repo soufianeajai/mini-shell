@@ -96,12 +96,14 @@ void	set_env_value(t_env **env, char *key, char *value)
 void	free_env_list(t_env **env_list)
 {
 	t_env *temp;
-	while (env_list)
+
+	temp = *env_list;
+	while (temp)
 	{
-		temp = *env_list;
 		*env_list = (*env_list)->next;
-		ft_free((&temp->key));
+		ft_free(&(temp->key));
 		ft_free(&(temp->value));
 		free(temp);
+		temp = *env_list;
 	}
 }

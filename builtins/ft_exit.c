@@ -64,9 +64,11 @@ int	ft_exit(t_cmd_node *cmd, t_env **env)
 	int	i;
 
 	i = 0;
-	if (count_len(cmd->arguments) == 1)
+	if (count_len(cmd->arguments) == 1 )
 	{
 		shell_level(env);
+		free_env_list(env);
+		system("leaks minishell");
 		ft_putstr_fd("exit\n", 2);
 		exit(EXIT_CODE);
 	}
@@ -86,7 +88,7 @@ int	ft_exit(t_cmd_node *cmd, t_env **env)
 	}
 	return (0);
 }
-// free_env_list(env);
+// 
 //  !cmd for handle signal
 // system("leaks minishell");
 

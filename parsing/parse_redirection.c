@@ -4,6 +4,7 @@
 
 void	ignore(int sig)
 {
+	EXIT_CODE = 130;
 	(void)sig;
 }
 void	check_her_doc(t_token **token, t_env *env_list)
@@ -20,6 +21,8 @@ void	check_her_doc(t_token **token, t_env *env_list)
 	while (1)
 	{
 		input = readline("> ");
+		if(!input)
+			exit(0);
 		if (!input || strcmp(input, redir->filename) == 0)
 		{
 			ft_free(&input);
@@ -69,10 +72,15 @@ t_redir_node	*handle_herdoc(t_token **tokens, t_env *env_list,
 		else
 		{
 			signal(SIGINT, ignore);
+			waitpid(pid, &status, 0);
+			if(EXIT_CODE == 130)
+			{	
+				EXIT_CODE = 1;
+				return (0);
+			}
+			EXIT_CODE = WEXITSTATUS(status);
 			node->filename = ft_strdup(".her_doc.c");
 			node->redir_type = IN;
-			waitpid(pid, &status, 0);
-			EXIT_CODE = WEXITSTATUS(status);
 		}
 	}
 	return (*redir_node);

@@ -17,6 +17,7 @@
 
 int EXIT_CODE;
 
+
 typedef enum
 {
 	CMD,

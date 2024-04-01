@@ -3,11 +3,17 @@
 
 void util_add(char **key, char **value, int index, char *str)
 {
+    char *temp;
+
     ft_strlcpy(*key, str, index + 1);
     ft_strlcpy(*value, str + index + 1, ft_strlen(str) - index);
     if (!ft_strcmp(*key, "SHLVL"))
-        *value = ft_itoa(my_atoi(*value) + 1);
-}
+    {
+        temp = *value;
+        *value = ft_itoa(my_atoi(temp) + 1);
+        free(temp);
+    }
+} 
 void ft_lstadd_back_env(t_env **lst, int index, char *str)
 {
     t_env *new;

@@ -104,7 +104,7 @@ int	execute_tree(t_tree_node *tree, t_env **env)
 {
 	if (!tree)
 
-		return (24);
+		return (EXIT_CODE);
 
 	if (tree->type == PIPE)
 
@@ -118,7 +118,7 @@ int	execute_tree(t_tree_node *tree, t_env **env)
 
 		return(execute_redir(env, (t_redir_node *)(tree->node)));
 
-	return (25);
+	return (0);
 }
 
 // int execute_tree(t_tree_node *tree, t_env *env)

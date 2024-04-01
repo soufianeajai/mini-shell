@@ -23,12 +23,12 @@ t_tree_node	*parse_pipeline(t_token **tokens, t_env *env_list)
 	t_tree_node	*tree_node;
 	t_tree_node	*left;
 	t_tree_node	*right;
-	int			flag_redir;
+	int			redir_syntax;
 
 	pipe_node = 0;
 	tree_node = 0;
-	flag_redir = 0;
-	left = parse_simple_command(tokens, env_list, &flag_redir);
+	redir_syntax = 0;
+	left = parse_simple_command(tokens, env_list, &redir_syntax);
 	if (!left)
 		return (0);
 	if (*tokens && (*tokens)->type == PIPE)
@@ -99,7 +99,7 @@ t_tree_node	*parse_simple_command(t_token **tokens, t_env *env_list,
 		else
 		{
 			if (!parse_redir(tokens, &head_redir, env_list, flag_redir)
-				&& *flag_redir)
+				|| *flag_redir)
 				return ((t_tree_node *)free_tree_util(executable, arguments,
 						flag_env, head_redir));
 		}
