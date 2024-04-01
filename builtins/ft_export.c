@@ -56,6 +56,7 @@ void	add_to_env(int append, t_env **env, char *key, char *value)
 			remove_env(env, key);
 		set_env_value(env, key, value);
 	}
+	free(oldvalue);
 }
 
 void	handle_key_value(char *arg, t_env **env)

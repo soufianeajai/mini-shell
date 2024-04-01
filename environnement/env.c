@@ -53,7 +53,9 @@ static void add_env_first(t_env **env)
 void env_copy(t_env **env, char **environ)
 {
     int i;
+    char *shlvl;
     
+    shlvl = ft_getenv(*env, "SHLVL");
     i = 0;
     if (!*environ)
     {
@@ -65,8 +67,10 @@ void env_copy(t_env **env, char **environ)
         ft_lstadd_back_env(env, ft_strchr(environ[i], '='), environ[i]);
         i++;
     }
-    if (!ft_getenv(*env, "SHLVL"))
+    if (!shlvl)
         set_env_value(env, "SHLVL", "1");
+    else 
+        free(shlvl);
 }
 
 // void print_env(t_env *tmp, char *input)
