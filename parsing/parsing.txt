@@ -1,0 +1,89 @@
+Grammar for Shell Commands
+Command Structure
+
+Command: A command can be either a simple command, a series of commands connected by pipelines, or conditional executions.
+<command> ::= <simple_command> | <pipeline> | <conditional>
+Pipelines
+
+Pipeline: A sequence of one or more commands separated by the pipe symbol (|). Output of one command serves as input to the next.
+<pipeline> ::= <command> "|" <command>
+Conditional Execution
+
+Conditional: Commands can be conditionally executed based on the success (&&) or failure (||) of the previous command.
+<conditional> ::= <command> "&&" <command> | <command> "||" <command>
+Simple Commands
+
+Simple Command: A basic command unit that can be an executable with arguments, an assignment, or involve redirection.
+<simple_command> ::= <redirection> | <assignment> | <executable> <arguments>
+Redirections
+
+Input Redirection: Reads input from a file.
+<input_redirection> ::= "<" <filename>
+Output Redirection: Writes output to a file, overwriting existing contents.
+<output_redirection> ::= ">" <filename>
+Append Redirection: Appends output to a file.
+<append_redirection> ::= ">>" <filename>
+Components of Commands
+
+Arguments: A command may have zero or more arguments.
+<arguments> ::= <argument> <arguments> | ε
+Executable: The name of the program to execute.
+<executable> ::= <word>
+Filename: Used with redirection to specify the file name.
+<filename> ::= <word>
+Basic Elements
+
+Word: The basic building block, consisting of characters. Used for executables, filenames, and more.
+<word> ::= <character> | <character> <word>
+Assignment: Sets a variable to a value.
+<assignment> ::= <variable_name> "=" <value>
+Variable Name: The identifier for a variable.
+<variable_name> ::= <word>
+Value: The value assigned to a variable, which can be a word or a quoted string.
+<value> ::= <word> | <quoted_string>
+Quoted String: A string of characters enclosed in quotes, treated as a single word.
+<quoted_string> ::= '"' <word> '"'
+
+
+typedef enum {
+    NODE_COMMAND, // Represents a command with its arguments
+    NODE_PIPELINE, // Represents a pipeline of commands
+    NODE_CONDITIONAL, // Represents conditional execution (`&&`, `||`)
+    NODE_REDIRECTION, // Represents redirection (`<`, `>`, `>>`)
+    NODE_ASSIGNMENT // Represents an assignment
+} NodeType;
+
+typedef struct ASTNode {
+    NodeType type; (1 for command, 2 for redirection, 3 for pipe
+    char* executable; // For command nodes, this is the command to execute
+    char** arguments; // An array of strings for arguments, null-terminated
+    int arg_count; // Number of arguments
+
+    // For non-command nodes, these fields represent relationships and structure (pipe
+    struct ASTNode* left; // Left child in the AST
+    struct ASTNode* right; // Right child in the AST
+
+    // Additional fields for redirections, assignments, etc.
+    char* filename; // For redirection nodes
+	int	mode;
+	int fd;
+    char* variable; // For assignment nodes
+    char* value; // For assignment value or as needed
+} ASTNode;
+
+parse_line(tokens)
+  |
+  --> parseCommand(tokens)
+        |
+        +--> parseSimpleCommand(tokens)
+        |       |
+        |       +--> parseRedirection(tokens), parseAssignment(tokens), etc.
+        |
+        +--> parsePipeline(tokens)
+        |       |
+        |       +--> Recursively calls parseCommand(tokens) for each command in the pipeline.
+        |
+        +--> parseConditional(tokens)
+                |
+                +--> Recursively calls parseCommand(tokens) for each side of the conditional.
+
