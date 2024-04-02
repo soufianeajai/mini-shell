@@ -34,9 +34,9 @@ char	*handle_expandable(char **input, t_env *env_list)
 
 	key = 0;
 	value = 0;
-	if (**input == '$' && isalpha_num(**(input + 1)))
+	if (**input == '$' && isalpha_num(*((*input) + 1)))
 	{
-		if (is_alpha(**(input + 1)))
+		if (is_alpha(*((*input) + 1)))
 		{
 			(*input)++;
 			key = get_value(input, 1);
@@ -45,7 +45,7 @@ char	*handle_expandable(char **input, t_env *env_list)
 		}
 		else
 		{
-			*input = *(input + 2);
+			*input = (*input + 2);
 			value = get_value(input, 0);
 		}
 	}

@@ -77,6 +77,14 @@ int is_qoutes(char c, t_token **tok)
     }
     return (0);
 }
+void handling_qoutes_util(int *i, int *flag, t_token *tmp)
+{
+    if (tmp->str[*i] && *flag == is_qoutes(tmp->str[*i], &tmp))
+	{
+        i++;
+        flag = 0;
+    }
+}
 
 void handling_qoutes(t_token **tk)
 {
@@ -98,11 +106,7 @@ void handling_qoutes(t_token **tk)
 				i++;
 			while (tmp->str[i] && (!is_qoutes(tmp->str[i], &tmp) || (flag != is_qoutes(tmp->str[i], &tmp) && flag != 0)))
                 stock[j++] = tmp->str[i++];
-			if (tmp->str[i] && flag == is_qoutes(tmp->str[i], &tmp))
-			{
-                i++;
-                flag = 0;
-            }
+			handling_qoutes_util(&i, &flag, tmp);
 		}
 		stock[j] = '\0';
 		ft_free(&(tmp->str));
@@ -126,5 +130,3 @@ void free_tokens(t_token **tokens)
     }
     tokens = 0;
 }
-
-

@@ -1,37 +1,43 @@
 #include "../minishell.h"
 
+t_token *create_node(int len, node_type type, int index)
+{
+    t_token *new;
+
+    new = malloc(sizeof(t_token));
+    if (!new)
+        return (NULL);
+    new->len = len;
+    new->type = type;
+    if(type == ENV)
+        new->flag_env = 1;
+    else
+        new->flag_env = 0;
+    new->type_qoutes = -1;
+    new->index = index;
+    new->next = NULL;
+    new->prev = NULL;
+    return (new);
+}
+
 void	ft_lstadd_back(t_token **lst, int len , node_type type , int index)
 {
     t_token	*new;
     t_token	*p;
     t_token	*prev;
 
-    new = malloc(sizeof(t_token));
-    if (new != NULL)
-    {
-        new->len = len;
-        new->type = type;
-        if(type == ENV)
-            new->flag_env = 1;
-        else
-            new->flag_env = 0;
-        new->type_qoutes = -1;
-        new->index = index;
-        new->next = NULL;
-        new->prev = NULL;
-    }
+    new = create_node(len, type, index);
+    if (!new)
+        return ;
     p = *lst;
-    if (new)
+    if (*lst == NULL)
+        *lst = new;
+    else
     {
-        if (*lst == NULL)
-            *lst = new;
-        else
-        {
-            while (p->next)
-                p = p->next;
-            new->prev = p;
-            p->next = new;
-        }
+        while (p->next)
+            p = p->next;
+        new->prev = p;
+        p->next = new;
     }
 }
 int redirection_detect(char *input , t_token **tokens, int i)
@@ -62,62 +68,63 @@ int redirection_detect(char *input , t_token **tokens, int i)
     }
     return (0);
 }
+void handle_qts(int *i,char *input, int *env_flag)
+{
+    int flag_quote;
+    int k;
+
+    flag_quote = 0;
+    k = *i;
+    (*i)++;
+    while (input[*i] && input[*i] != input[k])
+    {
+        if (input[*i] == '$' && flag_quote == 0 && input[k] == '\"')
+                *env_flag = 1;
+        (*i)++;
+    }
+    if(input[*i] == input[k])
+        flag_quote = 1;
+    (*i)++;
+}
+
+int handle_env_cmd(int j, int *i, t_token **tokens, int env_flag)
+{
+    if (j == *i)
+        return (0);
+    if (env_flag)
+        ft_lstadd_back(tokens, *i - j, ENV, j);
+    else
+        ft_lstadd_back(tokens, *i - j, CMD, j);
+    return (1);
+}
 
 int is_word(t_token **tokens, char *input, int *i)
 {
     int j;
-    int k;
     int env_flag;
-    int flag_quote;
 
     j = *i;
-    k = -1;
     env_flag = 0;
     while (input[*i])
     {
         if (input[*i] == '\'' || input[*i] == '\"')
         {
-            flag_quote = 0;
-            k = *i;
-            (*i)++;
-            //printf("_____%c______\n", input[k]);
-            while (input[*i] && input[*i] != input[k])
-            {
-              //  printf("input[*i] = %c\n", input[*i]);
-                 if (input[*i] == '$' && flag_quote == 0 && input[k] == '\"')
-                     env_flag = 1;
-                (*i)++;
-            }
-            if(input[*i] == input[k])
-                flag_quote = 1;
-            (*i)++;
+            handle_qts(i, input, &env_flag);
             continue;
         }
         if(input[*i] != '<' && input[*i] != '>' && input[*i] != '|')
         {
-            
             if (input[*i] == '\'' || input[*i] == '\"')
                 continue;
-            if (input[*i] == '$')
-                env_flag = 1;
             if (input[*i] && ft_isspace(input[*i]))
                 break;
-            
+            if (input[(*i)++] == '$')
+                env_flag = 1;
         }
         else 
             break;
-        if(input[*i] && ft_isspace(input[*i]))
-            break;(*i)++;
     }
-    if (j == *i)
-        return (0);
-    if (env_flag)
-    {
-        ft_lstadd_back(tokens, *i - j, ENV, j);
-    }
-    else
-        ft_lstadd_back(tokens, *i - j, CMD, j);
-    return (1);
+    return (handle_env_cmd(j, i, tokens, env_flag));
 }
 
 void SplitTokens(char *input, t_token **tokens)
