@@ -85,15 +85,17 @@ t_tree_node	*parse_simple_command(t_token **tokens, t_env *env_list,
 	char			*executable;
 	char			**arguments;
 	int				flag_env;
+	int				flag_quote;
 
 	executable = 0;
 	arguments = 0;
 	head_redir = 0;
+	flag_quote = 0;
 	while ((*tokens) && (*tokens)->type != PIPE)
 	{
 		if ((*tokens)->type == CMD)
 		{
-			executable = parse_exec(tokens, executable, &flag_env);
+			executable = parse_exec(tokens, executable, &flag_env, &flag_quote);
 			arguments = get_arguments(executable, arguments, tokens);
 		}
 		else
@@ -104,6 +106,6 @@ t_tree_node	*parse_simple_command(t_token **tokens, t_env *env_list,
 						flag_env, head_redir));
 		}
 	}
-	return (combine_cmd(create_cmd_node(executable, arguments, flag_env),
+	return (combine_cmd(create_cmd_node(executable, arguments, flag_env, flag_quote),
 			head_redir));
 }

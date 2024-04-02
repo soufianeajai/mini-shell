@@ -45,7 +45,7 @@ void	ft_lstadd_back_redir(t_redir_node **head, t_redir_node *new)
 		}
 	}
 }
-t_cmd_node	*create_cmd_node(char *executable, char **arguments, int flag_env)
+t_cmd_node	*create_cmd_node(char *executable, char **arguments, int flag_env, int flag_quote)
 {
 	t_cmd_node	*node;
 
@@ -54,5 +54,6 @@ t_cmd_node	*create_cmd_node(char *executable, char **arguments, int flag_env)
 	node->executable = executable;
 	node->arguments = arguments;
 	node->flag_env = flag_env;
+	node->type_qoutes = flag_quote;
 	return (node);
 }

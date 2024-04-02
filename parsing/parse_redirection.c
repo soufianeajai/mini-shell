@@ -94,8 +94,6 @@ t_redir_node	*parse_redirection(t_token **tokens, t_env *env_list,
 		int *flag_redir)
 {
 	t_redir_node	*node;
-	t_redir_type	type;
-	char			*filename;
 
 	node = 0;
 	if ((*tokens) && (*tokens)->type == REDIR)

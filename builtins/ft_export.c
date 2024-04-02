@@ -82,7 +82,6 @@ void	handle_key_value(char *arg, t_env **env)
 int	handling_args(char **arg, t_env **env)
 {
 	int	i;
-	int	j;
 	int	flag;
 
 	i = 1;
@@ -111,6 +110,7 @@ int	ft_export(t_env **env, t_cmd_node *cmd)
 	int	i;
 
 	i = 1;
+	//t_export *export;
 	if (cmd && cmd->arguments && cmd->arguments[1] == NULL)
 	{
 		//ft_env(*env);

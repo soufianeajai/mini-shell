@@ -54,6 +54,8 @@ int main(int ac, char **av, char **env)
     t_token *temp;
     int flag_first;
 
+    (void)ac;
+    (void)av;
     EXIT_CODE = 1;
     env_list = NULL;
     flag_first = 0;

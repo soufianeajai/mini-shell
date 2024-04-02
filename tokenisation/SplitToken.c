@@ -24,7 +24,6 @@ void	ft_lstadd_back(t_token **lst, int len, t_node_type type, int index)
 {
 	t_token	*new;
 	t_token	*p;
-	t_token	*prev;
 
 	new = create_node(len, type, index);
 	if (!new)

@@ -43,7 +43,6 @@ void	exec_redir(t_tree_node *tree, t_env **env)
 {
 	int	status;
 	int	pid;
-	int	exit_code;
 
 	signal(SIGINT, SIG_IGN);
 	if (is_builtin((t_cmd_node *)(tree->node)))
@@ -119,10 +118,8 @@ int	execute_pipe(t_pipe_node *pipe_node, t_env **env)
 		if (pid <= 0)
 			break ;
 		if (pid == last_pid)
-		{
 			if (EXIT_CODE != 130)
-			EXIT_CODE = WEXITSTATUS(status);
-		}
+				EXIT_CODE = WEXITSTATUS(status);
 	}
 	return (EXIT_CODE);
 }

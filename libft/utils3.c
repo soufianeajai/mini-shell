@@ -125,7 +125,7 @@ size_t	my_atoi(const char *str)
 		tmp = res * 10 + (*str - '0');
 		if (sign == 1 && tmp > LONG_MAX)
 			return (SIZE_MAX);
-		if (sign == -1 && (-tmp) < LONG_MIN)
+		if (sign == -1 && (long long)(-tmp) < LONG_MIN)
 			return (SIZE_MAX);
 		res = tmp;
 		str++;

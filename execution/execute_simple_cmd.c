@@ -59,7 +59,7 @@ int	check_type(int flag, char *path, struct stat path_stat, char *cmd)
 int	check_path(char *path, char *cmd, int flag)
 {
 	struct stat	path_stat;
-
+	//printf("path: %s %s\n", path,cmd);
 	if (stat(path, &path_stat) == -1 && (ft_strchr(cmd, '/') || (!ft_strchr(cmd,
 					'/') && cmd[0] == '/')))
 	{
@@ -134,9 +134,13 @@ int	handle_null_path(t_env **env, t_cmd_node *cmd)
 }
 int	handle_env(int flag_env, char *cmd, char *path_cmd)
 {
-	if (flag_env == 1 && cmd && cmd == '\0')
+	//printf("flag_env: %d cmd :  -%p-\n", flag_env,cmd);
+	if (cmd && cmd[0] == '\0')
 	{
-		free(path_cmd);
+		if (flag_env == 0)
+			return (ft_error(NULL, "command not found"));
+		else
+			free(path_cmd);
 		return (0);
 	}
 	return (1);
@@ -145,7 +149,6 @@ int	handle_env(int flag_env, char *cmd, char *path_cmd)
 int	execute_simple_cmd(t_env **env, t_cmd_node *cmd)
 {
 	char	*path_cmd;
-	char	*new_path;
 
 	signal(SIGINT, SIG_DFL);
 	if (cmd->executable == NULL)
@@ -155,9 +158,9 @@ int	execute_simple_cmd(t_env **env, t_cmd_node *cmd)
 	path_cmd = get_path_cmd(*env, cmd);
 	if (!path_cmd)
 	{
-		if (!handle_env(cmd->flag_env, cmd->executable, path_cmd))
-			return (0);
-		if (cmd->executable && cmd->flag_env == 1)
+		if (!handle_env(cmd->flag_env, cmd->executable, path_cmd) || handle_env(cmd->flag_env, cmd->executable, path_cmd) == 127)
+			return (handle_env(cmd->flag_env, cmd->executable, path_cmd));
+		if (cmd->executable && cmd->flag_env == 1 && cmd->type_qoutes == -1)
 		{
 			free_str_list(cmd->arguments);
 			cmd->arguments = ft_split(cmd->executable, ' ');
@@ -207,7 +210,7 @@ int	util_redir(t_redir_node *cmd, t_redir_type type, int fd_in, int fd_out)
 		fd_file = open(cmd->filename, O_RDONLY);
 	else if (type == OUT)
 		fd_file = open(cmd->filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	else if (type == APPEND)
+	else
 		fd_file = open(cmd->filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd_file == -1)
 	{

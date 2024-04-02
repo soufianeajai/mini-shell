@@ -15,7 +15,6 @@
 
 void	util_add(char **key, char **value, int index, char *str)
 {
-	char	*temp;
 	int		shl;
 
 	ft_strlcpy(*key, str, index + 1);

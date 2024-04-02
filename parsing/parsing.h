@@ -45,6 +45,7 @@ typedef struct s_cmd_node
 	char				*executable;
 	char				**arguments;
 	int					flag_env;
+	int 				type_qoutes;
 }						t_cmd_node;
 
 typedef struct s_redir_node
@@ -70,8 +71,8 @@ t_redir_node			*parse_redirection(t_token **tokens, t_env *env_list,
 t_redir_type			get_redir_type(t_token **tokens);
 char					**get_arguments(char *exec, char **arguments,
 							t_token **tokens);
-t_cmd_node				*create_cmd_node(char *executable, char **arguments,
-							int flag_env);
+t_cmd_node	*create_cmd_node(char *executable, char **arguments, int flag_env, int flag_quote);
+
 int						count_args(t_token *tokens);
 int						count_len(char **arguments);
 void					*free_str_list(char **str);
@@ -86,7 +87,7 @@ void					check_her_doc(t_token **token, t_env *env_list);
 void					*free_tree_util(char *executable, char **arguments,
 							int flag_env, t_redir_node *head_redir);
 char					*parse_exec(t_token **tokens, char *executable,
-							int *flag_env);
+							int *flag_env, int *flag_quote);
 t_tree_node				*combine_cmd(t_cmd_node *cmd, t_redir_node *head);
 t_redir_node			*parse_redir(t_token **tokens,
 							t_redir_node **head_redir, t_env *env_list,

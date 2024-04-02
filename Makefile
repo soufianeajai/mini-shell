@@ -7,7 +7,7 @@ builtins/ft_cd.c builtins/ft_env.c builtins/ft_unset.c builtins/ft_export.c buil
 parsing/parsing.c parsing/free_tree.c parsing/utils.c parsing/parse_redirection.c parsing/expand_env.c parsing/get_arguments.c parsing/parsing_utils.c  execution/execute_tree.c \
 execution/execute_simple_cmd.c mini-shell.c
 OBJS = $(SRCS:.c=.o)
-
+CFLAGS = -Wall -Wextra -Werror
 all : $(NAME)
 #%.o: %.c #builtins/ft_export.c builtins/ft_unset.c builtins/ft_env.c \
 #    cc $(CFLAGS) -c $< -o $@ -g3 -g3 -fsanitize=address

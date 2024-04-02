@@ -72,20 +72,6 @@ static int	count_w(char const *s, char c)
 	return (count);
 }
 
-static char	**free_all(char **t, int row)
-{
-	int	i;
-
-	i = 0;
-	while (i < row)
-	{
-		free(t[i]);
-		i++;
-	}
-	free(t);
-	return (NULL);
-}
-
 char	**ft_split(char const *s, char c)
 {
 	int		i;

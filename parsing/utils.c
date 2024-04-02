@@ -1,7 +1,7 @@
 #include "../environnement/env.h"
 #include "parsing.h"
 
-char	*parse_exec(t_token **tokens, char *executable, int *flag_env)
+char	*parse_exec(t_token **tokens, char *executable, int *flag_env, int *flag_quote)
 {
 	char	*exec;
 
@@ -9,6 +9,7 @@ char	*parse_exec(t_token **tokens, char *executable, int *flag_env)
 	if (!executable)
 	{
 		*flag_env = (*tokens)->flag_env;
+		*flag_quote = (*tokens)->type_qoutes;
 		exec = ft_strdup((*tokens)->str);
 		consume(tokens);
 	}
