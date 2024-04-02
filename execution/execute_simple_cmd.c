@@ -20,6 +20,47 @@ int ft_error(char *cmd, char *error)
     return (126);
 }
 
+int check_type(int flag, char *path, struct stat path_stat, char *cmd)
+{
+    if (S_ISDIR(path_stat.st_mode))
+    {
+        if (flag)
+            ft_error((char *)path, "is a directory");
+        return (126);
+    }
+    if(S_ISREG(path_stat.st_mode) && (ft_strchr(cmd,'/') || (!ft_strchr(cmd,'/') && cmd[0] == '/')) && cmd[0] != '.')
+    {
+        if (flag)
+            ft_error(cmd, "No such file or directory");
+        return (127);
+    }
+    else if(S_ISREG(path_stat.st_mode) && access(cmd, X_OK) == -1)
+    {
+        if (flag)
+            ft_error(cmd, "Permission denied");
+        return (126);
+    }
+    return (0);
+}
+int check_path(char *path, char *cmd,int flag)
+{
+    struct stat path_stat;
+    
+    if (stat(path, &path_stat) == -1 && (ft_strchr(cmd,'/') || (!ft_strchr(cmd,'/') && cmd[0] == '/')))
+    {
+        if (flag)
+        {
+            if(errno == ENOTDIR)
+                return (ft_error(cmd, "Not a directory"));
+            else
+                return (ft_error(cmd, "No such file or directory"));
+        }
+        return (1);
+    }
+    return (check_type(flag, (char *)path, path_stat, cmd));
+}
+
+
  char **lst_to_arr(t_env *env)
 {
     int i = 0;
@@ -42,58 +83,52 @@ int ft_error(char *cmd, char *error)
     return (arr);
 }
 
-int check_path(const char *path, char *cmd,int flag) {
-    
-    struct stat path_stat;
-    
-    if (stat(path, &path_stat) == -1 && (ft_strchr(cmd,'/') || (!ft_strchr(cmd,'/') && cmd[0] == '/')))
+int run_cmd(t_env **env, char *path_cmd, t_cmd_node *cmd)
+{
+    char **arr;
+    int exit_code;
+    arr = lst_to_arr(*env);
+    if(execve(path_cmd, cmd->arguments, arr) == -1)
     {
-        //printf("\n1\n");
-        if (flag)
-        {
-            if(errno == ENOTDIR)
-                return (ft_error(cmd, "Not a directory"));
-            else
-                return (ft_error(cmd, "No such file or directory"));
-        }
-        return (1);
+        exit_code = check_path(path_cmd,cmd->executable,1);
+        free(path_cmd);
+        return(exit_code);
     }
-    if (S_ISDIR(path_stat.st_mode))
-    {
-        //printf("\n2\n");
-        if (flag)
-            ft_error((char *)path, "is a directory");
-        return (126);
-    }
-    if(S_ISREG(path_stat.st_mode) && (ft_strchr(cmd,'/') || (!ft_strchr(cmd,'/') && cmd[0] == '/')) && cmd[0] != '.')
-    {
-        printf("\n4\n");
-        if (flag)
-            ft_error(cmd, "No such file or directory");
-        return (127);
-    }
-    else if(S_ISREG(path_stat.st_mode) && access(cmd, X_OK) == -1)
-    {
-        printf("\n3\n");
-        if (flag)
-            ft_error(cmd, "Permission denied");
-        return (126);
-    }
-    
-    return 0;
+    return (0);
 }
 
+int handle_null_path(t_env **env, t_cmd_node *cmd)
+{
+    char *new_path;
+    char *path_;
+
+    path_ = ft_getenv(*env, "PATH");
+    new_path = ft_strjoin(getcwd(NULL, 0), "/", 1);
+    new_path = ft_strjoin(new_path, cmd->executable, 1);
+    if(check_path(new_path,cmd->executable,0))
+        return(check_path(new_path , cmd->executable,1));
+    if(!path_ && execve(new_path, cmd->arguments, NULL) != -1)
+        return(0);
+    else
+        return(ft_error(cmd->executable, "command not found"));
+    free(new_path);
+
+}
+int handle_env(int flag_env, char *cmd, char *path_cmd)
+{
+    if(flag_env == 1 && cmd && cmd == '\0')
+    {
+        free(path_cmd);
+            return (0);
+    }
+    return (1);
+}
 
 int execute_simple_cmd(t_env **env, t_cmd_node *cmd)
 {
-    pid_t pid;
     char *path_cmd;
-    char **arr;
     char *new_path;
-    char *PATH;
 
-    
-    PATH =ft_getenv(*env, "PATH");
     if(cmd->executable == NULL)
         return(0);
     if (is_builtin(cmd))
@@ -101,11 +136,8 @@ int execute_simple_cmd(t_env **env, t_cmd_node *cmd)
     path_cmd = get_path_cmd(*env, cmd);
     if (!path_cmd)
     {
-        if(cmd->flag_env == 1 && cmd->executable && cmd->executable[0] == '\0')
-        {
-            free(path_cmd);
+        if (!handle_env(cmd->flag_env, cmd->executable, path_cmd))
             return(0);
-        }
         if (cmd->executable && cmd->flag_env == 1)
         {
             free_str_list(cmd->arguments);
@@ -115,39 +147,9 @@ int execute_simple_cmd(t_env **env, t_cmd_node *cmd)
             path_cmd = get_path_cmd(*env, cmd);
         }
         if (!path_cmd)
-        {   
-            
-            new_path = ft_strjoin(getcwd(NULL, 0), "/", 1);
-            new_path = ft_strjoin(new_path, cmd->executable, 1);
-            //printf("\n111\n");
-            if(check_path(new_path,cmd->executable,0))
-                return(check_path(new_path , cmd->executable,1));
-            //free(path_cmd);
-            if(!PATH && execve(new_path, cmd->arguments, NULL) != -1)
-                return(0);
-            else
-                return(ft_error(cmd->executable, "command not found"));
-            free(new_path);
-        }
+            return(handle_null_path(env, cmd));
     }
-    arr = lst_to_arr(*env);
-    
-    if(execve(path_cmd, cmd->arguments, arr) == -1)
-    {
-        // case$c (variable not set) from strdup = allocate '\0' and set to cmd and first arg
-        // if(cmd->arguments[0][0] == '\0')
-        // {
-        //     free(path_cmd);
-        //     EXIT_CODE = 0;
-        //     exit(EXIT_CODE);
-        // }
-        //exit(ft_error(cmd->executable, "error in execve"));
-        int exite = check_path(path_cmd,cmd->executable,1);
-        //printf("\n333 %s %s %s %s\n",path_cmd,cmd->executable,cmd->arguments[0],cmd->arguments[1]);
-        free(path_cmd);
-        return(exite);
-    }
-    return(0);
+    return(run_cmd(env, path_cmd, cmd));
 }
 
 int execute_redir(t_env **env, t_redir_node *cmd)
@@ -155,10 +157,6 @@ int execute_redir(t_env **env, t_redir_node *cmd)
     int fd_in;
     int fd_out;  
     t_redir_node *tmp;
-    int fd_file;
-    int fd[2];
-        char *input;
-    char *tmp_char;
 
     signal(SIGINT,SIG_DFL);
     fd_in = dup(0);
