@@ -113,7 +113,7 @@ int	ft_export(t_env **env, t_cmd_node *cmd)
 	i = 1;
 	if (cmd && cmd->arguments && cmd->arguments[1] == NULL)
 	{
-		ft_env(*env);
+		//ft_env(*env);
 		return (0);
 	}
 	return (handling_args(cmd->arguments, env));

@@ -17,7 +17,6 @@
 char	*ft_getenv(t_env *env, char *key)
 {
 	t_env	*tmp;
-
 	tmp = env;
 	while (tmp && tmp->key)
 	{

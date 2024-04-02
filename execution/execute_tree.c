@@ -94,23 +94,35 @@ int	execute_pipe(t_pipe_node *pipe_node, t_env **env)
 	int	last_pid;
 
 	error_pipe(fd);
+	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid == 0)
+	{
+		signal(SIGINT, SIG_DFL);
 		execute_child(fd, 1, pipe_node, env);
+	}
+	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid != 0)
 		last_pid = pid;
 	if (pid == 0)
+	{
+		signal(SIGINT, SIG_DFL);
 		execute_child(fd, 0, pipe_node, env);
+	}
 	close(fd[0]);
 	close(fd[1]);
+	signal(SIGINT, ignore);
 	while (1)
 	{
 		pid = wait(&status);
 		if (pid <= 0)
 			break ;
 		if (pid == last_pid)
+		{
+			if (EXIT_CODE != 130)
 			EXIT_CODE = WEXITSTATUS(status);
+		}
 	}
 	return (EXIT_CODE);
 }

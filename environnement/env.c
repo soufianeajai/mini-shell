@@ -77,7 +77,6 @@ void	env_copy(t_env **env, char **environ)
 	char	*sh;
 
 	i = 0;
-	sh = ft_getenv(*env, "SHLVL");
 	if (!*environ)
 	{
 		add_env_first(env);
@@ -88,6 +87,7 @@ void	env_copy(t_env **env, char **environ)
 		ft_lstadd_back_env(env, ft_strchr(environ[i], '='), environ[i]);
 		i++;
 	}
+	sh = ft_getenv(*env, "SHLVL");
 	if (!sh)
 		set_env_value(env, "SHLVL", "1");
 	else

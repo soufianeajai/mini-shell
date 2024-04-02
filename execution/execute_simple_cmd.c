@@ -147,6 +147,7 @@ int	execute_simple_cmd(t_env **env, t_cmd_node *cmd)
 	char	*path_cmd;
 	char	*new_path;
 
+	signal(SIGINT, SIG_DFL);
 	if (cmd->executable == NULL)
 		return (0);
 	if (is_builtin(cmd))

@@ -56,7 +56,7 @@ static void	util_exit(t_cmd_node *cmd, int *i, t_env **env)
 	{
 		if (!ft_isdigit(cmd->arguments[1][*i]) && cmd->arguments[1][*i] != '-')
 			exit(ft_error_exit(cmd->arguments[1], 1, env));
-		i++;
+		(*i)++;
 	}
 }
 
