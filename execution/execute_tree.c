@@ -2,7 +2,6 @@
 #include "execute.h"
 
 void	exec_CMD(t_tree_node *tree, t_env **env)
-
 {
 	int status;
 
@@ -17,12 +16,16 @@ void	exec_CMD(t_tree_node *tree, t_env **env)
 	}
 	pid = fork();
 	if (pid == 0)
+	{
+		signal(SIGINT,SIG_DFL);
 		exit(execute_simple_cmd(env, (t_cmd_node *)(tree->node)));
+	}
 	else
 	{
 		signal(SIGINT, ignore);
 		waitpid(pid, &status, 0);
-		EXIT_CODE = WEXITSTATUS(status);
+		if (EXIT_CODE != 130)
+			EXIT_CODE = WEXITSTATUS(status);
 	}
 }
 

@@ -24,8 +24,6 @@ void sig_handler(int signal)
 {
     if (signal == SIGINT)
     {
-        //printf("ctrl+C\n");
-        //EXIT_CODE = 1;
         write(1, "\n", 1);
         rl_on_new_line();
         rl_replace_line("", 0);
@@ -97,7 +95,7 @@ int main(int ac, char **av, char **env)
         
         free(input);
        
-        system("leaks minishell");
+//        system("leaks minishell");
           // break;
     }
 }

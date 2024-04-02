@@ -12,12 +12,10 @@ void	check_her_doc(t_token **token, t_env *env_list)
 	t_redir_node	*redir;
 	char			*input;
 	int				fd;
-	char			*filename;
 
 	signal(SIGINT, SIG_DFL);
-	filename = ft_strdup(".her_doc.c");
 	redir = (t_redir_node *)(*token);
-	fd = open(filename, O_RDWR | O_CREAT | O_TRUNC, 0644);
+	fd = open(".her_doc.c", O_RDWR | O_CREAT | O_TRUNC, 0644);
 	while (1)
 	{
 		input = readline("> ");
@@ -53,6 +51,16 @@ t_redir_node	*create_redir_node(redir_type type)
 	return (node);
 }
 
+int	check_code()
+{
+	if(EXIT_CODE == 130)
+	{	
+		EXIT_CODE = 1;
+		return (0);
+	}
+	return (1);
+}
+
 t_redir_node	*handle_herdoc(t_token **tokens, t_env *env_list,
 		t_redir_node **redir_node, int *flag_redir)
 {
@@ -67,18 +75,14 @@ t_redir_node	*handle_herdoc(t_token **tokens, t_env *env_list,
 	{
 		signal(SIGINT, SIG_IGN);
 		consume(tokens);
-		pid = fork();
-		if (pid == 0)
+		if (!(pid = fork()))
 			check_her_doc(tokens, env_list);
 		else
 		{
 			signal(SIGINT, ignore);
 			waitpid(pid, &status, 0);
-			if(EXIT_CODE == 130)
-			{	
-				EXIT_CODE = 1;
+			if(!check_code())
 				return (0);
-			}
 			EXIT_CODE = WEXITSTATUS(status);
 			node->filename = ft_strdup(".her_doc.c");
 			node->redir_type = IN;

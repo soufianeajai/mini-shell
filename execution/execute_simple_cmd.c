@@ -92,7 +92,7 @@ int execute_simple_cmd(t_env **env, t_cmd_node *cmd)
     char *new_path;
     char *PATH;
 
-    signal(SIGINT,SIG_DFL);
+    
     PATH =ft_getenv(*env, "PATH");
     if(cmd->executable == NULL)
         return(0);
