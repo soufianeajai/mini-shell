@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: afanidi <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/02 03:13:40 by afanidi           #+#    #+#             */
+/*   Updated: 2024/04/02 03:13:42 by afanidi          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 #include "../parsing/parsing.h"
 #include "env.h"
@@ -93,7 +105,7 @@ void	set_env_value(t_env **env, char *key, char *value)
 
 void	free_env_list(t_env **env_list)
 {
-	t_env *temp;
+	t_env	*temp;
 
 	temp = *env_list;
 	while (temp)

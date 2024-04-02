@@ -49,7 +49,8 @@ char	*ft_strjoin(char *s1, char *s2, int free_flag)
 	i = 0;
 	temp1 = s1;
 	temp2 = s2;
-	if(!(str = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char))))
+	str = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
+	if (!str)
 		return (NULL);
 	while (temp1 && *temp1)
 		str[i++] = *(temp1++);
@@ -60,11 +61,6 @@ char	*ft_strjoin(char *s1, char *s2, int free_flag)
 		ft_free(&s1);
 	if (free_flag == 2)
 		ft_free(&s2);
-	if (free_flag == 3)
-	{
-		ft_free(&s1); 
-		ft_free(&s2);
-	}
 	return (str);
 }
 
@@ -87,4 +83,3 @@ char	*ft_strdup(char *src)
 	new[i] = '\0';
 	return (new);
 }
-

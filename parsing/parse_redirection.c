@@ -19,7 +19,7 @@ void	check_her_doc(t_token **token, t_env *env_list)
 	while (1)
 	{
 		input = readline("> ");
-		if(!input)
+		if (!input)
 			exit(0);
 		if (!input || strcmp(input, redir->filename) == 0)
 		{
@@ -36,7 +36,7 @@ void	check_her_doc(t_token **token, t_env *env_list)
 	exit(0);
 }
 
-t_redir_node	*create_redir_node(redir_type type)
+t_redir_node	*create_redir_node(t_redir_type type)
 {
 	t_redir_node	*node;
 
@@ -51,10 +51,10 @@ t_redir_node	*create_redir_node(redir_type type)
 	return (node);
 }
 
-int	check_code()
+int	check_code(void)
 {
-	if(EXIT_CODE == 130)
-	{	
+	if (EXIT_CODE == 130)
+	{
 		EXIT_CODE = 1;
 		return (0);
 	}
@@ -64,37 +64,37 @@ int	check_code()
 t_redir_node	*handle_herdoc(t_token **tokens, t_env *env_list,
 		t_redir_node **redir_node, int *flag_redir)
 {
-	t_redir_node	*node;
-	int				pid;
-	int				status;
+	int	pid;
+	int	status;
 
-	node = *redir_node;
 	if ((*tokens)->next && is_special_char((*tokens)->next->str, flag_redir))
 		return (0);
 	else if (((*tokens)->next))
 	{
 		signal(SIGINT, SIG_IGN);
 		consume(tokens);
-		if (!(pid = fork()))
+		pid = fork();
+		if (pid == 0)
 			check_her_doc(tokens, env_list);
 		else
 		{
 			signal(SIGINT, ignore);
 			waitpid(pid, &status, 0);
-			if(!check_code())
+			if (!check_code())
 				return (0);
 			EXIT_CODE = WEXITSTATUS(status);
-			node->filename = ft_strdup(".her_doc.c");
-			node->redir_type = IN;
+			(*redir_node)->filename = ft_strdup(".her_doc.c");
+			(*redir_node)->redir_type = IN;
 		}
 	}
 	return (*redir_node);
 }
 
-t_redir_node	*parse_redirection(t_token **tokens, t_env *env_list, int *flag_redir)
+t_redir_node	*parse_redirection(t_token **tokens, t_env *env_list,
+		int *flag_redir)
 {
 	t_redir_node	*node;
-	redir_type		type;
+	t_redir_type	type;
 	char			*filename;
 
 	node = 0;
@@ -120,9 +120,9 @@ t_redir_node	*parse_redirection(t_token **tokens, t_env *env_list, int *flag_red
 	return (node);
 }
 
-redir_type	get_redir_type(t_token **tokens)
+t_redir_type	get_redir_type(t_token **tokens)
 {
-	redir_type	type;
+	t_redir_type	type;
 
 	if (!ft_strncmp((*tokens)->str, "<", 1))
 		type = IN;

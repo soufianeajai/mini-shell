@@ -96,7 +96,8 @@ char	**ft_split(char const *s, char c)
 	j = 0;
 	if (!s)
 		return (NULL);
-	if (!(p = (char **)malloc(sizeof(char *) * (count_w(s, c) + 1))))
+	p = (char **)malloc(sizeof(char *) * (count_w(s, c) + 1));
+	if (!p)
 		return (NULL);
 	while (s[i])
 	{
@@ -105,8 +106,6 @@ char	**ft_split(char const *s, char c)
 		if (!s[i])
 			break ;
 		p[j] = word(s + i, c);
-		if (!p[j])
-			return (free_all(p, j));
 		j++;
 		while (s[i] && s[i] != c)
 			i++;

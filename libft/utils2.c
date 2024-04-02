@@ -1,8 +1,8 @@
 #include "../minishell.h"
 
-int ft_strchr(const char *s, int c)
+int	ft_strchr(const char *s, int c)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (s[i])
@@ -14,24 +14,24 @@ int ft_strchr(const char *s, int c)
 	return (0);
 }
 
-void ft_putstr_fd(char *s, int fd)
+void	ft_putstr_fd(char *s, int fd)
 {
 	if (!s || fd < 0)
-		return;
+		return ;
 	write(fd, s, ft_strlen(s));
 }
 
-size_t count_strings(char **strings)
+size_t	count_strings(char **strings)
 {
-	size_t count;
+	size_t	count;
 
 	count = 0;
 	while (strings[count] != NULL)
 		count++;
-	return count;
+	return (count);
 }
 
-int ft_isspace(char c)
+int	ft_isspace(char c)
 {
 	if ((c >= '\t' && c <= '\r') || c == ' ')
 		return (1);
@@ -41,6 +41,7 @@ int ft_isspace(char c)
 void	*free_str_list(char **str)
 {
 	int	i;
+
 	i = 0;
 	if (!str)
 		return (0);

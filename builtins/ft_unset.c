@@ -65,7 +65,7 @@ int	ft_unset(t_env **env, t_cmd_node *cmd)
 	int	i;
 
 	i = 1;
-	if (cmd && cmd->arguments && !ft_strcmp(cmd->arguments[1],"_"))
+	if (cmd && cmd->arguments && !ft_strcmp(cmd->arguments[1], "_"))
 		return (0);
 	while (cmd->arguments[i])
 	{

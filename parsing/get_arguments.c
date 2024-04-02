@@ -12,7 +12,8 @@ char	**get_arguments(char *exec, char **arguments, t_token **tokens)
 	i = 0;
 	len = count_len(arguments);
 	len_args = count_args(*tokens) + len;
-	if (!(args = malloc(sizeof(char *) * (len_args + 2))))
+	args = malloc(sizeof(char *) * (len_args + 2));
+	if (!args)
 		return (0);
 	args[0] = ft_strdup(exec);
 	while (++i < len)

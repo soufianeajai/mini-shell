@@ -26,7 +26,6 @@ void	expand_env(t_token **token, t_env *env_list)
 	}
 }
 
-
 char	*handle_expandable(char **input, t_env *env_list)
 {
 	char	*key;
@@ -74,7 +73,8 @@ char	*get_env_value(char *input, t_env *env_list)
 		}
 		else
 			value = get_value(&input, 0);
-		result = ft_strjoin(result, value, 3);
+		result = ft_strjoin(result, value, 1);
+		ft_free(&value);
 	}
 	return (result);
 }

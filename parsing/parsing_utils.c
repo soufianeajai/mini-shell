@@ -17,7 +17,7 @@ t_pipe_node	*create_pipe_node(t_tree_node *left, t_tree_node *right)
 	node->right = right;
 	return (node);
 }
-t_tree_node	*add_to_tree(void *node, node_type type)
+t_tree_node	*add_to_tree(void *node, t_node_type type)
 {
 	t_tree_node	*ret_node;
 

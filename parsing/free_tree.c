@@ -7,7 +7,7 @@ void	*free_tree_util(char *executable, char **arguments, int flag_env,
 			head_redir));
 	return (0);
 }
-void free_cmd_node(t_cmd_node *cmd)
+void	free_cmd_node(t_cmd_node *cmd)
 {
 	unlink(".her_doc.c");
 	if (cmd)
@@ -20,7 +20,7 @@ void free_cmd_node(t_cmd_node *cmd)
 		cmd = 0;
 	}
 }
-void free_redir_node(t_redir_node *redir)
+void	free_redir_node(t_redir_node *redir)
 {
 	if (redir)
 	{
@@ -34,7 +34,7 @@ void free_redir_node(t_redir_node *redir)
 		redir = 0;
 	}
 }
-void free_pipe_node(t_pipe_node *pipe)
+void	free_pipe_node(t_pipe_node *pipe)
 {
 	if (pipe)
 	{
@@ -46,10 +46,10 @@ void free_pipe_node(t_pipe_node *pipe)
 		pipe = 0;
 	}
 }
-void free_tree(t_tree_node *tree)
+void	free_tree(t_tree_node *tree)
 {
 	if (!tree)
-		return;
+		return ;
 	if (tree)
 	{
 		if (tree->type == CMD)

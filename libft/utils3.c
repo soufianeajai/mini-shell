@@ -2,12 +2,12 @@
 
 int	ft_strcmp(const char *s1, const char *s2)
 {
-    int	i;
+	int	i;
 
-    i = 0;
-    while (s1[i] && s2[i] && s1[i] == s2[i])
-        i++;
-    return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+	i = 0;
+	while (s1[i] && s2[i] && s1[i] == s2[i])
+		i++;
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
 
 void	*ft_memset(void *s, int c, size_t len)
@@ -25,10 +25,9 @@ void	ft_bzero(void *s, size_t n)
 	ft_memset(s, 0, n);
 }
 
-
 static int	my_len(int nbr)
 {
-	int		len;
+	int	len;
 
 	len = 0;
 	if (nbr <= 0)
@@ -43,9 +42,9 @@ static int	my_len(int nbr)
 
 char	*ft_itoa(int n)
 {
-	char			*str;
-	int				nbr_elements;
-	long			nbr;
+	char	*str;
+	int		nbr_elements;
+	long	nbr;
 
 	nbr = n;
 	nbr_elements = my_len(n);
@@ -56,7 +55,7 @@ char	*ft_itoa(int n)
 	if (nbr == 0)
 		str[0] = '0';
 	else if (nbr < 0)
-	{	
+	{
 		nbr = -nbr;
 		str[0] = '-';
 	}
@@ -76,27 +75,27 @@ void	ft_free(char **str)
 	}
 }
 
-char *ft_substr(char *s, unsigned int start, size_t len)
+char	*ft_substr(char *s, unsigned int start, size_t len)
 {
-    char *str;
-    size_t i;
+	char	*str;
+	size_t	i;
 
-    i = 0;
-    if (!s)
-        return (NULL);
-    if (start > ft_strlen(s))
-        return (ft_strdup(""));
-    str = (char *)malloc(sizeof(char) * (len + 1));
-    if (!str)
-        return (NULL);
-    while (i < len && s[start])
-    {
-        str[i] = s[start];
-        i++;
-        start++;
-    }
-    str[i] = '\0';
-    return (str);
+	i = 0;
+	if (!s)
+		return (NULL);
+	if (start > ft_strlen(s))
+		return (ft_strdup(""));
+	str = (char *)malloc(sizeof(char) * (len + 1));
+	if (!str)
+		return (NULL);
+	while (i < len && s[start])
+	{
+		str[i] = s[start];
+		i++;
+		start++;
+	}
+	str[i] = '\0';
+	return (str);
 }
 
 int	ft_isdigit(int c)

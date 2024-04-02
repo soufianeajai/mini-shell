@@ -75,7 +75,7 @@ int main(int ac, char **av, char **env)
             add_history(input);       
         else 
             continue;  
-        SplitTokens(input, &tokens);
+        split_tokens(input, &tokens);
         tokenisation(&tokens,input);
 	    handling_qoutes(&tokens);
         temp = tokens;
@@ -84,9 +84,9 @@ int main(int ac, char **av, char **env)
         if (tree)
         {
             if (tree->type ==CMD)
-                exec_CMD(tree, &env_list);
+                exec_cmd(tree, &env_list);
             else if (tree->type == REDIR)
-                exec_REDIR(tree, &env_list);
+                exec_redir(tree, &env_list);
             else 
                 execute(tree, &env_list);   
         }
@@ -95,7 +95,7 @@ int main(int ac, char **av, char **env)
         
         free(input);
        
-//        system("leaks minishell");
+        system("leaks minishell");
           // break;
     }
 }

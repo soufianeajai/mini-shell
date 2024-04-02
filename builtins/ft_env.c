@@ -36,7 +36,5 @@ int	ft_env(t_env *env)
 		}
 		tmp = tmp->next;
 	}
-	//if (!tmp)
-	//ft_lstadd_back_env(env , int index, char *str)
 	return (0);
 }

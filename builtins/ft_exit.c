@@ -12,11 +12,11 @@
 
 #include "builtin.h"
 
-void shell_level(t_env **env)
+void	shell_level(t_env **env)
 {
-	int i;
-	t_env *tmp;
-	int shl;
+	int		i;
+	t_env	*tmp;
+	int		shl;
 
 	tmp = *env;
 	i = 0;
@@ -27,7 +27,7 @@ void shell_level(t_env **env)
 			shl = my_atoi(tmp->value);
 			ft_free(&tmp->value);
 			tmp->value = ft_itoa(shl - 1);
-			break;
+			break ;
 		}
 		tmp = tmp->next;
 	}
@@ -50,55 +50,41 @@ int	ft_error_exit(char *arg, int flag, t_env **env)
 	}
 }
 
-static void	util_exit(t_cmd_node *cmd, int *i,t_env **env)
+static void	util_exit(t_cmd_node *cmd, int *i, t_env **env)
 {
 	while (cmd->arguments[1][*i])
 	{
 		if (!ft_isdigit(cmd->arguments[1][*i]) && cmd->arguments[1][*i] != '-')
-			exit(ft_error_exit(cmd->arguments[1], 1,env));
+			exit(ft_error_exit(cmd->arguments[1], 1, env));
 		i++;
 	}
 }
-
-
 
 int	ft_exit(t_cmd_node *cmd, t_env **env)
 {
 	int	i;
 
 	i = 0;
-	if (count_len(cmd->arguments) == 1 )
+	if (count_len(cmd->arguments) == 1)
 	{
 		shell_level(env);
 		free_env_list(env);
-		system("leaks minishell");
 		ft_putstr_fd("exit\n", 2);
 		exit(EXIT_CODE);
 	}
 	if (cmd->arguments[1])
 	{
-		util_exit(cmd, &i,env);
+		util_exit(cmd, &i, env);
 		if (cmd->arguments[2])
 		{
-			ft_error_exit(cmd->arguments[1], 0,env);
+			ft_error_exit(cmd->arguments[1], 0, env);
 			return (1);
 		}
 		if (my_atoi(cmd->arguments[1]) >= SIZE_MAX)
-			exit(ft_error_exit(cmd->arguments[1], 1,env));
+			exit(ft_error_exit(cmd->arguments[1], 1, env));
 		EXIT_CODE = my_atoi(cmd->arguments[1]) % 256;
 		shell_level(env);
 		exit(EXIT_CODE);
 	}
 	return (0);
 }
-// 
-//  !cmd for handle signal
-// system("leaks minishell");
-
-// while (cmd->arguments[1][i])
-// 		{
-// 			if (!ft_isdigit(cmd->arguments[1][i])
-// 				&& cmd->arguments[1][i] != '-')
-// 				exit(ft_error_exit(cmd->arguments[1], 1));
-// 			i++;
-// 		}
