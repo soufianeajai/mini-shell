@@ -7,6 +7,12 @@ void	ignore(int sig)
 	EXIT_CODE = 130;
 	(void)sig;
 }
+
+void	sig_quit()
+{
+	printf("^\\Quit: 3\n");
+	EXIT_CODE = 131;
+}
 void	check_her_doc(t_token **token, t_env *env_list)
 {
 	t_redir_node	*redir;

@@ -13,12 +13,15 @@
 #include "../builtins/builtin.h"
 #include "execute.h"
 
+
+
 void	exec_cmd(t_tree_node *tree, t_env **env)
 {
 	int	status;
 	int	pid;
 
 	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	if (is_builtin((t_cmd_node *)(tree->node)))
 	{
 		EXIT_CODE = execute_builtin(env, (t_cmd_node *)(tree->node));
@@ -28,13 +31,15 @@ void	exec_cmd(t_tree_node *tree, t_env **env)
 	if (pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		exit(execute_simple_cmd(env, (t_cmd_node *)(tree->node)));
 	}
 	else
 	{
 		signal(SIGINT, ignore);
+		signal(SIGQUIT, sig_quit);
 		waitpid(pid, &status, 0);
-		if (EXIT_CODE != 130)
+		if (EXIT_CODE != 130 && EXIT_CODE != 131)
 			EXIT_CODE = WEXITSTATUS(status);
 	}
 }
@@ -56,6 +61,7 @@ void	exec_redir(t_tree_node *tree, t_env **env)
 	else
 	{
 		signal(SIGINT, ignore);
+		signal(SIGQUIT, sig_quit);
 		waitpid(pid, &status, 0);
 		EXIT_CODE = WEXITSTATUS(status);
 	}
@@ -98,6 +104,7 @@ int	execute_pipe(t_pipe_node *pipe_node, t_env **env)
 	if (pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		execute_child(fd, 1, pipe_node, env);
 	}
 	signal(SIGINT, SIG_IGN);
@@ -107,18 +114,20 @@ int	execute_pipe(t_pipe_node *pipe_node, t_env **env)
 	if (pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		execute_child(fd, 0, pipe_node, env);
 	}
 	close(fd[0]);
 	close(fd[1]);
 	signal(SIGINT, ignore);
+	signal(SIGQUIT, sig_quit);
 	while (1)
 	{
 		pid = wait(&status);
 		if (pid <= 0)
 			break ;
 		if (pid == last_pid)
-			if (EXIT_CODE != 130)
+			if (EXIT_CODE != 130 && EXIT_CODE != 131)
 				EXIT_CODE = WEXITSTATUS(status);
 	}
 	return (EXIT_CODE);

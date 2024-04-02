@@ -3,7 +3,7 @@
 void	*free_tree_util(char *executable, char **arguments, int flag_env,
 		t_redir_node *head_redir)
 {
-	free_tree(combine_cmd(create_cmd_node(executable, arguments, flag_env),
+	free_tree(combine_cmd(create_cmd_node(executable, arguments, flag_env, 1),
 			head_redir));
 	return (0);
 }
