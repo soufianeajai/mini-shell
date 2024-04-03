@@ -14,7 +14,7 @@ void	expand_env(t_token **token, t_env *env_list)
 		if (temp->type == ENV)
 		{
 			temp_str = &temp->str;
-			value = get_env_value(temp->str, env_list);
+			value = get_env_value(temp->str, env_list,temp->str_qoutes);
 			ft_free(temp_str);
 			if (value && *value == '\0')
 				ft_free(&value);
@@ -33,6 +33,7 @@ char	*handle_expandable(char **input, t_env *env_list)
 
 	key = 0;
 	value = 0;
+	
 	if (**input == '$' && isalpha_num(*((*input) + 1)))
 	{
 		if (is_alpha(*((*input) + 1)))
@@ -50,17 +51,79 @@ char	*handle_expandable(char **input, t_env *env_list)
 	}
 	return (value);
 }
-char	*get_env_value(char *input, t_env *env_list)
+
+
+
+int	checkfor_qoutes(char *tab_qoutes,int *i)
+{
+	printf("------>%s",tab_qoutes);
+	while (tab_qoutes[*i])
+	{
+		if (tab_qoutes[*i] == '\'')
+		{
+			*i = *i + 1;
+			while (tab_qoutes[*i] && tab_qoutes[*i] != '\'')
+				*i = *i + 1;
+			if (tab_qoutes[*i] && tab_qoutes[*i] == '\'')
+				*i = *i + 1;
+			printf("1 - i : %d\n",*i);
+			return (0);
+		}
+		else if (tab_qoutes[*i] == '\"')
+		{
+			*i = *i + 1;
+			while (tab_qoutes[*i] && tab_qoutes[*i] != '\"')
+				*i = *i + 1;
+			if (tab_qoutes[*i] && tab_qoutes[*i] == '\"')
+			*i = *i + 1;
+			printf("2 - i : %d\n",*i);
+			return (1);
+		}
+		else
+		{
+			*i = *i + 1;
+			printf("3 - i : %d\n",*i);
+			return (1);
+		}
+		// else if (tab_qoutes[j] == '\"' && j == 0)
+		// {
+		// 	while(tab_qoutes[j] && tab_qoutes[++j] != '\"')
+		// 		j++;
+		// 	// tab[j] == "
+		// 	*i += j + 1;
+		// 	printf("i : %d\n",*i);
+		// 	return (1);
+		// }
+		// else if (tab_qoutes[j] && tab_qoutes[j] == '\'' && j == 0)
+		// {
+		// 	while(tab_qoutes[j] == '\"')
+		// 	{
+		// 		(*i)++;
+		// 		j++;
+		// 	}
+		// 	return (0);
+		// }
+		// j++;
+	}
+	return (1);
+}
+char	*get_env_value(char *input, t_env *env_list,char *tab_qoutes)
 {
 	char	*result;
 	char	*value;
+	int i = 0;
 
 	result = NULL;
 	value = NULL;
 	while (input && *input)
 	{
-		if (*input == '$' && isalpha_num(*(input + 1)))
+		//printf("\n\ninput : %s , qoutes : %s  -- %d\n\n",input,tab_qoutes,checkfor_qoutes(tab_qoutes,&i));
+		if (*input == '$' && isalpha_num(*(input + 1)) && checkfor_qoutes(tab_qoutes,&i))
+			
 			value = handle_expandable(&input, env_list);
+		
+		
+		
 		else if (*input == '$' && *(input + 1) == '?')
 		{
 			value = ft_itoa(EXIT_CODE);

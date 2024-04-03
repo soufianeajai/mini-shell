@@ -17,6 +17,7 @@ t_token	*create_node(int len, t_node_type type, int index)
 	new->index = index;
 	new->next = NULL;
 	new->prev = NULL;
+	new->str_qoutes = NULL;
 	return (new);
 }
 

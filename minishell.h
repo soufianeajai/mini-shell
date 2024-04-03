@@ -30,6 +30,7 @@ typedef struct s_token
 	int				len;
 	int				index;
 	t_node_type		type;
+	char			*str_qoutes;
 	char			*str;
 	struct s_token	*prev;
 	struct s_token	*next;
@@ -81,5 +82,6 @@ char				*mystrdup(t_token *tokens, char *input);
 void				ft_strlcpy(char *dst, const char *src, size_t dstsize);
 void				handling_qoutes(t_token **t);
 int					is_qoutes(char c, t_token **tok);
+int 				detect_qts_exist(char *str);
 
 #endif
