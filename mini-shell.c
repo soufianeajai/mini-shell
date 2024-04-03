@@ -28,19 +28,17 @@ void sig_handler(int signal)
         rl_on_new_line();
         rl_replace_line("", 0);   
         rl_redisplay();
+        EXIT_CODE = 1;
     }
     if (signal == SIGQUIT)
         rl_redisplay();
 }
 void    handle_signals()
 {
-    // Ctrl+C signal
-        if (signal(SIGINT, sig_handler) == SIG_ERR)
-            ft_putstr_fd("Error: signal\n", 2);
-    // Ctrl+\ signal        
-        if (signal(SIGQUIT, sig_handler) == SIG_ERR)
-            ft_putstr_fd("Error: signal\n", 2);
-
+    if (signal(SIGINT, sig_handler) == SIG_ERR)
+        ft_putstr_fd("Error: signal\n", 2);       
+    if (signal(SIGQUIT, sig_handler) == SIG_ERR)
+        ft_putstr_fd("Error: signal\n", 2);
 }
 
 
@@ -55,7 +53,7 @@ int main(int ac, char **av, char **env)
 
     (void)ac;
     (void)av;
-    EXIT_CODE = 1;
+    EXIT_CODE = 0;
     env_list = NULL;
     flag_first = 0;
     env_copy(&env_list, env);

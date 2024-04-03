@@ -13,8 +13,7 @@
 #include "../builtins/builtin.h"
 #include "execute.h"
 
-
-
+// execute a unique command
 void	exec_cmd(t_tree_node *tree, t_env **env)
 {
 	int	status;
@@ -36,20 +35,18 @@ void	exec_cmd(t_tree_node *tree, t_env **env)
 	}
 	else
 	{
-		signal(SIGINT, ignore);
-		signal(SIGQUIT, sig_quit);
 		waitpid(pid, &status, 0);
-		if (EXIT_CODE != 130 && EXIT_CODE != 131)
-			EXIT_CODE = WEXITSTATUS(status);
+		check_exit_code(status);
 	}
 }
-
+// execute a command that have redirections
 void	exec_redir(t_tree_node *tree, t_env **env)
 {
 	int	status;
 	int	pid;
 
 	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	if (is_builtin((t_cmd_node *)(tree->node)))
 	{
 		EXIT_CODE = execute_builtin(env, (t_cmd_node *)(tree->node));
@@ -57,17 +54,21 @@ void	exec_redir(t_tree_node *tree, t_env **env)
 	}
 	pid = fork();
 	if (pid == 0)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		exit(execute_redir(env, (t_redir_node *)(tree->node)));
+	}
 	else
 	{
-		signal(SIGINT, ignore);
-		signal(SIGQUIT, sig_quit);
 		waitpid(pid, &status, 0);
-		EXIT_CODE = WEXITSTATUS(status);
+		check_exit_code(status);
 	}
 }
 void	execute_child(int *fd, int flag, t_pipe_node *pipe_node, t_env **env)
 {
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	if (flag)
 	{
 		close(fd[0]);
@@ -91,45 +92,60 @@ void	error_pipe(int *fd)
 		exit(1);
 	}
 }
-int	execute_pipe(t_pipe_node *pipe_node, t_env **env)
+void	check_exit_code(int status)
 {
-	int	pid;
-	int	status;
-	int	fd[2];
-	int	last_pid;
+	if (WIFEXITED(status))
+		EXIT_CODE = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+		EXIT_CODE = 130;
+	else if (WIFSIGNALED(status) && WTERMSIG(status) == SIGQUIT)
+	{
+		ft_putstr_fd("^\\Quit: 3\n", 2);
+		EXIT_CODE = 131;
+	}
+}
+int	exit_pipe(int last_pid)
+{
+	int pid;
+	int status;
 
-	error_pipe(fd);
-	signal(SIGINT, SIG_IGN);
-	pid = fork();
-	if (pid == 0)
-	{
-		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_DFL);
-		execute_child(fd, 1, pipe_node, env);
-	}
-	signal(SIGINT, SIG_IGN);
-	pid = fork();
-	if (pid != 0)
-		last_pid = pid;
-	if (pid == 0)
-	{
-		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_DFL);
-		execute_child(fd, 0, pipe_node, env);
-	}
-	close(fd[0]);
-	close(fd[1]);
-	signal(SIGINT, ignore);
-	signal(SIGQUIT, sig_quit);
-	while (1)
+	pid = 0;
+	status = 0;
+	if (last_pid)
 	{
 		pid = wait(&status);
 		if (pid <= 0)
-			break ;
+			return (0);
 		if (pid == last_pid)
-			if (EXIT_CODE != 130 && EXIT_CODE != 131)
-				EXIT_CODE = WEXITSTATUS(status);
+			check_exit_code(status);
 	}
+	return (1);
+}
+
+int	execute_pipe(t_pipe_node *pipe_node, t_env **env)
+{
+	int	pid;
+	int	fd[2];
+	int	last_pid;
+
+	last_pid = 0;
+	error_pipe(fd);
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+	pid = fork();
+	if (pid == 0)
+		execute_child(fd, 1, pipe_node, env);
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+	pid = fork();
+	if (pid == 0)
+		execute_child(fd, 0, pipe_node, env);
+	last_pid = pid;
+	close(fd[0]);
+	close(fd[1]);
+	while (1)
+		if (!exit_pipe(last_pid))
+			break;
 	return (EXIT_CODE);
 }
 

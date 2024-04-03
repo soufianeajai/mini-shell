@@ -99,5 +99,5 @@ void					free_pipe_node(t_pipe_node *pipe);
 void					free_tree(t_tree_node *tree);
 void					ignore(int sig);
 int						is_special_char(char *c, int *flag_redir);
-
+void enable_raw_mode(void);
 #endif

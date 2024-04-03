@@ -150,7 +150,7 @@ int	execute_simple_cmd(t_env **env, t_cmd_node *cmd)
 {
 	char	*path_cmd;
 
-	signal(SIGINT, SIG_DFL);
+//	signal(SIGINT, SIG_DFL);
 	if (cmd->executable == NULL)
 		return (0);
 	if (is_builtin(cmd))
@@ -180,7 +180,7 @@ int	execute_redir(t_env **env, t_redir_node *cmd)
 	int				fd_out;
 	t_redir_node	*tmp;
 
-	signal(SIGINT, SIG_DFL);
+//	signal(SIGINT, SIG_DFL);
 	fd_in = dup(0);
 	fd_out = dup(1);
 	while (cmd)

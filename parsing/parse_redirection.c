@@ -2,15 +2,15 @@
 #include "parsing.h"
 #include <fcntl.h>
 
-void	ignore(int sig)
+void	ignore()
 {
+	ft_putstr_fd("\n", 1);
 	EXIT_CODE = 130;
-	(void)sig;
 }
 
 void	sig_quit()
 {
-	printf("^\\Quit: 3\n");
+	ft_putstr_fd("^\\Quit: 3\n", 2);
 	EXIT_CODE = 131;
 }
 void	check_her_doc(t_token **token, t_env *env_list)
