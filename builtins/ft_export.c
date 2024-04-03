@@ -119,12 +119,27 @@ void add_env(t_env **env, t_env *new)
 	temp->next = new;
 }
 
+t_env *get_element(char *key, char *value)
+{
+	t_env	*new;
+
+	new = malloc(sizeof(t_env));
+	if (!new)
+		return (0);
+	new->key = ft_strjoin("declare -x ", ft_strdup(key), 2);
+	new->value = ft_strdup(value);
+	new->next = 0;
+	return (new);
+}
+
 t_env	**copy_env(t_env **env)
 {
 	t_env	**export;
 	t_env	*temp;
-	t_env	*new;
+//	t_env	*new;
+	int		oldpwd_flag;
 
+	oldpwd_flag = 0;
 	export = malloc(sizeof(t_env *));
 	if (!export)
 		return (0);
@@ -132,14 +147,20 @@ t_env	**copy_env(t_env **env)
 	temp = *env;
 	while (temp)
 	{
-		new = malloc(sizeof(t_env));
-		if (!new)
-			return (0);
-		new->key = ft_strjoin("declare -x ", ft_strdup(temp->key), 2);
-		new->value = ft_strdup(temp->value);
-		new->next = 0;
-		add_env(export, new);
+		if (ft_strcmp(temp->key, "_") == 0)
+		{
+			temp = temp->next;
+			continue ;
+		}
+		if (ft_strcmp(temp->key, "OLDPWD") == 0)
+			oldpwd_flag = 1;
+		add_env(export, get_element(temp->key, temp->value));
 		temp = temp->next;
+	}
+	if (!oldpwd_flag)
+	{
+	//	new = get_element("OLDPWD", "");
+		add_env(export, get_element("OLDPWD", ""));
 	}
 	return (export);
 }
