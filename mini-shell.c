@@ -40,7 +40,77 @@ void    handle_signals()
     if (signal(SIGQUIT, sig_handler) == SIG_ERR)
         ft_putstr_fd("Error: signal\n", 2);
 }
+char *get_last_arg(char **arguments)
+{
+    int i;
+    char *cmd;
+    i = 0;
+    cmd = 0;
+    while (arguments[i])
+        i++;
+    cmd = ft_strdup(arguments[i - 1]);
+    return (cmd);
+}
+t_cmd_node *get_cmd_node(t_redir_node *redir)
+{
+    t_redir_node *tmp;
+    
+    while (redir)
+    {
+        tmp = redir;
+        redir = redir->next;
+    }
+    return (tmp->cmd);
+}
 
+char *get_node(t_tree_node *tree)
+{
+    char *cmd;
+    t_cmd_node *cmd_node;
+
+    cmd = 0;
+    if (tree->type == CMD)
+    {
+        cmd_node = (t_cmd_node *)tree->node;
+        if (cmd_node->executable && !(cmd_node->arguments))
+            cmd = ft_strdup(cmd_node->executable);
+        else if (cmd_node->arguments)
+            cmd = get_last_arg(cmd_node->arguments);
+    }
+    else if (tree->type == REDIR)
+    {
+        cmd_node = get_cmd_node(((t_redir_node *)tree->node));
+        if (cmd_node->executable && !(cmd_node->arguments))
+            cmd = ft_strdup(cmd_node->executable);
+        else
+            cmd = get_last_arg(cmd_node->arguments);
+    }
+    else
+        cmd = 0;
+    return (cmd);
+}
+
+
+void    update_underscore_var(t_env **env_list, t_tree_node *node)
+{
+    t_env   *temp;
+    char    *cmd;
+
+    if (node == NULL)
+        return ;
+    cmd = get_node(node);
+    temp = *env_list;
+    while (temp)
+    {
+        if (ft_strncmp(temp->key, "_", 2) == 0)
+        {
+            free(temp->value);
+            temp->value = cmd;
+            break;
+        }
+        temp = temp->next;
+    }
+}
 
 // optimize lstadd_back
 int main(int ac, char **av, char **env)
@@ -89,6 +159,7 @@ int main(int ac, char **av, char **env)
             else 
                 execute(tree, &env_list);   
         }
+        update_underscore_var(&env_list, tree);
         free_tree(tree);
         free_tokens(&temp);
         

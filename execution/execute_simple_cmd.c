@@ -150,7 +150,6 @@ int	execute_simple_cmd(t_env **env, t_cmd_node *cmd)
 {
 	char	*path_cmd;
 
-//	signal(SIGINT, SIG_DFL);
 	if (cmd->executable == NULL)
 		return (0);
 	if (is_builtin(cmd))

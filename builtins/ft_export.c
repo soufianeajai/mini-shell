@@ -104,16 +104,56 @@ int	handling_args(char **arg, t_env **env)
 	}
 	return (flag);
 }
+void add_env(t_env **env, t_env *new)
+{
+	t_env	*temp;
+
+	if (!*env)
+	{
+		*env = new;
+		return ;
+	}
+	temp = *env;
+	while (temp->next)
+		temp = temp->next;
+	temp->next = new;
+}
+
+t_env	**copy_env(t_env **env)
+{
+	t_env	**export;
+	t_env	*temp;
+	t_env	*new;
+
+	export = malloc(sizeof(t_env *));
+	if (!export)
+		return (0);
+	*export = 0;
+	temp = *env;
+	while (temp)
+	{
+		new = malloc(sizeof(t_env));
+		if (!new)
+			return (0);
+		new->key = ft_strjoin("declare -x ", ft_strdup(temp->key), 2);
+		new->value = ft_strdup(temp->value);
+		new->next = 0;
+		add_env(export, new);
+		temp = temp->next;
+	}
+	return (export);
+}
 
 int	ft_export(t_env **env, t_cmd_node *cmd)
 {
 	int	i;
-
+	t_env	**export;
 	i = 1;
-	//t_export *export;
+	export = copy_env(env);
 	if (cmd && cmd->arguments && cmd->arguments[1] == NULL)
 	{
-		//ft_env(*env);
+		//free export in exit 
+		ft_env(*export);
 		return (0);
 	}
 	return (handling_args(cmd->arguments, env));
