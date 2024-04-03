@@ -80,8 +80,8 @@ void	handling_qoutes_util(int *i, int *flag, t_token *tmp)
 {
 	if (tmp->str[*i] && *flag == is_qoutes(tmp->str[*i], &tmp))
 	{
-		i++;
-		flag = 0;
+		*i = *i + 1;
+		*flag = 0;
 	}
 }
 
