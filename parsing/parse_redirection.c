@@ -2,21 +2,21 @@
 #include "parsing.h"
 #include <fcntl.h>
 
-void	ignore()
+void	ignore(void)
 {
 	ft_putstr_fd("\n", 1);
 	EXIT_CODE = 130;
 }
 
-void	sig_quit()
+void	sig_quit(void)
 {
 	ft_putstr_fd("^\\Quit: 3\n", 2);
 	EXIT_CODE = 131;
 }
 void	check_her_doc(t_token **token, t_env *env_list)
 {
-	char			*input;
-	int				fd;
+	char	*input;
+	int		fd;
 
 	signal(SIGINT, SIG_DFL);
 	fd = open(".her_doc.c", O_RDWR | O_CREAT | O_TRUNC, 0644);
@@ -31,15 +31,13 @@ void	check_her_doc(t_token **token, t_env *env_list)
 			break ;
 		}
 		if (*token && (*token)->type_qoutes == -1)
-			input = get_env_value(input, env_list,NULL);
+			input = get_env_value(input, env_list, NULL);
 		write(fd, ft_strjoin(input, "\n", 0), ft_strlen(input) + 1);
 		ft_free(&input);
 	}
 	close(fd);
 	exit(0);
 }
-
-
 
 t_redir_node	*create_redir_node(t_redir_type type)
 {

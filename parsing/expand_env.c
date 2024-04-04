@@ -86,6 +86,17 @@ int	check_qts(char *tab_qoutes, int i, int type, int *len)
 	return (0);
 }
 
+int	skip_2(int flag_dollar, int len_pair, int *i)
+{
+	if (len_pair == 0 && flag_dollar == 0)
+		*i = *i + 1;
+	else if (flag_dollar == 0)
+		*i = len_pair + 1;
+	else
+		return (1);
+	return (0);
+}
+
 void	skip(char *tab_qoutes, int *i)
 {
 	int	len_pair;
@@ -98,49 +109,51 @@ void	skip(char *tab_qoutes, int *i)
 		if (tab_qoutes[*i] == '\'')
 		{
 			flag_dollar = check_qts(tab_qoutes, *i, 1, &len_pair);
-			if (len_pair == 0 && flag_dollar == 0)
-				*i = *i + 1;
-			else if (flag_dollar == 0)
-				*i = len_pair + 1;
-			else
+			if (skip_2(flag_dollar, len_pair, i))
 				return ;
 		}
 		if (tab_qoutes[*i] == '\"')
 		{
 			flag_dollar = check_qts(tab_qoutes, *i, 2, &len_pair);
-			if (len_pair == 0 && flag_dollar == 0)
-				*i = *i + 1;
-			else if (flag_dollar == 0)
-				*i = len_pair + 1;
-			else
+			if (skip_2(flag_dollar, len_pair, i))
 				return ;
 		}
 		*i = *i + 1;
 	}
 	return ;
 }
+void	get_next(char *tab_qoutes, int *i, int type)
+{
+	*i = *i + 1;
+	if (type == 1)
+	{
+		while (tab_qoutes[*i] && tab_qoutes[*i] != '\'')
+			*i = *i + 1;
+		if (tab_qoutes[*i] && tab_qoutes[*i] == '\'')
+			*i = *i + 1;
+	}
+	else
+	{
+		while (tab_qoutes[*i] && tab_qoutes[*i] != '\"')
+			*i = *i + 1;
+		if (tab_qoutes[*i] && tab_qoutes[*i] == '\"')
+			*i = *i + 1;
+	}
+}
 
 int	checkfor_qoutes(char *tab_qoutes, int *i)
 {
 	while (tab_qoutes[*i])
 	{
-			skip(tab_qoutes, i);
+		skip(tab_qoutes, i);
 		if (tab_qoutes[*i] && tab_qoutes[*i] == '\'')
 		{
-			*i = *i + 1;
-			while (tab_qoutes[*i] && tab_qoutes[*i] != '\'')
-				*i = *i + 1;
-			if (tab_qoutes[*i] && tab_qoutes[*i] == '\'')
-				*i = *i + 1;
+			get_next(tab_qoutes, i, 1);
 			return (0);
 		}
 		else if (tab_qoutes[*i] && tab_qoutes[*i] == '\"')
 		{
-			*i = *i + 1;
-			while (tab_qoutes[*i] && tab_qoutes[*i] != '\"')
-				*i = *i + 1;
-			if (tab_qoutes[*i] && tab_qoutes[*i] == '\"')
-				*i = *i + 1;
+			get_next(tab_qoutes, i, 2);
 			return (1);
 		}
 		else
@@ -150,6 +163,12 @@ int	checkfor_qoutes(char *tab_qoutes, int *i)
 		}
 	}
 	return (1);
+}
+
+char	*handle_dollar(char **input)
+{
+	(*input)++;
+	return (ft_strjoin("$", get_value(input, 0), 2));
 }
 char	*get_env_value(char *input, t_env *env_list, char *tab_qoutes)
 {
@@ -171,10 +190,7 @@ char	*get_env_value(char *input, t_env *env_list, char *tab_qoutes)
 			input = input + 2;
 		}
 		else if (*input == '$')
-		{
-			input++;
-			value = ft_strjoin("$", get_value(&input, 0), 2);
-		}
+			value = handle_dollar(&input);
 		else
 			value = get_value(&input, 0);
 		result = ft_strjoin(result, value, 1);

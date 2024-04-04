@@ -13,7 +13,6 @@
 #include "../builtins/builtin.h"
 #include "execute.h"
 
-// execute a unique command
 void	exec_cmd(t_tree_node *tree, t_env **env)
 {
 	int	status;
@@ -39,7 +38,6 @@ void	exec_cmd(t_tree_node *tree, t_env **env)
 		check_exit_code(status);
 	}
 }
-// execute a command that have redirections
 void	exec_redir(t_tree_node *tree, t_env **env)
 {
 	int	status;
@@ -106,8 +104,8 @@ void	check_exit_code(int status)
 }
 int	exit_pipe(int last_pid)
 {
-	int pid;
-	int status;
+	int	pid;
+	int	status;
 
 	pid = 0;
 	status = 0;
@@ -145,7 +143,7 @@ int	execute_pipe(t_pipe_node *pipe_node, t_env **env)
 	close(fd[1]);
 	while (1)
 		if (!exit_pipe(last_pid))
-			break;
+			break ;
 	return (EXIT_CODE);
 }
 

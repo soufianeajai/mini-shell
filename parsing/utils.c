@@ -1,7 +1,8 @@
 #include "../environnement/env.h"
 #include "parsing.h"
 
-char	*parse_exec(t_token **tokens, char *executable, int *flag_env, int *flag_quote)
+char	*parse_exec(t_token **tokens, char *executable, int *flag_env,
+		int *flag_quote)
 {
 	char	*exec;
 

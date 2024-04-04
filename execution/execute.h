@@ -26,7 +26,7 @@ int		execute_tree(t_tree_node *tree, t_env **env);
 
 int		util_redir(t_redir_node *cmd, t_redir_type type, int fd_in, int fd_out);
 int		ft_error(char *cmd, char *error);
-void	sig_quit();
+void	sig_quit(void);
 void	check_exit_code(int status);
 
 #endif

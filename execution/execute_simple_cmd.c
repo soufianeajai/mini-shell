@@ -59,7 +59,7 @@ int	check_type(int flag, char *path, struct stat path_stat, char *cmd)
 int	check_path(char *path, char *cmd, int flag)
 {
 	struct stat	path_stat;
-	//printf("path: %s %s\n", path,cmd);
+
 	if (stat(path, &path_stat) == -1 && (ft_strchr(cmd, '/') || (!ft_strchr(cmd,
 					'/') && cmd[0] == '/')))
 	{
@@ -134,7 +134,6 @@ int	handle_null_path(t_env **env, t_cmd_node *cmd)
 }
 int	handle_env(int flag_env, char *cmd, char *path_cmd)
 {
-	//printf("flag_env: %d cmd :  -%p-\n", flag_env,cmd);
 	if (cmd && cmd[0] == '\0')
 	{
 		if (flag_env == 0)
@@ -157,7 +156,8 @@ int	execute_simple_cmd(t_env **env, t_cmd_node *cmd)
 	path_cmd = get_path_cmd(*env, cmd);
 	if (!path_cmd)
 	{
-		if (!handle_env(cmd->flag_env, cmd->executable, path_cmd) || handle_env(cmd->flag_env, cmd->executable, path_cmd) == 127)
+		if (!handle_env(cmd->flag_env, cmd->executable, path_cmd)
+			|| handle_env(cmd->flag_env, cmd->executable, path_cmd) == 127)
 			return (handle_env(cmd->flag_env, cmd->executable, path_cmd));
 		if (cmd->executable && cmd->flag_env == 1 && cmd->type_qoutes == -1)
 		{
@@ -179,7 +179,6 @@ int	execute_redir(t_env **env, t_redir_node *cmd)
 	int				fd_out;
 	t_redir_node	*tmp;
 
-//	signal(SIGINT, SIG_DFL);
 	fd_in = dup(0);
 	fd_out = dup(1);
 	while (cmd)

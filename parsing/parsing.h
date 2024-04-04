@@ -1,4 +1,3 @@
-
 #ifndef PARSING_H
 # define PARSING_H
 
@@ -15,7 +14,7 @@ typedef struct s_env
 {
 	char				*key;
 	char				*value;
-	int 				flag;
+	int					flag;
 	struct s_env		*next;
 }						t_env;
 
@@ -46,7 +45,7 @@ typedef struct s_cmd_node
 	char				*executable;
 	char				**arguments;
 	int					flag_env;
-	int 				type_qoutes;
+	int					type_qoutes;
 }						t_cmd_node;
 
 typedef struct s_redir_node
@@ -72,7 +71,8 @@ t_redir_node			*parse_redirection(t_token **tokens, t_env *env_list,
 t_redir_type			get_redir_type(t_token **tokens);
 char					**get_arguments(char *exec, char **arguments,
 							t_token **tokens);
-t_cmd_node	*create_cmd_node(char *executable, char **arguments, int flag_env, int flag_quote);
+t_cmd_node				*create_cmd_node(char *executable, char **arguments,
+							int flag_env, int flag_quote);
 
 int						count_args(t_token *tokens);
 int						count_len(char **arguments);
@@ -80,7 +80,8 @@ void					*free_str_list(char **str);
 void					ft_lstadd_back_redir(t_redir_node **head,
 							t_redir_node *new);
 void					expand_env(t_token **tokens, t_env *env_list);
-char					*get_env_value(char *str, t_env *env_list, char *tab_qoutes);
+char					*get_env_value(char *str, t_env *env_list,
+							char *tab_qoutes);
 int						isalpha_num(char c);
 int						is_alpha(char c);
 char					*get_value(char **str, int flag);
@@ -100,5 +101,5 @@ void					free_pipe_node(t_pipe_node *pipe);
 void					free_tree(t_tree_node *tree);
 void					ignore(int sig);
 int						is_special_char(char *c, int *flag_redir);
-void enable_raw_mode(void);
+void					enable_raw_mode(void);
 #endif

@@ -98,14 +98,11 @@ t_tree_node	*parse_simple_command(t_token **tokens, t_env *env_list,
 			executable = parse_exec(tokens, executable, &flag_env, &flag_quote);
 			arguments = get_arguments(executable, arguments, tokens);
 		}
-		else
-		{
-			if (!parse_redir(tokens, &head_redir, env_list, flag_redir)
-				|| *flag_redir)
-				return ((t_tree_node *)free_tree_util(executable, arguments,
-						flag_env, head_redir));
-		}
+		else if (!parse_redir(tokens, &head_redir, env_list, flag_redir)
+			|| *flag_redir)
+			return ((t_tree_node *)free_tree_util(executable, arguments,
+					flag_env, head_redir));
 	}
-	return (combine_cmd(create_cmd_node(executable, arguments, flag_env, flag_quote),
-			head_redir));
+	return (combine_cmd(create_cmd_node(executable, arguments, flag_env,
+				flag_quote), head_redir));
 }
