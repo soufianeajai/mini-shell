@@ -22,7 +22,7 @@ int	util_add(char **key, char **value, int index, char *str)
 	if (!ft_strcmp(*key, "SHLVL"))
 	{
 		shl = my_atoi(*value);
-		ft_free(value);
+		free(*value);
 		*value = ft_itoa(shl + 1);
 	}
 	else if (!ft_strcmp(*key, "_"))

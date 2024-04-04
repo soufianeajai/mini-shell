@@ -60,6 +60,7 @@ void	tokenisation(t_token **tokens, char *input)
 {
 	t_token	*tmp;
 
+	split_tokens(input, tokens);
 	tmp = *tokens;
 	while (tmp)
 	{
