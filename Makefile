@@ -9,9 +9,8 @@ execution/execute_simple_cmd.c execution/util_smp_cmd1.c execution/util_smp_cmd2
 OBJS = $(SRCS:.c=.o)
 CFLAGS = -Wall -Wextra -Werror
 all : $(NAME)
-#-g3 -fsanitize=address
 $(NAME) : $(OBJS)
-	cc  -g3 $(CFLAGS)   -o $@ $^ -lreadline  -L /Users/$(USER)/Desktop/homebrew/opt/readline/lib -I /Users/$(USER)/Desktop/homebrew/opt/readline/include
+	cc  -g3 $(CFLAGS) -o $@ $^ -lreadline  -L /Users/$(USER)/Desktop/homebrew/opt/readline/lib -I /Users/$(USER)/Desktop/homebrew/opt/readline/include
 
 clean :
 	$(RM) $(OBJS) $(OBJSB)
