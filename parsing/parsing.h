@@ -128,4 +128,5 @@ void					sig_quit(void);
 void					check_her_doc(t_token **token, t_env *env_list);
 t_redir_node			*create_redir_node(t_redir_type type);
 int						check_code(void);
+char	*get_expandable(char *input, t_env *env_list);
 #endif

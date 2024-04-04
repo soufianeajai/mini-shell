@@ -20,6 +20,7 @@ t_tree_node	*parse_command(t_token **tokens, t_env *env_list)
 
 	syntax_error = check_syntax(*tokens);
 	expand_env(tokens, env_list);
+	handling_qoutes2(tokens);
 	tree = parse_pipeline(tokens, env_list);
 	if (syntax_error)
 	{

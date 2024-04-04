@@ -43,7 +43,7 @@ void	check_her_doc(t_token **token, t_env *env_list)
 			break ;
 		}
 		if (*token && (*token)->type_qoutes == -1)
-			input = get_env_value(input, env_list, NULL);
+			input = get_expandable(input, env_list);
 		write(fd, ft_strjoin(input, "\n", 0), ft_strlen(input) + 1);
 		free(input);
 	}

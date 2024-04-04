@@ -15,6 +15,8 @@
 
 int	checkfor_qoutes(char *tab_qoutes, int *i)
 {
+	if(!tab_qoutes)
+		return (1);
 	while (tab_qoutes[*i])
 	{
 		skip(tab_qoutes, i);
@@ -41,6 +43,34 @@ char	*handle_dollar(char **input)
 {
 	(*input)++;
 	return (ft_strjoin("$", get_value(input, 0), 2));
+}
+
+char	*get_expandable(char *input, t_env *env_list)
+{
+	char	*result;
+	char	*value;
+	int		i;
+
+	i = 0;
+	result = NULL;
+	value = NULL;
+	while (input && *input)
+	{
+		if (*input == '$' && isalpha_num(*(input + 1)))
+			value = handle_expandable(&input, env_list);
+		else if (*input == '$' && *(input + 1) == '?')
+		{
+			value = ft_itoa(EXIT_CODE);
+			input = input + 2;
+		}
+		else if (*input == '$')
+			value = handle_dollar(&input);
+		else
+			value = get_value(&input, 0);
+		result = ft_strjoin(result, value, 1);
+		ft_free(&value);
+	}
+	return (result);
 }
 
 char	*get_env_value(char *input, t_env *env_list, char *tab_qoutes)

@@ -87,6 +87,7 @@ int					is_qoutes(char c, t_token **tok);
 int					detect_qts_exist(char *str);
 void				handling_qoutes_util(int *i, int *flag, t_token *tmp);
 t_token				*create_node(int len, t_node_type type, int index);
-void				ft_lstadd_back(t_token **lst, int len, t_node_type type, int index);
-
+void				ft_lstadd_back(t_token **lst, int len, t_node_type type,
+						int index);
+void				handling_qoutes2(t_token **tk);
 #endif
