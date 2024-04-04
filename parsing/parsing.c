@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: afanidi <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/04 17:50:06 by afanidi           #+#    #+#             */
+/*   Updated: 2024/04/04 17:50:07 by afanidi          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../environnement/env.h"
 #include "parsing.h"
 
@@ -11,6 +23,7 @@ t_tree_node	*parse_command(t_token **tokens, t_env *env_list)
 	tree = parse_pipeline(tokens, env_list);
 	if (syntax_error)
 	{
+		EXIT_CODE = 258;
 		free_tree(tree);
 		return (0);
 	}
@@ -41,6 +54,7 @@ t_tree_node	*parse_pipeline(t_token **tokens, t_env *env_list)
 	}
 	return (left);
 }
+
 t_tree_node	*combine_cmd(t_cmd_node *cmd, t_redir_node *head)
 {
 	t_tree_node		*node;
@@ -59,6 +73,7 @@ t_tree_node	*combine_cmd(t_cmd_node *cmd, t_redir_node *head)
 		node = add_to_tree((void *)cmd, CMD);
 	return (node);
 }
+
 t_redir_node	*parse_redir(t_token **tokens, t_redir_node **head_redir,
 		t_env *env_list, int *flag_redir)
 {

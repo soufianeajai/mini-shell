@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "builtin.h"
+
 int	ft_error(char *cmd, char *error);
 
 int	is_builtin(t_cmd_node *cmd)
@@ -48,7 +49,7 @@ int	execute_builtin(t_env **env, t_cmd_node *cmd)
 		return (ft_unset(env, cmd));
 	if (ft_strncmp(cmd->executable, "env", 4) == 0)
 	{
-		if(cmd->arguments && cmd->arguments[1])
+		if (cmd->arguments && cmd->arguments[1])
 		{
 			ft_error(cmd->arguments[1], "No such file or directory");
 			return (127);

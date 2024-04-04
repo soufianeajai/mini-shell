@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free_tree.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: afanidi <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/04 17:49:35 by afanidi           #+#    #+#             */
+/*   Updated: 2024/04/04 17:49:36 by afanidi          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "parsing.h"
 
 void	*free_tree_util(char *executable, char **arguments, int flag_env,
@@ -7,6 +19,7 @@ void	*free_tree_util(char *executable, char **arguments, int flag_env,
 			head_redir));
 	return (0);
 }
+
 void	free_cmd_node(t_cmd_node *cmd)
 {
 	unlink(".her_doc.c");
@@ -20,6 +33,7 @@ void	free_cmd_node(t_cmd_node *cmd)
 		cmd = 0;
 	}
 }
+
 void	free_redir_node(t_redir_node *redir)
 {
 	if (redir)
@@ -34,6 +48,7 @@ void	free_redir_node(t_redir_node *redir)
 		redir = 0;
 	}
 }
+
 void	free_pipe_node(t_pipe_node *pipe)
 {
 	if (pipe)
@@ -46,6 +61,7 @@ void	free_pipe_node(t_pipe_node *pipe)
 		pipe = 0;
 	}
 }
+
 void	free_tree(t_tree_node *tree)
 {
 	if (!tree)

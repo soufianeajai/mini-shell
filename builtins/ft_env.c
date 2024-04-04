@@ -20,8 +20,7 @@ int	print_error_export(char *arg)
 	return (1);
 }
 
-
-void print_export(t_env *export)
+void	print_export(t_env *export)
 {
 	t_env	*tmp;
 
@@ -51,9 +50,7 @@ int	ft_env(t_env *env, int type)
 {
 	t_env	*tmp;
 
-	//type 0 ->  env, type 1 -> export
 	tmp = env;
-
 	if (type == 1)
 	{
 		print_export(env);
@@ -64,7 +61,7 @@ int	ft_env(t_env *env, int type)
 		if (tmp->key && tmp->value && (tmp->flag == 1 || tmp->flag == 0))
 		{
 			ft_putstr_fd(tmp->key, 1);
-				ft_putstr_fd("=", 1);
+			ft_putstr_fd("=", 1);
 			ft_putstr_fd(tmp->value, 1);
 			ft_putstr_fd("\n", 1);
 		}

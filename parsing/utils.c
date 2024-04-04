@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: afanidi <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/04 17:50:57 by afanidi           #+#    #+#             */
+/*   Updated: 2024/04/04 17:50:58 by afanidi          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../environnement/env.h"
 #include "parsing.h"
 
@@ -18,6 +30,7 @@ char	*parse_exec(t_token **tokens, char *executable, int *flag_env,
 		return (executable);
 	return (exec);
 }
+
 int	is_special_char(char *c, int *flag_redir)
 {
 	if (c)
@@ -30,6 +43,7 @@ int	is_special_char(char *c, int *flag_redir)
 	}
 	return (0);
 }
+
 int	is_alpha(char c)
 {
 	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_')

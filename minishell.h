@@ -71,10 +71,12 @@ char				*ft_itoa(int n);
 char				*ft_substr(char *s, unsigned int start, size_t len);
 size_t				my_atoi(const char *str);
 int					ft_isdigit(int c);
+int					my_len(int nbr);
 
 // tokenisation
 extern void			rl_replace_line(const char *, int);
 void				free_tokens(t_token **tokens);
+void				no_expaind_her_doc(t_token **token);
 void				tokenisation(t_token **tokens, char *input);
 void				split_tokens(char *input, t_token **tokens);
 void				print_tokens(t_token *tokens);
@@ -82,6 +84,9 @@ char				*mystrdup(t_token *tokens, char *input);
 void				ft_strlcpy(char *dst, const char *src, size_t dstsize);
 void				handling_qoutes(t_token **t);
 int					is_qoutes(char c, t_token **tok);
-int 				detect_qts_exist(char *str);
+int					detect_qts_exist(char *str);
+void				handling_qoutes_util(int *i, int *flag, t_token *tmp);
+t_token				*create_node(int len, t_node_type type, int index);
+void				ft_lstadd_back(t_token **lst, int len, t_node_type type, int index);
 
 #endif

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_utils.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: afanidi <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/04 17:50:33 by afanidi           #+#    #+#             */
+/*   Updated: 2024/04/04 17:50:36 by afanidi          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../environnement/env.h"
 #include "parsing.h"
 #include <fcntl.h>
@@ -7,6 +19,7 @@ void	consume(t_token **tokens)
 	if (*tokens)
 		*tokens = (*tokens)->next;
 }
+
 t_pipe_node	*create_pipe_node(t_tree_node *left, t_tree_node *right)
 {
 	t_pipe_node	*node;
@@ -17,6 +30,7 @@ t_pipe_node	*create_pipe_node(t_tree_node *left, t_tree_node *right)
 	node->right = right;
 	return (node);
 }
+
 t_tree_node	*add_to_tree(void *node, t_node_type type)
 {
 	t_tree_node	*ret_node;
@@ -26,6 +40,7 @@ t_tree_node	*add_to_tree(void *node, t_node_type type)
 	ret_node->node = node;
 	return (ret_node);
 }
+
 void	ft_lstadd_back_redir(t_redir_node **head, t_redir_node *new)
 {
 	t_redir_node	*tmp;
@@ -45,6 +60,7 @@ void	ft_lstadd_back_redir(t_redir_node **head, t_redir_node *new)
 		}
 	}
 }
+
 t_cmd_node	*create_cmd_node(char *executable, char **arguments, int flag_env,
 		int flag_quote)
 {

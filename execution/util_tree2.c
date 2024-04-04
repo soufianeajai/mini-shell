@@ -1,32 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pwd.c                                           :+:      :+:    :+:   */
+/*   util_tree2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: afanidi <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/31 00:40:18 by afanidi           #+#    #+#             */
-/*   Updated: 2024/03/31 00:40:19 by afanidi          ###   ########.fr       */
+/*   Created: 2024/04/04 17:33:52 by afanidi           #+#    #+#             */
+/*   Updated: 2024/04/04 17:33:53 by afanidi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtin.h"
+#include "../builtins/builtin.h"
+#include "execute.h"
 
-int	ft_pwd(void)
+void	error_pipe(int *fd)
 {
-	char	*pwd;
+	if (pipe(fd) == -1)
+	{
+		perror("pipe");
+		exit(1);
+	}
+}
 
-	pwd = getcwd(NULL, 0);
-	if (pwd != NULL)
+int	exit_pipe(int last_pid)
+{
+	int	pid;
+	int	status;
+
+	pid = 0;
+	status = 0;
+	if (last_pid)
 	{
-		ft_putstr_fd(pwd, 1);
-		ft_putstr_fd("\n", 1);
-		free(pwd);
-		return (0);
+		pid = wait(&status);
+		if (pid <= 0)
+			return (0);
+		if (pid == last_pid)
+			check_exit_code(status);
 	}
-	else
-	{
-		ft_putstr_fd("getcwd: cannot access parent directories\n", 2);
-		return (1);
-	}
+	return (1);
 }

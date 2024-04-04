@@ -69,7 +69,6 @@ int	ft_exit(t_cmd_node *cmd, t_env **env)
 	{
 		shell_level(env);
 		free_env_list(env);
-		//free_env_list(export);
 		ft_putstr_fd("exit\n", 2);
 		exit(EXIT_CODE);
 	}

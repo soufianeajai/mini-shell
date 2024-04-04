@@ -1,7 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: afanidi <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/04 17:50:15 by afanidi           #+#    #+#             */
+/*   Updated: 2024/04/04 17:50:17 by afanidi          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PARSING_H
 # define PARSING_H
 
 # include "../minishell.h"
+# include <fcntl.h>
 # include <fcntl.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -102,4 +115,17 @@ void					free_tree(t_tree_node *tree);
 void					ignore(int sig);
 int						is_special_char(char *c, int *flag_redir);
 void					enable_raw_mode(void);
+
+void					expand_env(t_token **token, t_env *env_list);
+char					*handle_expandable(char **input, t_env *env_list);
+int						look_for_dollar(char *tab_qoutes, int i, int len);
+int						check_qts(char *tab_qoutes, int i, int type, int *len);
+int						skip_2(int flag_dollar, int len_pair, int *i);
+void					skip(char *tab_qoutes, int *i);
+void					get_next(char *tab_qoutes, int *i, int type);
+void					ignore(int sig);
+void					sig_quit(void);
+void					check_her_doc(t_token **token, t_env *env_list);
+t_redir_node			*create_redir_node(t_redir_type type);
+int						check_code(void);
 #endif

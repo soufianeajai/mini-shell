@@ -15,11 +15,10 @@
 
 int	util_add(char **key, char **value, int index, char *str)
 {
-	int		shl;
+	int	shl;
 
 	ft_strlcpy(*key, str, index + 1);
 	ft_strlcpy(*value, str + index + 1, ft_strlen(str) - index);
-
 	if (!ft_strcmp(*key, "SHLVL"))
 	{
 		shl = my_atoi(*value);
@@ -27,7 +26,7 @@ int	util_add(char **key, char **value, int index, char *str)
 		*value = ft_itoa(shl + 1);
 	}
 	else if (!ft_strcmp(*key, "_"))
-		return(0);
+		return (0);
 	return (1);
 }
 
@@ -69,6 +68,7 @@ static void	add_env_first(t_env **env)
 	str = ft_strjoin(pwd, "./minishell", 0);
 	set_env_value(env, "SHLVL", "1", 1);
 	set_env_value(env, "PWD", pwd, 1);
+	set_env_value(env, "PATH", "/usr/bin:/bin:/usr/sbin:/sbin", 0);
 	set_env_value(env, "_", str, 0);
 	free(str);
 	free(pwd);

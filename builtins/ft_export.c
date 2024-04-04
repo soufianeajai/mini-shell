@@ -54,7 +54,10 @@ void	add_to_env(int append, t_env **env, char *key, char *value)
 	{
 		if (oldvalue)
 			remove_env(env, key);
-		set_env_value(env, key, value, 1);
+		if (ft_strcmp(key, "_"))
+			set_env_value(env, key, value, 1);
+		else
+			set_env_value(env, key, "_", 0);
 	}
 }
 
@@ -96,7 +99,6 @@ int	handling_args(char **arg, t_env **env)
 		}
 		if (ft_strchr(arg[i], '=') == 0 && arg[i][0] != '=')
 		{
-			printf("de %s\n", arg[i]);
 			set_env_value(env, arg[i], "", 2);
 			i++;
 			continue ;
@@ -109,9 +111,6 @@ int	handling_args(char **arg, t_env **env)
 
 int	ft_export(t_env **env, t_cmd_node *cmd)
 {
-	int	i;
-	i = 1;
-	
 	if (cmd && cmd->arguments && cmd->arguments[1] == NULL)
 	{
 		ft_env(*env, 1);

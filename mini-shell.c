@@ -1,17 +1,20 @@
 #include "minishell.h"
 #include "execution/execute.h"
 #include "builtins/builtin.h"
-
+// Get the current terminal settings
+// Copy settings to modify
+// Modify settings to disable ECHOCTL
+// Apply the modified settings
 void disable_raw_mode()
 {
     struct termios new_termios;
-    // Get the current terminal settings
+    
     tcgetattr(0, &orig_termios);
-    // Copy settings to modify
+    
     new_termios = orig_termios;
-    // Modify settings to disable ECHOCTL
+    
     new_termios.c_lflag &= ~ECHOCTL;
-    // Apply the modified settings
+
     tcsetattr(0, TCSANOW, &new_termios);
 }
 
@@ -40,6 +43,37 @@ void    handle_signals()
     if (signal(SIGQUIT, sig_handler) == SIG_ERR)
         ft_putstr_fd("Error: signal\n", 2);
 }
+
+int len_equal(char *str)
+{
+    int i;
+    i = 0;
+    while (str[i] && str[i] != '=')
+        i++;
+    return (i);
+}
+
+int	check_valid_identifier1(char *arg)
+{
+	int	i;
+
+	i = 0;
+	while (arg[i] && arg[i] != '=')
+	{
+		if (arg[i] == '+' && arg[i + 1] == '=' && i != 0)
+		{
+			i++;
+			continue ;
+		}
+		if ((!is_alpha(arg[i]) && arg[i] != '_'))
+			return (1);
+		i++;
+	}
+	if (arg[0] == '=' || (arg[i] == '=' && ft_isspace(arg[i - 1])
+			&& ft_isspace(arg[i + 1])))
+		return (1);
+	return (0);
+}
 char *get_last_arg(char **arguments, int flag)
 {
     int i;
@@ -57,15 +91,17 @@ char *get_last_arg(char **arguments, int flag)
     }
     else
     {
-        if(EXIT_CODE == 0 && arguments[1] && ft_strchr(arguments[1],'=') != 0)
-            cmd = ft_substr(arguments[1], 0, ft_strlen(arguments[1]) - ft_strchr(arguments[1],'=') - 1);
+        if(arguments[1] && ft_strchr(arguments[1],'=') != 0 && !check_valid_identifier1(arguments[1]))
+            cmd = ft_substr(arguments[1], 0, len_equal(arguments[1]));
         else if (arguments[1])
-            cmd = ft_strdup(arguments[1]);
+                cmd = ft_strdup(arguments[1]);
         else
             cmd = ft_strdup(arguments[0]);
     }
     return (cmd);
 }
+
+
 t_cmd_node *get_cmd_node(t_redir_node *redir)
 {
     t_redir_node *tmp;
@@ -84,24 +120,24 @@ char *get_node(t_tree_node *tree)
     t_cmd_node *cmd_node;
 
     cmd = 0;
-    if (tree->type == CMD)
+    if (tree && tree->type == CMD)
     {
         cmd_node = (t_cmd_node *)tree->node;
-        if (cmd_node->executable && !(cmd_node->arguments))
+        if (cmd_node && cmd_node->executable && !(cmd_node->arguments))
             cmd = ft_strdup(cmd_node->executable);
-        else if (strcmp(cmd_node->executable, "export") && cmd_node->arguments)
+        else if (cmd_node && ft_strcmp(cmd_node->executable, "export") && cmd_node->arguments)
             cmd = get_last_arg(cmd_node->arguments, 0);
-        else if (cmd_node->arguments)
+        else if (cmd_node && cmd_node->arguments)
             cmd = get_last_arg(cmd_node->arguments,1);
     }
-    if (tree->type == REDIR)
+    if (tree && tree->type == REDIR)
     {
         cmd_node = get_cmd_node(((t_redir_node *)tree->node));
-        if (cmd_node->executable && !(cmd_node->arguments))
+        if (cmd_node && cmd_node->executable && !(cmd_node->arguments))
             cmd = ft_strdup(cmd_node->executable);
-        else if (strcmp(cmd_node->executable, "export") && cmd_node->arguments)
+        else if (cmd_node && ft_strcmp(cmd_node->executable, "export") && cmd_node->arguments)
             cmd = get_last_arg(cmd_node->arguments, 0);
-        else if (cmd_node->arguments)
+        else if (cmd_node && cmd_node->arguments)
             cmd = get_last_arg(cmd_node->arguments, 1);
     }
     return (cmd);
@@ -147,11 +183,9 @@ int main(int ac, char **av, char **env)
     disable_raw_mode();
     while(1)
     {
-       // printf("\nEXIT_CODE : %d\n", EXIT_CODE);
         tokens = NULL;
         handle_signals(); 
         input = readline("➜  MiNiSh ✗ ");
-        // ctrl+D
         if (!input)
         {
             enable_raw_mode();
@@ -167,7 +201,6 @@ int main(int ac, char **av, char **env)
         temp = tokens;
         t_tree_node *tree = parse_command(&tokens, env_list);
         update_underscore_var(&env_list, tree);
-
         if (tree)
         {
             if (tree->type ==CMD)
@@ -179,10 +212,6 @@ int main(int ac, char **av, char **env)
         }
         free_tree(tree);
         free_tokens(&temp);
-        
         free(input);
-       
-        //system("leaks minishell");
-          // break;
     }
 }

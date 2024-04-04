@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   syntax.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: afanidi <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/04 17:54:53 by afanidi           #+#    #+#             */
+/*   Updated: 2024/04/04 17:54:54 by afanidi          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 int	is_operator(t_node_type type, int len, char *str)
@@ -23,6 +35,7 @@ void	printf_error_syntax(char *str)
 	ft_putstr_fd(str, 2);
 	ft_putstr_fd("`\n", 2);
 }
+
 int	handle_type(int type1, int type2, char *str)
 {
 	if (type2 == type1)
