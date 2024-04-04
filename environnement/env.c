@@ -13,18 +13,22 @@
 #include "../minishell.h"
 #include "env.h"
 
-void	util_add(char **key, char **value, int index, char *str)
+int	util_add(char **key, char **value, int index, char *str)
 {
 	int		shl;
 
 	ft_strlcpy(*key, str, index + 1);
 	ft_strlcpy(*value, str + index + 1, ft_strlen(str) - index);
+
 	if (!ft_strcmp(*key, "SHLVL"))
 	{
 		shl = my_atoi(*value);
 		ft_free(value);
 		*value = ft_itoa(shl + 1);
 	}
+	else if (!ft_strcmp(*key, "_"))
+		return(0);
+	return (1);
 }
 
 void	ft_lstadd_back_env(t_env **lst, int index, char *str)
@@ -43,7 +47,7 @@ void	ft_lstadd_back_env(t_env **lst, int index, char *str)
 		free(new);
 		return ;
 	}
-	util_add(&new->key, &new->value, index, str);
+	new->flag = util_add(&new->key, &new->value, index, str);
 	new->next = NULL;
 	p = *lst;
 	if (lst && *lst == NULL)
