@@ -24,7 +24,7 @@ int	check_valid_identifier(char *arg)
 			i++;
 			continue ;
 		}
-		if ((!isalpha_num(arg[i]) && arg[i] != '_'))
+		if ((!is_alpha(arg[i]) && arg[i] != '_'))
 			return (print_error_export(arg));
 		i++;
 	}

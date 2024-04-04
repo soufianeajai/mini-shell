@@ -46,7 +46,7 @@ int	check_syntax(t_token *tok)
 	while (tok)
 	{
 		type1 = is_operator(tok->type, tok->len, tok->str);
-		if (type1 && !tok->next)
+		if ((type1 && !tok->next) || (type1 == 1 && !tok->prev))
 		{
 			printf_error_syntax(tok->str);
 			return (1);

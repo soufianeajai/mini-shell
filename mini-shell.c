@@ -40,15 +40,28 @@ void    handle_signals()
     if (signal(SIGQUIT, sig_handler) == SIG_ERR)
         ft_putstr_fd("Error: signal\n", 2);
 }
-char *get_last_arg(char **arguments)
+char *get_last_arg(char **arguments, int flag)
 {
     int i;
     char *cmd;
     i = 0;
     cmd = 0;
-    while (arguments[i])
-        i++;
-    cmd = ft_strdup(arguments[i - 1]);
+    if (!arguments)
+        return (0);
+    if (!flag)
+    {
+        while (arguments[i])
+         i++;
+        if (i)
+            cmd = ft_strdup(arguments[i - 1]);
+    }
+    else
+    {
+        if(EXIT_CODE == 0)
+            cmd = ft_substr(arguments[1], 0, ft_strlen(arguments[1]) - ft_strchr(arguments[1],'=') - 1);
+        else
+            cmd = ft_strdup(arguments[1]);
+    }
     return (cmd);
 }
 t_cmd_node *get_cmd_node(t_redir_node *redir)
@@ -74,16 +87,20 @@ char *get_node(t_tree_node *tree)
         cmd_node = (t_cmd_node *)tree->node;
         if (cmd_node->executable && !(cmd_node->arguments))
             cmd = ft_strdup(cmd_node->executable);
+        else if (strcmp(cmd_node->executable, "export") && cmd_node->arguments)
+            cmd = get_last_arg(cmd_node->arguments, 0);
         else if (cmd_node->arguments)
-            cmd = get_last_arg(cmd_node->arguments);
+            cmd = get_last_arg(cmd_node->arguments,1);
     }
     else if (tree->type == REDIR)
     {
         cmd_node = get_cmd_node(((t_redir_node *)tree->node));
         if (cmd_node->executable && !(cmd_node->arguments))
             cmd = ft_strdup(cmd_node->executable);
-        else
-            cmd = get_last_arg(cmd_node->arguments);
+        else if (strcmp(cmd_node->executable, "export") && cmd_node->arguments)
+            cmd = get_last_arg(cmd_node->arguments, 0);
+        else if (cmd_node->arguments)
+            cmd = get_last_arg(cmd_node->arguments, 1);
     }
     else
         cmd = 0;

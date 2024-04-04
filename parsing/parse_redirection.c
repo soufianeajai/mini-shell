@@ -15,19 +15,17 @@ void	sig_quit()
 }
 void	check_her_doc(t_token **token, t_env *env_list)
 {
-	t_redir_node	*redir;
 	char			*input;
 	int				fd;
 
 	signal(SIGINT, SIG_DFL);
-	redir = (t_redir_node *)(*token);
 	fd = open(".her_doc.c", O_RDWR | O_CREAT | O_TRUNC, 0644);
 	while (1)
 	{
 		input = readline("> ");
 		if (!input)
 			exit(0);
-		if (!input || strcmp(input, redir->filename) == 0)
+		if (!input || ft_strcmp(input, (*token)->str) == 0)
 		{
 			ft_free(&input);
 			break ;
@@ -37,10 +35,11 @@ void	check_her_doc(t_token **token, t_env *env_list)
 		write(fd, ft_strjoin(input, "\n", 0), ft_strlen(input) + 1);
 		ft_free(&input);
 	}
-	free(redir->filename);
 	close(fd);
 	exit(0);
 }
+
+
 
 t_redir_node	*create_redir_node(t_redir_type type)
 {
