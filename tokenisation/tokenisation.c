@@ -169,6 +169,8 @@ void	free_tokens(t_token **tokens)
 		*tokens = (*tokens)->next;
 		free(tmp->str);
 		tmp->str = 0;
+		free(tmp->str_qoutes);
+		tmp->str_qoutes = 0;
 		free(tmp);
 		tmp = 0;
 	}

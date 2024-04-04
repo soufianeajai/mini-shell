@@ -170,11 +170,12 @@ int	ft_export(t_env **env, t_cmd_node *cmd)
 	int	i;
 	t_env	**export;
 	i = 1;
-	export = copy_env(env);
+	
 	if (cmd && cmd->arguments && cmd->arguments[1] == NULL)
 	{
-		//free export in exit 
+		export = copy_env(env);
 		ft_env(*export);
+		free_env_list(export);
 		return (0);
 	}
 	return (handling_args(cmd->arguments, env));
