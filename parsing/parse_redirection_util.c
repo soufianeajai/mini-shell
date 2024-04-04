@@ -16,13 +16,13 @@ void	ignore(int sig)
 {
 	(void)sig;
 	ft_putstr_fd("\n", 1);
-	EXIT_CODE = 130;
+	g_exitcode = 130;
 }
 
 void	sig_quit(void)
 {
 	ft_putstr_fd("^\\Quit: 3\n", 2);
-	EXIT_CODE = 131;
+	g_exitcode = 131;
 }
 
 void	check_her_doc(t_token **token, t_env *env_list)
@@ -68,9 +68,9 @@ t_redir_node	*create_redir_node(t_redir_type type)
 
 int	check_code(void)
 {
-	if (EXIT_CODE == 130)
+	if (g_exitcode == 130)
 	{
-		EXIT_CODE = 1;
+		g_exitcode = 1;
 		return (0);
 	}
 	return (1);

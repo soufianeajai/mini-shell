@@ -22,7 +22,7 @@ void	exec_cmd(t_tree_node *tree, t_env **env)
 	signal(SIGQUIT, SIG_IGN);
 	if (is_builtin((t_cmd_node *)(tree->node)))
 	{
-		EXIT_CODE = execute_builtin(env, (t_cmd_node *)(tree->node));
+		g_exitcode = execute_builtin(env, (t_cmd_node *)(tree->node));
 		return ;
 	}
 	pid = fork();
@@ -48,7 +48,7 @@ void	exec_redir(t_tree_node *tree, t_env **env)
 	signal(SIGQUIT, SIG_IGN);
 	if (is_builtin((t_cmd_node *)(tree->node)))
 	{
-		EXIT_CODE = execute_builtin(env, (t_cmd_node *)(tree->node));
+		g_exitcode = execute_builtin(env, (t_cmd_node *)(tree->node));
 		return ;
 	}
 	pid = fork();
@@ -87,15 +87,15 @@ void	execute_child(int *fd, int flag, t_pipe_node *pipe_node, t_env **env)
 
 void	check_exit_code(int status)
 {
-	if (EXIT_CODE == 258)
+	if (g_exitcode == 258)
 		return ;
 	if (WIFEXITED(status))
-		EXIT_CODE = WEXITSTATUS(status);
+		g_exitcode = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
-		EXIT_CODE = 130;
+		g_exitcode = 130;
 	else if (WIFSIGNALED(status) && WTERMSIG(status) == SIGQUIT)
 	{
 		ft_putstr_fd("^\\Quit: 3\n", 2);
-		EXIT_CODE = 131;
+		g_exitcode = 131;
 	}
 }

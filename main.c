@@ -63,7 +63,7 @@ char	*get_input(t_env **env_list)
 	if (!input)
 	{
 		free_env_list(env_list);
-		exit(EXIT_CODE);
+		exit(g_exitcode);
 	}
 	return (input);
 }
@@ -72,7 +72,7 @@ void	init_data(int ac, char **av)
 {
 	(void)ac;
 	(void)av;
-	EXIT_CODE = 0;
+	g_exitcode = 0;
 }
 
 int	main(int ac, char **av, char **env)

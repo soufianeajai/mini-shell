@@ -33,7 +33,7 @@ void	sig_handler(int signal)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-		EXIT_CODE = 1;
+		g_exitcode = 1;
 	}
 	if (signal == SIGQUIT)
 		rl_redisplay();

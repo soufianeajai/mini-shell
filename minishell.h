@@ -21,7 +21,7 @@
 # include <termios.h>
 # include <unistd.h>
 
-int	EXIT_CODE;
+int						g_exitcode;
 
 typedef enum s_node_type
 {
@@ -126,7 +126,7 @@ int						ft_isdigit(int c);
 int						my_len(int nbr);
 
 // tokenisation
-extern void				rl_replace_line(const char *, int);
+extern void				rl_replace_line(const char *str, int i);
 void					free_tokens(t_token **tokens);
 void					no_expaind_her_doc(t_token **token);
 void					tokenisation(t_token **tokens, char *input);
@@ -144,5 +144,6 @@ void					ft_lstadd_back(t_token **lst, int len, t_node_type type,
 void					handling_qoutes2(t_token **tk);
 void					handle_signals(void);
 char					*get_node(t_tree_node *tree);
+char					*hand_qts_tab(char *str);
 
 #endif

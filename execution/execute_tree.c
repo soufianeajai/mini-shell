@@ -37,7 +37,7 @@ int	execute_pipe(t_pipe_node *pipe_node, t_env **env)
 	while (1)
 		if (!exit_pipe(last_pid))
 			break ;
-	return (EXIT_CODE);
+	return (g_exitcode);
 }
 
 void	execute(t_tree_node *tree, t_env **env)
@@ -50,7 +50,7 @@ void	execute(t_tree_node *tree, t_env **env)
 int	execute_tree(t_tree_node *tree, t_env **env)
 {
 	if (!tree)
-		return (EXIT_CODE);
+		return (g_exitcode);
 	if (tree->type == PIPE)
 		return (execute_pipe((t_pipe_node *)(tree->node), env));
 	else if (tree->type == CMD)

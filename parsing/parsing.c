@@ -24,7 +24,7 @@ t_tree_node	*parse_command(t_token **tokens, t_env *env_list)
 	tree = parse_pipeline(tokens, env_list);
 	if (syntax_error)
 	{
-		EXIT_CODE = 258;
+		g_exitcode = 258;
 		free_tree(tree);
 		return (0);
 	}

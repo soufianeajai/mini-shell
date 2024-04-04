@@ -34,7 +34,7 @@ t_redir_node	*handle_herdoc(t_token **tokens, t_env *env_list,
 			waitpid(pid, &status, 0);
 			if (!check_code())
 				return (0);
-			EXIT_CODE = WEXITSTATUS(status);
+			g_exitcode = WEXITSTATUS(status);
 			(*redir_node)->filename = ft_strdup(".her_doc.c");
 			(*redir_node)->redir_type = IN;
 		}

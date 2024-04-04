@@ -12,47 +12,10 @@
 
 #include "../minishell.h"
 
-int	detect_qts_exist(char *str)
-{
-	int	i;
-	int	qts;
-
-	i = 0;
-	qts = 0;
-	while (str[i])
-	{
-		if (str[i] == '\"' || str[i] == '\'' || str[i] == '$')
-			qts++;
-		i++;
-	}
-	return (qts);
-}
-
-char	*hand_qts_tab(char *str)
-{
-	int		i;
-	int		j;
-	char	*stock;
-
-	stock = malloc(sizeof(char) * (detect_qts_exist(str) + 1));
-	i = 0;
-	j = 0;
-	while (str[i])
-	{
-		if (str[i] == '\"' || str[i] == '\'' || str[i] == '$')
-			stock[j++] = str[i];
-		i++;
-	}
-	stock[j] = '\0';
-	return (stock);
-}
-
 void	util2(t_token **tmp)
 {
 	if (detect_qts_exist((*tmp)->str) != 0)
 		(*tmp)->str_qoutes = hand_qts_tab((*tmp)->str);
-	//ft_free(&((*tmp)->str));
-	//(*tmp)->str = ft_strdup(stock);
 	(*tmp) = (*tmp)->next;
 }
 
@@ -67,11 +30,17 @@ void	handling_qoutes(t_token **tk)
 		util2(&tmp);
 }
 
+void	util_qts(t_token **tmp, char *stock)
+{
+	ft_free(&((*tmp)->str));
+	(*tmp)->str = ft_strdup(stock);
+	(*tmp) = (*tmp)->next;
+}
 
 void	handling_qoutes2(t_token **tk)
 {
 	t_token	*tmp;
-	char	stock[100];
+	char	stock[1000];
 	int		i;
 	int		j;
 	int		flag;
@@ -93,9 +62,7 @@ void	handling_qoutes2(t_token **tk)
 			handling_qoutes_util(&i, &flag, tmp);
 		}
 		stock[j] = '\0';
-		ft_free(&(tmp->str));
-		tmp->str = ft_strdup(stock);
-		tmp = tmp->next;
+		util_qts(&tmp, stock);
 	}
 }
 

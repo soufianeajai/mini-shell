@@ -70,7 +70,7 @@ int	ft_exit(t_cmd_node *cmd, t_env **env)
 		shell_level(env);
 		free_env_list(env);
 		ft_putstr_fd("exit\n", 2);
-		exit(EXIT_CODE);
+		exit(g_exitcode);
 	}
 	if (cmd->arguments[1])
 	{
@@ -79,9 +79,9 @@ int	ft_exit(t_cmd_node *cmd, t_env **env)
 			return (ft_error_exit(cmd->arguments[1], 0, env));
 		if (my_atoi(cmd->arguments[1]) >= SIZE_MAX)
 			exit(ft_error_exit(cmd->arguments[1], 1, env));
-		EXIT_CODE = my_atoi(cmd->arguments[1]) % 256;
+		g_exitcode = my_atoi(cmd->arguments[1]) % 256;
 		shell_level(env);
-		exit(EXIT_CODE);
+		exit(g_exitcode);
 	}
 	return (0);
 }

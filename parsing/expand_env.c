@@ -15,7 +15,7 @@
 
 int	checkfor_qoutes(char *tab_qoutes, int *i)
 {
-	if(!tab_qoutes)
+	if (!tab_qoutes)
 		return (1);
 	while (tab_qoutes[*i])
 	{
@@ -60,7 +60,7 @@ char	*get_expandable(char *input, t_env *env_list)
 			value = handle_expandable(&input, env_list);
 		else if (*input == '$' && *(input + 1) == '?')
 		{
-			value = ft_itoa(EXIT_CODE);
+			value = ft_itoa(g_exitcode);
 			input = input + 2;
 		}
 		else if (*input == '$')
@@ -89,7 +89,7 @@ char	*get_env_value(char *input, t_env *env_list, char *tab_qoutes)
 			value = handle_expandable(&input, env_list);
 		else if (*input == '$' && *(input + 1) == '?')
 		{
-			value = ft_itoa(EXIT_CODE);
+			value = ft_itoa(g_exitcode);
 			input = input + 2;
 		}
 		else if (*input == '$')
