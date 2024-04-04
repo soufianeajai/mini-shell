@@ -96,6 +96,7 @@ int	handling_args(char **arg, t_env **env)
 		}
 		if (ft_strchr(arg[i], '=') == 0 && arg[i][0] != '=')
 		{
+			
 			i++;
 			continue ;
 		}

@@ -57,10 +57,12 @@ char *get_last_arg(char **arguments, int flag)
     }
     else
     {
-        if(EXIT_CODE == 0)
+        if(EXIT_CODE == 0 && arguments[1] && ft_strchr(arguments[1],'=') != 0)
             cmd = ft_substr(arguments[1], 0, ft_strlen(arguments[1]) - ft_strchr(arguments[1],'=') - 1);
-        else
+        else if (arguments[1])
             cmd = ft_strdup(arguments[1]);
+        else
+            cmd = ft_strdup(arguments[0]);
     }
     return (cmd);
 }
@@ -92,7 +94,7 @@ char *get_node(t_tree_node *tree)
         else if (cmd_node->arguments)
             cmd = get_last_arg(cmd_node->arguments,1);
     }
-    else if (tree->type == REDIR)
+    if (tree->type == REDIR)
     {
         cmd_node = get_cmd_node(((t_redir_node *)tree->node));
         if (cmd_node->executable && !(cmd_node->arguments))
@@ -102,8 +104,6 @@ char *get_node(t_tree_node *tree)
         else if (cmd_node->arguments)
             cmd = get_last_arg(cmd_node->arguments, 1);
     }
-    else
-        cmd = 0;
     return (cmd);
 }
 
@@ -166,6 +166,7 @@ int main(int ac, char **av, char **env)
 	    handling_qoutes(&tokens);
         temp = tokens;
         t_tree_node *tree = parse_command(&tokens, env_list);
+        update_underscore_var(&env_list, tree);
 
         if (tree)
         {
@@ -176,7 +177,6 @@ int main(int ac, char **av, char **env)
             else 
                 execute(tree, &env_list);   
         }
-        update_underscore_var(&env_list, tree);
         free_tree(tree);
         free_tokens(&temp);
         

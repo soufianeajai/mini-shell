@@ -88,11 +88,9 @@ int	check_qts(char *tab_qoutes, int i, int type, int *len)
 
 void	skip(char *tab_qoutes, int *i)
 {
-	int	j;
 	int	len_pair;
 	int	flag_dollar;
 
-	j = *i;
 	while (tab_qoutes[*i])
 	{
 		if (tab_qoutes[*i] == '$')
@@ -126,10 +124,7 @@ int	checkfor_qoutes(char *tab_qoutes, int *i)
 {
 	while (tab_qoutes[*i])
 	{
-		printf("tab:  %s\n", tab_qoutes + *i);
-		if (tab_qoutes[*i] != '$')
 			skip(tab_qoutes, i);
-		printf("tab:  %s\n", tab_qoutes + *i);
 		if (tab_qoutes[*i] && tab_qoutes[*i] == '\'')
 		{
 			*i = *i + 1;
