@@ -27,8 +27,8 @@ static int	utils_cd(char *path, t_env **env, char *oldpwd)
 	pwd = getcwd(NULL, 0);
 	if (pwd)
 	{
-		set_env_value(env, "OLDPWD", oldpwd);
-		set_env_value(env, "PWD", pwd);
+		set_env_value(env, "OLDPWD", oldpwd, 1);
+		set_env_value(env, "PWD", pwd, 1);
 		free(pwd);
 		free(oldpwd);
 	}

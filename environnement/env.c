@@ -67,9 +67,9 @@ static void	add_env_first(t_env **env)
 
 	pwd = getcwd(NULL, 0);
 	str = ft_strjoin(pwd, "./minishell", 0);
-	set_env_value(env, "SHLVL", "1");
-	set_env_value(env, "PWD", pwd);
-	set_env_value(env, "_", str);
+	set_env_value(env, "SHLVL", "1", 1);
+	set_env_value(env, "PWD", pwd, 1);
+	set_env_value(env, "_", str, 0);
 	free(str);
 	free(pwd);
 }
@@ -92,7 +92,7 @@ void	env_copy(t_env **env, char **environ)
 	}
 	sh = ft_getenv(*env, "SHLVL");
 	if (!sh)
-		set_env_value(env, "SHLVL", "1");
+		set_env_value(env, "SHLVL", "1", 1);
 	else
 		free(sh);
 }

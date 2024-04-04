@@ -18,7 +18,7 @@
 void	ft_lstadd_back_env(t_env **lst, int index, char *str);
 void	env_copy(t_env **env, char **environ);
 char	*ft_getenv(t_env *env, char *key);
-void	set_env_value(t_env **env, char *key, char *value);
+void	set_env_value(t_env **env, char *key, char *value, int flag);
 char	*get_path_cmd(t_env *env, t_cmd_node *cmd);
 void	free_env_list(t_env **env_list);
 

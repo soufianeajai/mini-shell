@@ -21,7 +21,7 @@ int		execute_builtin(t_env **env, t_cmd_node *cmd);
 int		ft_echo(t_cmd_node *cmd);
 int		ft_pwd(void);
 int		ft_cd(t_env **env, t_cmd_node *cmd);
-int		ft_env(t_env *env);
+int		ft_env(t_env *env, int type_for_print);
 int		ft_unset(t_env **env, t_cmd_node *cmd);
 void	remove_env(t_env **env, char *key);
 int		ft_export(t_env **env, t_cmd_node *cmd);

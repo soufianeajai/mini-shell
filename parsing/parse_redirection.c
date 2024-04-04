@@ -2,8 +2,9 @@
 #include "parsing.h"
 #include <fcntl.h>
 
-void	ignore(void)
+void	ignore(int sig)
 {
+	(void)sig;	
 	ft_putstr_fd("\n", 1);
 	EXIT_CODE = 130;
 }

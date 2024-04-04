@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "errno.h": "c",
+        "execute.h": "c",
+        "builtin.h": "c"
+    }
+}

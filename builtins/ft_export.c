@@ -54,7 +54,7 @@ void	add_to_env(int append, t_env **env, char *key, char *value)
 	{
 		if (oldvalue)
 			remove_env(env, key);
-		set_env_value(env, key, value);
+		set_env_value(env, key, value, 1);
 	}
 }
 
@@ -96,7 +96,8 @@ int	handling_args(char **arg, t_env **env)
 		}
 		if (ft_strchr(arg[i], '=') == 0 && arg[i][0] != '=')
 		{
-			
+			printf("de %s\n", arg[i]);
+			set_env_value(env, arg[i], "", 2);
 			i++;
 			continue ;
 		}
@@ -105,78 +106,15 @@ int	handling_args(char **arg, t_env **env)
 	}
 	return (flag);
 }
-void add_env(t_env **env, t_env *new)
-{
-	t_env	*temp;
-
-	if (!*env)
-	{
-		*env = new;
-		return ;
-	}
-	temp = *env;
-	while (temp->next)
-		temp = temp->next;
-	temp->next = new;
-}
-
-t_env *get_element(char *key, char *value)
-{
-	t_env	*new;
-
-	new = malloc(sizeof(t_env));
-	if (!new)
-		return (0);
-	new->key = ft_strjoin("declare -x ", ft_strdup(key), 2);
-	new->value = ft_strdup(value);
-	new->next = 0;
-	return (new);
-}
-
-t_env	**copy_env(t_env **env)
-{
-	t_env	**export;
-	t_env	*temp;
-//	t_env	*new;
-	int		oldpwd_flag;
-
-	oldpwd_flag = 0;
-	export = malloc(sizeof(t_env *));
-	if (!export)
-		return (0);
-	*export = 0;
-	temp = *env;
-	while (temp)
-	{
-		if (ft_strcmp(temp->key, "_") == 0)
-		{
-			temp = temp->next;
-			continue ;
-		}
-		if (ft_strcmp(temp->key, "OLDPWD") == 0)
-			oldpwd_flag = 1;
-		add_env(export, get_element(temp->key, temp->value));
-		temp = temp->next;
-	}
-	if (!oldpwd_flag)
-	{
-	//	new = get_element("OLDPWD", "");
-		add_env(export, get_element("OLDPWD", ""));
-	}
-	return (export);
-}
 
 int	ft_export(t_env **env, t_cmd_node *cmd)
 {
 	int	i;
-	t_env	**export;
 	i = 1;
 	
 	if (cmd && cmd->arguments && cmd->arguments[1] == NULL)
 	{
-		export = copy_env(env);
-		ft_env(*export);
-		free_env_list(export);
+		ft_env(*env, 1);
 		return (0);
 	}
 	return (handling_args(cmd->arguments, env));

@@ -64,17 +64,18 @@ char	*get_path_cmd(t_env *env, t_cmd_node *cmd)
 	return ((char *)free_str_list(path));
 }
 
-static t_env	*alloc_node_env(char *key, char *value)
+static t_env	*alloc_node_env(char *key, char *value, int flag)
 {
 	t_env	*new;
 
 	new = malloc(sizeof(t_env));
 	new->key = ft_strdup(key);
 	new->value = ft_strdup(value);
+	new->flag = flag;
 	new->next = NULL;
 	return (new);
 }
-void	set_env_value(t_env **env, char *key, char *value)
+void	set_env_value(t_env **env, char *key, char *value, int flag)
 {
 	t_env	*tmp;
 	t_env	*new;
@@ -90,7 +91,7 @@ void	set_env_value(t_env **env, char *key, char *value)
 		}
 		tmp = tmp->next;
 	}
-	new = alloc_node_env(key, value);
+	new = alloc_node_env(key, value,flag);
 	tmp = *env;
 	if (!*env)
 		*env = new;

@@ -20,14 +20,48 @@ int	print_error_export(char *arg)
 	return (1);
 }
 
-int	ft_env(t_env *env)
+
+void print_export(t_env *export)
 {
 	t_env	*tmp;
 
-	tmp = env;
+	tmp = export;
 	while (tmp)
 	{
-		if (tmp->value && (tmp->flag == 1 || tmp->flag == 0))
+		if (tmp->key && (tmp->flag == 1 || tmp->flag == 2))
+		{
+			ft_putstr_fd("declare -x ", 1);
+			ft_putstr_fd(tmp->key, 1);
+			if (tmp->value && tmp->value[0] != '\0')
+			{
+				ft_putstr_fd("=", 1);
+				ft_putstr_fd("\"", 1);
+				ft_putstr_fd(tmp->value, 1);
+				ft_putstr_fd("\"", 1);
+				ft_putstr_fd("\n", 1);
+			}
+			else
+				ft_putstr_fd("\n", 1);
+		}
+		tmp = tmp->next;
+	}
+}
+
+int	ft_env(t_env *env, int type)
+{
+	t_env	*tmp;
+
+	//type 0 ->  env, type 1 -> export
+	tmp = env;
+
+	if (type == 1)
+	{
+		print_export(env);
+		return (0);
+	}
+	while (tmp)
+	{
+		if (tmp->key && tmp->value && (tmp->flag == 1 || tmp->flag == 0))
 		{
 			ft_putstr_fd(tmp->key, 1);
 				ft_putstr_fd("=", 1);

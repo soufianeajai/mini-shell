@@ -20,6 +20,7 @@ void	exec_cmd(t_tree_node *tree, t_env **env);
 void	exec_redir(t_tree_node *tree, t_env **env);
 int		execute_simple_cmd(t_env **env, t_cmd_node *cmd);
 int		execute_redir(t_env **env, t_redir_node *cmd);
+int	    ft_error(char *cmd, char *error);
 
 void	execute(t_tree_node *tree, t_env **env);
 int		execute_tree(t_tree_node *tree, t_env **env);
