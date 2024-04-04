@@ -138,10 +138,7 @@ int	handle_env(int flag_env, char *cmd, char *path_cmd)
 	if (cmd && cmd[0] == '\0')
 	{
 		if (flag_env == 0)
-		{
-			
 			return (ft_error(NULL, "command not found"));
-		}
 		else
 			free(path_cmd);
 		return (0);

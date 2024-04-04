@@ -120,25 +120,29 @@ char *hand_qts_tab(char *str)
 	return (stock);
 }
 
+void util2(char *stock, t_token **tmp)
+{
+	if (detect_qts_exist((*tmp)->str) != 0)
+		(*tmp)->str_qoutes = hand_qts_tab((*tmp)->str);
+	ft_free(&((*tmp)->str));
+	(*tmp)->str = ft_strdup(stock);
+	(*tmp) = (*tmp)->next;
+}
 
 void	handling_qoutes(t_token **tk)
 {
 	t_token	*tmp;
+	char	stock[100];
 	int		i;
 	int		j;
 	int		flag;
-	char	stock[100];
+	
 	tmp = *tk;
 	flag = 0;
-
-	
 	while (tmp)
 	{
 		j = 0;
 		i = 0;
-		//printf("Handling qoutes %s\n", tmp->str);
-		
-		
 		while (tmp->str && tmp->str[i])
 		{
             flag = is_qoutes(tmp->str[i], &tmp);
@@ -150,12 +154,7 @@ void	handling_qoutes(t_token **tk)
 			handling_qoutes_util(&i, &flag, tmp);
 		}
 		stock[j] = '\0';
-		if (detect_qts_exist(tmp->str) != 0)
-			tmp->str_qoutes = hand_qts_tab(tmp->str);
-		//printf("\nstock qoutes %s\n", tmp->str_qoutes);
-		ft_free(&(tmp->str));
-		tmp->str = ft_strdup(stock);
-		tmp = tmp->next;
+		util2(stock, &tmp);
 	}
 }
 

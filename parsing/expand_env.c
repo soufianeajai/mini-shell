@@ -105,30 +105,22 @@ void skip(char *tab_qoutes,int *i)
 		if (tab_qoutes[*i] == '\'')
 		{
 			flag_dollar = check_qts(tab_qoutes,*i,1,&len_pair);
-		//	printf("\n ' : flag-len : %d-%d\n\n",flag_dollar,len_pair);
 			if (len_pair == 0 && flag_dollar == 0)
 				*i = *i + 1;
 			else if (flag_dollar  == 0)
-			{
 				*i = len_pair + 1;
-			}
 			else
 				return;
 		}
 		if (tab_qoutes[*i] == '\"')
 		{
 			flag_dollar = check_qts(tab_qoutes,*i,2,&len_pair);
-		//	printf("\n \" : flag-len : %d-%d\n\n",flag_dollar,len_pair);
 			if (len_pair == 0 && flag_dollar == 0)
 				*i = *i + 1;
 			else if (flag_dollar  == 0)
-			{
 				*i = len_pair + 1;
-			}
 			else
-			{
 				return;
-			}
 		}
 		*i = *i + 1;
 	}
