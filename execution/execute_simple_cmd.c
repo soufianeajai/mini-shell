@@ -82,8 +82,7 @@ int	execute_redir(t_env **env, t_redir_node *cmd)
 	dup2(fd_out, 1);
 	close(fd_in);
 	close(fd_out);
-	execute_simple_cmd(env, tmp->cmd);
-	return (0);
+	return (execute_simple_cmd(env, tmp->cmd));
 }
 
 int	util_redir(t_redir_node *cmd, t_redir_type type, int fd_in, int fd_out)
