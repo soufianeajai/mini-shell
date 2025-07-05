@@ -11,15 +11,14 @@
 /* ************************************************************************** */
 
 #include "builtin.h"
+#include <stdint.h>
 
 void	shell_level(t_env **env)
 {
-	int		i;
 	t_env	*tmp;
 	int		shl;
 
 	tmp = *env;
-	i = 0;
 	while (tmp)
 	{
 		if (!ft_strncmp(tmp->key, "SHLVL", 5))

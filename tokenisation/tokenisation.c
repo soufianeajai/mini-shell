@@ -22,10 +22,7 @@ void	util2(t_token **tmp)
 void	handling_qoutes(t_token **tk)
 {
 	t_token	*tmp;
-	int		flag;
-
 	tmp = *tk;
-	flag = 0;
 	while (tmp)
 		util2(&tmp);
 }

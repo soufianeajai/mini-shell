@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
+#include <stdint.h> 
 char	*ft_itoa(int n)
 {
 	char	*str;

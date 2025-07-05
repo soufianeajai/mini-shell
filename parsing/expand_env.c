@@ -49,9 +49,7 @@ char	*get_expandable(char *input, t_env *env_list)
 {
 	char	*result;
 	char	*value;
-	int		i;
 
-	i = 0;
 	result = NULL;
 	value = NULL;
 	while (input && *input)

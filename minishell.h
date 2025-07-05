@@ -21,7 +21,7 @@
 # include <termios.h>
 # include <unistd.h>
 
-int						g_exitcode;
+extern int						g_exitcode;
 
 typedef enum s_node_type
 {
